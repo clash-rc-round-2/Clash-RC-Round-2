@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loggedin</title>
+</head>
+<body>
+    <h1>
+        <center> Hello {{ user.username}} <br> </center>
+    </h1>
+         Click on a question to display: <br>
+        {% for question in all_questions %}
+        <a href ="qp/{{forloop.counter}}">{{ question.title_number }}</a><br><br>
+        {% endfor %}
+</body>
+</html>
