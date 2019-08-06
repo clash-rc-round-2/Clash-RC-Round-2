@@ -24,6 +24,7 @@ Refer StepsForGit.png in repo to see screenshot of commands of git on terminal
 Bofore making commit append the list below which you can find in round2 folder as a readme.md, So that I can understand you have completed and set the git by following all 9 steps correctly.
          
          --> Gaurav Ghati 
+         --> Nikhil Kulkarni
          --> Sanchit Raina  
          --> Murtuza Husain
 
