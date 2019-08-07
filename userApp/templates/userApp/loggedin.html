@@ -10,7 +10,7 @@
     </h1>
          Click on a question to display: <br>
         {% for question in all_questions %}
-        <a href ="qp/{{forloop.counter}}">{{ question.title_number }}</a><br><br>
+        <a href ="question/{{forloop.counter}}">{{ question.title_number }}</a><br><br>
         {% endfor %}
 </body>
 </html>

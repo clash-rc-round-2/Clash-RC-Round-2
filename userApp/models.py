@@ -7,3 +7,8 @@ class QUESTION(models.Model):
 
     def __str__(self):
             return self.title_number + '-' + self.question
+
+
+class UserProfile(models.Model):
+    username = models.CharField(max_length=250)
+    password = models.CharField(max_length=250)

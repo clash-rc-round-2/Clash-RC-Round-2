@@ -24,4 +24,4 @@ def detail(request):
 
 def file(request, qn):
     question = QUESTION.objects.get(pk=qn)
-    return render(request, 'userApp/que_page.html', context={'question': question})
+    return render(request, 'userApp/question.html', context={'question': question})
