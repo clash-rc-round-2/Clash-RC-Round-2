@@ -28,7 +28,8 @@ Bofore making commit append the list below which you can find in round2 folder a
          --> Sanchit Raina  
          --> Murtuza Husain
          --> Sanket Landge
-	 --> Prerna Bhardwaj
+         --> Prerna Bhardwaj
+         --> Abhishek Velankar
 
 6) $ git add .
    - Adds the files in the local repository and stages them for commit. To unstage a file, use 'git reset HEAD YOUR-FILE'.
