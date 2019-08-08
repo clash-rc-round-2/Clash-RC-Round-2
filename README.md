@@ -1,6 +1,6 @@
 # Clash-RC-Round-2
 
-#Update 02
+# Update 02
 
 Since, All of us are now comfortable with git's command, I want you guys to start contributing your work on "clash-rc-round-2" repository..
 
@@ -31,7 +31,7 @@ All of us have to work on same Project now it's important to understand all proj
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-#Update 01
+# Update 01
 
 Hey, This is to make sure you all have cloned the repo and set git for working with it..
 Refer StepsForGit.png in repo to see screenshot of commands of git on terminal
