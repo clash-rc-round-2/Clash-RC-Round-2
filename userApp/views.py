@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from .models import QUESTION
+from .models import Question
 
 
 def signup(request):
@@ -18,10 +17,10 @@ def signup(request):
 
 
 def detail(request):
-    all_questions = QUESTION.objects.all()
+    all_questions = Question.objects.all()
     return render(request, 'userApp/loggedin.html', context={'all_questions': all_questions})
 
 
 def file(request, qn):
-    question = QUESTION.objects.get(pk=qn)
+    question = Question.objects.get(pk=qn)
     return render(request, 'userApp/question.html', context={'question': question})
