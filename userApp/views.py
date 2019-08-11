@@ -4,13 +4,14 @@ from django.contrib.auth.models import User
 from .models import Question
 import os
 
+cwd = os.getcwd()
+
 
 def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = User.objects.create_user(username=username, password=password)
-        cwd = os.getcwd()
         os.chdir('%s/data/usersCode' %cwd)
         os.mkdir(username)
         login(request, user)
