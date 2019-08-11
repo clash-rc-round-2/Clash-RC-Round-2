@@ -26,11 +26,13 @@ def detail(request):
     return render(request, 'userApp/loggedin.html', context={'all_questions': all_questions})
 
 
-def file(request, qn):
+def file(request, username, qn):
     if request.method == 'POST':
+        user = User.objects.get(username=username)
+        login(request, user)
         content = request.POST['content']
-        question = Question.objects.get(pk=qn)
-        submission = Submission(code=content, que=question)
+        submission = Submission(code=content, user=user)
+        os.chdir(f'{cwd}/data/usersCode/{username}')
         f = open("solution.cpp", "w+")
         f.write(content)
         f.close()
@@ -38,4 +40,5 @@ def file(request, qn):
 
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
-        return render(request, 'userApp/question.html', context={'question': question})
+        user = User.objects.get(username=username)
+        return render(request, 'userApp/question.html', context={'question': question, 'user': user})
