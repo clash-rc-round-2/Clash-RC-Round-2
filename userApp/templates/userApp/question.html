@@ -8,7 +8,7 @@
 <h1>{{question.title_number}}</h1>  <br><br><br>  <h3>Question:</h3><br>{{question.question}}
 <br><br>
 <h4> Enter your code here: </h4>
-<form action="", method="post">
+<form method="post">
     {% csrf_token %}
  <textarea name="content" rows="35" cols="200">
 

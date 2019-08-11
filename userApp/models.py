@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class User(models.Model):
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=User())
     score = models.IntegerField(default=0)
+    # time = models.DateTimeField()
 
     def __str__(self):
-            return self.username
+            return self.user.username
 
 
 class Question(models.Model):
@@ -18,7 +20,6 @@ class Question(models.Model):
 
 
 class Submission(models.Model):
-    time = models.DateTimeField()
-    code = models.CharField(max_length=1000)
-    output = models.CharField(max_length=100)
-    que = models.ForeignKey(Question, on_delete=models.CASCADE)
+    code = models.CharField(max_length=1000, default="")
+    # output = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=UserProfile(user=User()))

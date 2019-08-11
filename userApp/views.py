@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from .models import Question
+from .models import Question, Submission
 import os
 
 cwd = os.getcwd()
@@ -12,7 +12,7 @@ def signup(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = User.objects.create_user(username=username, password=password)
-        os.chdir('%s/data/usersCode' %cwd)
+        os.chdir('%s/data/usersCode' % cwd)
         os.mkdir(username)
         login(request, user)
         return redirect(reverse("detail"))
@@ -28,11 +28,10 @@ def detail(request):
 
 def file(request, qn):
     if request.method == 'POST':
-       # username = User.username
         content = request.POST['content']
-        #cwd = os.getcwd()
-        #os.chdir('%s/data/usersCode/%s'%(cwd,username))
-        f = open("solution.cpp","w+")
+        question = Question.objects.get(pk=qn)
+        submission = Submission(code=content, que=question)
+        f = open("solution.cpp", "w+")
         f.write(content)
         f.close()
         return redirect(reverse("detail"))
