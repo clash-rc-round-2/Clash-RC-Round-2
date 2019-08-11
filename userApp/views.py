@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .models import Question
-import subprocess
 import os
 
 
@@ -12,7 +11,7 @@ def signup(request):
         password = request.POST.get('password')
         user = User.objects.create_user(username=username, password=password)
         cwd = os.getcwd()
-        os.chdir('%s/data/usersCode'%cwd)
+        os.chdir('%s/data/usersCode' %cwd)
         os.mkdir(username)
         login(request, user)
         return redirect(reverse("detail"))
