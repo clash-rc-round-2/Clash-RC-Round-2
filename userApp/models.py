@@ -3,12 +3,10 @@ from django.contrib.auth.models import User
 
 
 class UserProfile(models.Model):
+    id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     # time = models.DateTimeField()
-
-    def __str__(self):
-            return self.user.username
 
 
 class Question(models.Model):

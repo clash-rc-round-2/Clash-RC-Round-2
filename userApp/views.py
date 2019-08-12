@@ -33,7 +33,7 @@ def file(request, username, qn):
         content = request.POST['content']
         submission = Submission(code=content, user=user)
         os.chdir(f'{cwd}/data/usersCode/{username}')
-        f = open("solution.cpp", "w+")
+        f = open(f"solution{qn}.cpp", "w+")
         f.write(content)
         f.close()
         return redirect(reverse("detail"))
