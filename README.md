@@ -36,11 +36,11 @@ As discussed we are creating a new team who will work on views.py and try to con
 
 II) Os and Subprocess modules (Will work on data storing and compliation of the cpp files)
    
-   - Sanket  ()
-   - Prerna  ()
-   - Murtuza ()
-   - Shreya  ()
-   - Ram     ()
+   - Sanket  (compare output with std_output and update score)
+   - Prerna  (compilation of program)
+   - Murtuza (input output redirection using subprocess.PIPE)
+   - Shreya  (use of subprocess.Popen)
+   - Ram     (making standard input/output directories after signup)
 
 Working with views.py and os/subprocess modules are interconnected to each other so we all have to work together and stay connected for understanding whole code of the project! it's important to understand all Code!!
 
