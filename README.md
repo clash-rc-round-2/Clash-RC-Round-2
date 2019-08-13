@@ -1,12 +1,60 @@
 # Clash-RC-Round-2
 
+# Update 03
+
+Guys, It's time to start working vigorously on this project.
+
+I NEED CONTRIBUTION FOR ALL OF YOU!
+
+please, don't fear to commit in git repo, if something goes wrong seniors and teammates are there to help us. And be active on whatsapp group, you can text me or senior anytime if you face any error in code
+
+I will be distributing work and adding new members in each teams. These are the following points that were disscussed in today's meet. 
+
+ --> Updating and adding new fields in UserProfile, Questions and Submission
+ --> add functions compile, runTestCase and compare in views.py
+ --> adding load buffer button(using AJAX for refreshing page) in the coding page
+ --> working on leaderboard's logic.
+ --> saving, Compiling and testing code.
+
+So, As discussed in our team meet, we have to work on our logic for connecting Models.py and views.py so that it can work properly.
+
+As discussed we are creating a new team who will work on views.py and try to connect and implement the logic of the compilation, testing, load buffer.The members are of the teams with there work are:
+
+1) Views.py      (implement the logic of various functions)
+    
+   - Gaurav  (Adding load buffer button and logic of it using AJAX)
+   - Sanchit (Build logic to save submission whenever the user click submit)
+   - Rutuja  (to add compile function in views.py)
+   - Yash    (to add compile function in views.py)
+   
+2) Models.py     (Will work on data storing and compliation of the cpp files)
+   
+   - Gaurav  (connecting userProfile and Submission using foreign keys)
+   - Abhishek(add needed fields into Questions and makemigrations of all)
+   - pranav  (add needed fields into UserProfile)
+   - Nikhil  (add needed fields into UserProfile)
+
+II) Os and Subprocess modules (Will work on data storing and compliation of the cpp files)
+   
+   - Sanket  ()
+   - Prerna  ()
+   - Murtuza ()
+   - Shreya  ()
+   - Ram     ()
+
+Working with views.py and os/subprocess modules are interconnected to each other so we all have to work together and stay connected for understanding whole code of the project! it's important to understand all Code!!
+
+KEEP PUSHING YOUR CODE IN GITHUB REPO.!
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 # Update 02
 
 Since, All of us are now comfortable with git's command, I want you guys to start contributing your work on "clash-rc-round-2" repository..
 
 before pushing any changes into the "clash-rc-round-2" repo, please make sure that you have added correct code in the commit.. If you not sure that your code which you added is correct or not, you can push it in your own repo and ask me to check whether it is correct or not, then push it into "clash-rc-round-2" repo.
 
-In late meet we discussed and divide our work into teams. these are the teams :
+In last meet we discussed and divide our work into teams. these are the teams:
 
 I) Model (will work on creating Models and the key relations between them)
    - Gaurav Ghati
@@ -30,7 +78,7 @@ Remaining members are requested to join whichever team they want, please append 
 All of us have to work on same Project now it's important to understand all project. so, whenever anyone added or push some code into the repo you all are suppose to pull and understand the code so that you will be able to work with it.
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 # Update 01
 
@@ -49,8 +97,8 @@ Refer StepsForGit.png in repo to see screenshot of commands of git on terminal
 4) $ git remote add origin https://github.com/clash-rc-round-2/Clash-RC-Round-2.git
    - Sets the new remote
  
-   $ git remote -v   
-   - Verifies the new remote URL   
+   $ git remote -v
+   - Verifies the new remote URL
    
 5) $ git pull origin master
    Then pull the all code into the round2 folder from the GitHub
@@ -73,7 +121,6 @@ Bofore making commit append the list below which you can find in round2 folder a
    
 7) $ git commit -m "Initial commit"
    Then Commit into it by this above command
-   
    
 8) $ git push origin master
    Then push the all changes into the GitHub by this command
