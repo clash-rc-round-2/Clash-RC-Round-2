@@ -17,6 +17,8 @@ I will be distributing work and adding new members in each teams. These are the 
  --> saving, Compiling and testing code.
 
 So, As discussed in our team meet, we have to work on our logic for connecting Models.py and views.py so that it can work properly.
+As compilation,compare and runTestCases function needed for every submitted code, we are going to create judge folder in data directory which will contain a python file that will do compilation, compare and testcases verification.
+We can run this python file using subprocess after submission of each code.
 
 As discussed we are creating a new team who will work on views.py and try to connect and implement the logic of the compilation, testing, load buffer.The members are of the teams with there work are:
 
