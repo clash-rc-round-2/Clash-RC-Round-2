@@ -10,11 +10,11 @@ please, don't fear to commit in git repo, if something goes wrong seniors and te
 
 I will be distributing work and adding new members in each teams. These are the following points that were disscussed in today's meet. 
 
- --> Updating and adding new fields in UserProfile, Questions and Submission
- --> add functions compile, runTestCase and compare in views.py
- --> adding load buffer button(using AJAX for refreshing page) in the coding page
- --> working on leaderboard's logic.
- --> saving, Compiling and testing code.
+-> Updating and adding new fields in UserProfile, Questions and Submission
+-> add functions compile, runTestCase and compare in views.py
+-> adding load buffer button(using AJAX for refreshing page) in the coding page
+-> working on leaderboard's logic.
+-> saving, Compiling and testing code.
 
 So, As discussed in our team meet, we have to work on our logic for connecting Models.py and views.py so that it can work properly.
 
@@ -37,7 +37,7 @@ As discussed we are creating a new team who will work on views.py and try to con
    - pranav  (add needed fields into UserProfile)
    - Nikhil  (add needed fields into UserProfile)
 
-II) Os and Subprocess modules (Will work on data storing and compliation of the cpp files)
+3) Os and Subprocess modules (Will work on data storing and compliation of the cpp files)
    
    - Sanket  (compare output with std_output and update score)
    - Prerna  (compilation of program)
