@@ -29,13 +29,16 @@ def detail(request):
 def file(request, username, qn):
     if request.method == 'POST':
         user = User.objects.get(username=username)
-        login(request, user)
         content = request.POST['content']
-        submission = Submission(code=content, user=user)
+        question = Question.objects.get(pk=qn)
+        submission = Submission(code=content, user=user, que=question)
+        submission.save()
         os.chdir(f'{cwd}/data/usersCode/{username}')
-        f = open(f"solution{qn}.cpp", "w+")
-        f.write(content)
-        f.close()
+        os.mkdir(f'question{qn}')
+        os.chdir(f'question{qn}/')
+        codefile = open(f"code{qn}.cpp", "w+")
+        codefile.write(content)
+        codefile.close()
         return redirect(reverse("detail"))
 
     elif request.method == 'GET':

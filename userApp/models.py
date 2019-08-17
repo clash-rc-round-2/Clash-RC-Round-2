@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     phone2 = models.CharField(max_length=10)
     name1 = models.CharField(max_length=100)
     name2 = models.CharField(max_length=100)
-    latestSubTime = models.CharField(max_length=10)
+    latestSubTime = models.TimeField(default='00:00')
     scoreQuestion1 = models.IntegerField(default=0)
     scoreQuestion2 = models.IntegerField(default=0)
     scoreQuestion3 = models.IntegerField(default=0)
@@ -39,6 +39,9 @@ class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     que = models.ForeignKey(Question, on_delete=models.CASCADE)
     code = models.CharField(max_length=1000)
-    subStatus = models.BooleanField(default=False)           # False for correct submission and True for wrong
-    subTime = models.CharField(max_length=10, default='')
+    subStatus = models.BooleanField(default=False)           # False for wrong submission and True for Correct
+    subTime = models.TimeField(default='00:00')
     subScore = models.IntegerField(default=0)
+
+    def __str__(self):
+            return self.user.username + ' - ' + self.que.title_number

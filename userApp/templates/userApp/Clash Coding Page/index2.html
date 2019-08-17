@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/codemirror.js"></script>
+    <script src="mode/clike/clike.js" type="text/javascript"></script>
+    <script src="addon/edit/matchbrackets.js"></script>
+    <link rel="stylesheet" href="theme/3024-night.css">
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <link href="https://fonts.googleapis.com/css?family=Biryani&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Biryani', sans-serif;
+            background: url('1111111.jpg');
+            color: #d7e9f8;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        #close {
+            background-color: #f0f0f0;
+            font-size: 25px;
+            width: 50px;
+            height: 4vh;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgb(43, 43, 43);
+            border-radius: 5px;
+        }
+
+        #run.disabled:hover {
+            cursor: not-allowed;
+        }
+
+        #close:hover {
+            background-color: red;
+            color: white;
+        }
+
+        .CodeMirror {
+            height: 90%;
+            margin-top: 5vh;
+        }
+
+        #box{
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        #tab li {
+            width: 89.3px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            border-bottom: 2px solid #d7e9f8;
+        }
+
+        #brt{
+            background-color: none;
+            border: 1px solid #d7e9f8;
+        }
+
+        .nav-tabs>li>a {
+            background-color: #000000; 
+            border-color: #777777;
+            color:#d7e9f8;
+        }
+        .nav-tabs >.active{
+            color: rgb(0, 0, 0);
+            background-color: #666;
+            border: 1px solid #888888;
+        }
+
+        input[type="radio"] {
+            -ms-transform: scale(1.5); /* IE 9 */
+            -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+            transform: scale(1.5);
+        }
+
+        .CodeMirror {
+            margin-top: 0;
+            border-radius: 5px;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+    <div class="container-fluid">
+        <div class="row" style="background-color: rgb(0, 0, 0);color: white">
+            <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
+                <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;"><img src="clash.jpg" style="height: 7vh;margin-bottom: 2px;"></div>
+                <div class="col-lg-9 mt-3" style=" height: 6vh; display:flex;align-items: center; justify-content: center;"><h5 style="margin-bottom: 10px">CODING PAGE</h5></div>
+            </div>
+            <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;">
+                Timer
+            </div>
+            <div class="col-lg-5" style=" height: 7vh;">
+                <div class="row" style="display: flex;justify-content: center;align-items: center;">
+                    <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                        <button class="btn btn-block" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh;color: white">Question Hub</button>
+                    </div>
+                    <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                        <button class="btn btn-block" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh; color: white">Leaderboard</button>
+                    </div>
+                    <div class="col-lg-3 mt-1" style="display: flex; justify-content: center;align-items: center;height: 6vh">
+                        <button class="btn btn-danger"style="font-size: 12px;width: 110px;padding-top: 8px;height: 5vh; ">Log Out</button>
+                    </div>
+                    <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex;align-items: center;">
+                        <img src="ieee.jpeg" style="height: 5vh;margin-left: 4px">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="height: 2vh"></div>
+        
+            <div class="row" id="box">
+                <div class="col-lg-12" style="height: 9vh;display: flex;align-items: center;">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-2"  style="display: flex; justify-content: center;align-items: center;height: 6vh;color: #d7e9f8">
+                        <div class="col-lg-7" style="border: 1px solid #daffef;display: flex; justify-content: center;align-items: center;height: 35px;font-size: 25px;color: #d7e9f8;padding-top: 8px; ">
+                            Score
+                        </div>
+                        <div class="col-lg-5" style="border: 1px solid #daffef;display: flex; justify-content: center;align-items: center;height: 35px;font-size: 25px;color: #d7e9f8;padding-top: 8px; ">
+                            100
+                        </div>
+                    </div>
+                    <div class="col-lg-4"></div>
+                    
+                    <div class="col-lg-4" style=" height: 6vh;display: flex; justify-content: center;align-items: center;">
+                        <span id="fname" style="margin-right: 10px;">No file choosen</span>
+                        <input type="file" id="fileLoader" name="files" title="Load File" style="display: none;" />
+                        <button class="btn btn-block" id="br" style="width: 130px;height:35px;font-size: 15px;display: flex; justify-content: center;align-items: center;padding-top: 8px;background-color: #3a8196;color: white ">
+                            Browse
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-5 ml-3 mr-3" style=" height: 64vh; ">
+                    <div class="row" style="height: 2vh"></div>
+
+                    <div class="row no-gutters">
+                        <ul class="nav nav-tabs" id="tab" style="margin-left: 2px">
+                             <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#home">1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu1">2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu2">3</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu2">4</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu2">5</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu2">6</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12" style="border: 0px solid steelblue; height:57vh;">
+                            <textarea class="col-lg-12 " style="height: 54vh; resize: none; border-radius: 5px; background-color: rgb(0, 0, 0);border: none;" readonly></textarea>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-0 ml-3" style="height: 64vh;">
+                    <div class="col-lg-6"></div>
+                </div>
+
+                <div class="col-lg-6 ml-3" style="height: 64vh; border:0px solid rgb(79, 185, 255)">
+                    <div class="row">
+                        <div class="col-lg-3 " style="height: 4vh;color: #d7e9f8;font-size: 20px;margin-top: 35px">Code Editor</div>
+                    </div>
+                    <div class="row">    
+                        <div class="col-lg-12" id="xx" style="height:60vh;">
+                            <textarea class="col-lg-12" id="editor" style="height: 54vh; resize: none; border-radius: 5px;"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 mt-2" id="con" style="height:0;font-size: 0;color: #d7e9f8;">
+                            Console:
+                        </div>
+                        <div class="col-lg-7 mt-2"></div>
+                        <div class="col-lg-2 mt-2" id="closediv" style="height: 0;opacity: 0;">
+                            <a href="#" id="close" class="float-right">&times;</a>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-lg-4" id="hidden" style="opacity: 0;height: 0;">
+                            <textarea class="col-lg-12" id="texthidden" style="height: 0;border-radius: 5px;resize: none;background-color: #000;color: #d7e9f8;" readonly>Actual Output:</textarea>
+                        </div>
+                        <div class="col-lg-4" id="hidden1" style="opacity: 0;height: 0;">
+                            <textarea class="col-lg-12" id="texthidden1" style="height: 0;border-radius: 5px;resize: none;background-color: #000;color: #d7e9f8;" readonly>Expected Output:</textarea>
+                        </div>
+                        <div class="col-lg-4" id="hidden2" style="opacity: 0;height: 0;">
+                            <textarea class="col-lg-12" id="texthidden2" style="height: 0;border-radius: 5px;resize: none;background-color: #000;color: #d7e9f8;" readonly>Status:</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 ml-3 mr-3" style="border: 0px solid rgb(64, 179, 255);height: 8vh;display: flex;justify-content: center;align-items: center;">
+                    <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh;">
+                        <ul class="nav nav-tabs" id="tab" style="margin-left: 2px">
+                            <li class="nav-item">
+                               <a class="nav-link active" data-toggle="tab" href="#home">C</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" data-toggle="tab" href="#menu1">C++</a>
+                           </li>
+                        </ul>   
+                    </div>
+
+                </div>
+                <div class="col-lg-0 ml-3 mr-3" style="height: 8vh;">
+                    <div class="col-lg-6"></div>
+                </div>
+                <div class="col-lg-6 " style="border: 0px solid rgb(95, 178, 255); height: 8vh; display: flex;justify-content: center;align-items: center;">
+                    <div class="col-lg-6 mt-3">
+                        <button class="btn btn-block" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
+                    </div>
+                    <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
+                        <button class="btn btn-block" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
+                    </div>
+                    <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
+                        <button class="btn btn-block" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style=" height: 3vh; display: flex; justify-content: center; align-items: center;"></div>
+            </div>
+        
+        
+        <div class="row" style="background-color: #111">
+            <div class="col-lg-12" style="border: 2px solid black;height:7vh;display: flex;justify-content: center;align-items: center;color: #ffffff">
+                &copy PICT IEEE STUDENT BRANCH
+            </div>
+        </div>
+    </div>
+    </form>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+            lineNumbers: true,
+            theme: '3024-night',
+            matchBrackets: true,
+            mode: "text/x-csrc"
+        });
+        
+
+
+        var editor = document.getElementById('editor');
+        var div = document.getElementById('hidden');
+        var text = document.getElementById('texthidden');
+        var run = document.getElementById('run');
+        var div2 = document.getElementById('xx');
+        var con = document.getElementById('con');
+        var closediv = document.getElementById('closediv');
+        var close = document.getElementById('close');
+        var div3 = document.getElementById('hidden1');
+        var div4 = document.getElementById('hidden2');
+        var browse = document.getElementById('br');
+        var text1 = document.getElementById('texthidden1');
+        var text2 = document.getElementById('texthidden2');
+        var rbutton= document.getElementById('rbtn');
+        var ftext= document.getElementById('fname');
+        var real= document.getElementById('fileLoader');
+
+        browse.addEventListener('click',function(){
+            real.click();
+        });
+
+        real.addEventListener("change",function(){
+            if(real.value) {
+                ftext.innerHTML= real.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+            }
+            else{
+                real.innerHTML= "No file chosen";
+            }
+        });
+
+        rbutton.onclick= function (){
+            run.click();
+        }
+
+        run.onclick = function () {
+            div2.style.transition = 'height 0.5s';
+            div2.style.height = '28vh';
+
+            editor.style.transition = 'height 0.5s';
+            editor.style.height = '24vh';
+
+            div.style.transition = 'height 0.5s';
+            div.style.height = '27vh';
+            div.style.opacity = '1';
+
+            text.style.transition = 'height 0.5s';
+            text.style.height = '21vh';
+
+            text1.style.transition = 'height 0.5s';
+            text1.style.height = '21vh';
+
+            text2.style.transition = 'height 0.5s';
+            text2.style.height = '21vh';
+
+            con.style.transition = 'height 0.05s';
+            con.style.height = '4vh';
+            con.style.fontSize = '18px';
+            con.style.color= '#d7e9f8';
+
+            div3.style.transition = 'height 0.05s';
+
+            div3.style.height = '4vh';
+            div3.style.opacity = '1';
+
+            div4.style.transition = 'height 0.05s';
+
+            div4.style.height = '4vh';
+            div4.style.opacity = '1';
+
+            closediv.style.transition = 'height 0.05s';
+
+            closediv.style.opacity = '1';
+
+            run.disabled = true;
+            run.classList.add('disabled');
+        }
+
+        close.onclick = function () {
+            div2.style.transition = 'height 0.5s';
+            div2.style.height = '60vh';
+
+            editor.style.transition = 'height 0.5s';
+            editor.style.height = '54vh';
+
+            div.style.transition = 'height 0.5s';
+            div.style.height = '0';
+
+            div.style.opacity = '0';
+
+            text.style.transition = 'height 0.5s';
+            text.style.height = '0';
+
+            text1.style.transition = 'height 0.5s';
+            text1.style.height = '0';
+
+            text2.style.transition = 'height 0.5s';
+            text2.style.height = '0';
+
+            con.style.transition = 'height 0.5s';
+            con.style.height = '0';
+            con.style.fontSize = '0';
+
+            div3.style.transition = 'height 0.5s';
+            div3.style.height = '0';
+            div3.style.opacity = '0';
+
+            div4.style.transition = 'height 0.5s';
+            div4.style.height = '0';
+            div4.style.opacity = '0';
+
+            closediv.style.transition = 'height 0.5s';
+            closediv.style.opacity = '0';
+
+            run.disabled = false;
+            run.classList.remove('disabled');
+        }
+    </script>
+</body>
+
+</html>

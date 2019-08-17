@@ -1,0 +1,220 @@
+body{
+
+
+    background-image:url('1111111.jpg');
+    font-family: 'Biryani', sans-serif;
+    background-size:100%;
+    background-repeat:no-repeat;
+    color:#d7e9f8;
+
+}
+.header {
+    border:none;
+    height:7vh;
+    background-color: black;
+    
+}
+.player1{
+        height:12vh;
+        border:none;
+    
+}
+.nam1{
+    
+}
+
+.nam1 input[type = "text"],
+.nam1 input[type = "email"],
+.nam1 input[type = "password"]
+{
+    border:none;background:transparent;outline:none; border-bottom: 2px solid black;  
+    border: none;
+    border-bottom: 1px solid #f3f4dc;font-family: 'Biryani', sans-serif;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color:#d7e9f8;
+    
+    
+    text-align: center;
+    width: 15vw;
+    display:flex;align-items: center;justify-content: center;
+    padding-left:2vw;
+}
+
+.nam1 label[for = "name"],
+.nam1 label[for = "contact"],
+.nam1 label[for = "email"],
+.nam1 label[for = "password"]
+{
+    
+  text-shadow: 1px 1px 2px #000000;
+  color:#d7e9f8;
+  text-emphasis: center;
+  text-align: center;
+  font-weight:bold;
+  font-family: 'Biryani', sans-serif;
+ display:flex; justify-content:center; align-items:center;
+}
+
+
+.h1r{
+    padding-top: 1vh;
+     text-align: center;
+     
+
+
+}
+.h1c{
+
+    border:none; height: 6vh; display:flex;align-items: center;justify-content: center;font-feature-settings:abvs ">height="45vh"width="100%;
+    padding-bottom:1vh;
+    
+}
+.h2c{
+    height:5vh; left:15vw; display:flex; justify-content:center; align-items:center;
+    padding-top:1vh;
+    
+}
+.h3c{
+    border: none; height: 6vh; display: flex; justify-content: center;align-items: center;
+    left:66vw;   display:flex;align-items: center;justify-content: center; 
+    padding-bottom:1vh;
+                                      
+}
+h5{
+    color:#d7e9f8;font-family: 'Biryani', sans-serif;
+}
+.bod{
+    height:86vh;
+}
+.b1r{
+    padding-top: 13vh; display:flex; justify-content:center; align-items:center;
+
+}
+.b1c{
+    height:60vh; border: none;
+    border-radius: 8px;
+   
+   border:1px solid black;
+    
+    background-color: rgba(0, 0, 0, 0.349);
+}
+.b2r{
+    display:flex; justify-content:center; align-items:center; padding-left:2vw; padding-right:2vw;
+}
+p{
+    padding-top:2vh;  font-weight: bold; text-align: center;font-size:4vh;color:#d7e9f8;font-family: 'Biryani', sans-serif;
+}
+.name1{
+    height:12vh;padding-left:4vw;padding-right:4vw; display:flex; justify-content:center; align-items:center;
+    display:flex; justify-content:center; align-items:center;
+    
+}
+.num1{
+    height:12vh;padding-left:4vw;padding-right:4vw;padding-top:2vh;
+    display:flex; justify-content:center; align-items:center;
+    display:flex; justify-content:center; align-items:center;
+    
+}
+.email1{
+    height:12vh;padding-left:4vw;padding-right:4vw;padding-top:3vh;
+    display:flex; justify-content:center; align-items:center;
+    
+}
+.team{
+    height:60vh;
+}
+.t1r{
+    display:flex;justify-content:center;align-items:center; 
+    border:1px solid black;
+    background-color: rgba(0, 0, 0, 0.349);
+   
+    border-radius: 8px;
+    
+}
+.t1c{
+    height: 12vh; text-align: center;
+}
+.tname{
+    height: 12vh;padding-left:4vw;padding-right:4vw;
+    
+}
+.tpassword{
+    height: 12vh; padding-left:4vw; padding-right:4vw;padding-top:2vh; display:flex; justify-content: center;align-content:center;
+    
+}
+.t2c{
+    height: 16vh;top:8vh;
+}
+.radio{
+    height:8vh;  display:flex; justify-content: center;align-content:center;
+}
+.button{
+    display: flex; justify-content:center; align-content: center;
+    padding-top:3.5vh;
+
+}
+.button input[type =button]{
+      display: flex; justify-content:center; align-content: center; 
+      
+    
+}
+.player2box{
+    height:60vh; border: none;
+    border-radius: 8px;
+    border:1px solid black;
+    
+    background-color: rgba(0, 0, 0, 0.349);
+}
+.p2r{
+    display:flex; justify-content:center; align-items:center; padding-left:2vw; padding-right:2vw;
+}
+
+.footer{
+    background-color: black; height: 7vh; display: flex; justify-content: center; align-items: center;
+    color:#d7e9f8;font-family: 'Biryani', sans-serif;
+    
+}
+.rad{
+    top:2vh;left:2vw; font-size: 20px;
+}
+
+.button button[type = "button"]
+{
+    top: 20vh; left:1vw; height: 6vh;color:#d7e9f8;font-family: 'Biryani', sans-serif;
+    background-color: rgba(0,0,0,1);
+}
+.t1r{
+    border:none;
+    height: 40vh;
+}
+.t2r{
+
+     display:flex; justify-content:center; align-items:center;
+
+}
+.radi1{
+    display:flex; justify-content:center; align-items:center;
+    padding-left: 2vw;
+}
+.radio_row{
+    display:flex; justify-content:center; align-items:center;
+}
+
+
+b{
+    display:flex; justify-content:center; align-items:center;font-family: 'Biryani', sans-serif;
+    
+    text-shadow: 1px 1px 2px #000000;
+    text-emphasis: center;
+    text-align: center;
+    font-weight:bold;
+    font-size:3vh;
+    padding-left:1vw;
+    color:#d7e9f8;font-family: 'Biryani', sans-serif;
+
+}
+::placeholder{
+    color: #d7e9f8;
+}
