@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+NO_OF_QUESTIONS = 6
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     totalScore = models.IntegerField(default=0)
-    totalAttempts = models.IntegerField(default=0)
     email1 = models.EmailField(default='example@gmail.com')
     email2 = models.EmailField(default='example@gmail.com')
     phone1 = models.CharField(max_length=10)
@@ -13,12 +14,6 @@ class UserProfile(models.Model):
     name1 = models.CharField(max_length=100)
     name2 = models.CharField(max_length=100)
     latestSubTime = models.TimeField(default='00:00')
-    scoreQuestion1 = models.IntegerField(default=0)
-    scoreQuestion2 = models.IntegerField(default=0)
-    scoreQuestion3 = models.IntegerField(default=0)
-    scoreQuestion4 = models.IntegerField(default=0)
-    scoreQuestion5 = models.IntegerField(default=0)
-    scoreQuestion6 = models.IntegerField(default=0)
 
     def __str__(self):
             return self.user.username
@@ -34,6 +29,12 @@ class Question(models.Model):
 
     def __str__(self):
             return self.title_number + '-' + self.question
+
+
+class MultipleQues(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    scoreQuestion = models.IntegerField(default=0)
+    attempts = models.IntegerField(default=0)
 
 
 class Submission(models.Model):

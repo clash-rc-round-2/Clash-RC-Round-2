@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from .models import Question, Submission, UserProfile
+from .models import Question, Submission, UserProfile, MultipleQues
 import os
 
 cwd = os.getcwd()
@@ -38,10 +38,11 @@ def file(request, username, qn):
     if request.method == 'POST':
         user = User.objects.get(username=username)
         content = request.POST['content']
-        question = Question.objects.get(pk=qn)
-        att = question.attempt
-        submission = Submission(code=content, user=user, que=question)
+        que = Question.objects.get(pk=qn)
+        submission = Submission(code=content, user=user, que=que)
         submission.save()
+        mulQue = MultipleQues(user=user)
+        att = mulQue.attempts
         os.chdir(f'{cwd}/data/usersCode/{username}')
 
         try:
@@ -53,9 +54,9 @@ def file(request, username, qn):
         codefile = open(f"code{qn}.{att}.cpp", "w+")
         codefile.write(content)
         codefile.close()
-        question.attempt += 1
-        question.save()
-        print(question.attempt)
+        mulQue.attempts += 1
+        mulQue.save()
+        print(mulQue.attempts)
         return redirect(reverse("detail"))
 
     elif request.method == 'GET':
