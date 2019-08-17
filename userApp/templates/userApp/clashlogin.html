@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>CLASH LOGIN</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-        <link rel = "stylesheet" type = "text/css" href="clashlogin.css" />
+        <link rel = "stylesheet" type = "text/css" href="{% static 'css/clashlogin.css' %}" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -14,7 +15,8 @@
         
     </head>
     <body>
-        <form>
+        <form method="post">
+            {% csrf_token %}
         <div class="container-fluid">
                 
             <div class="row">
@@ -23,7 +25,7 @@
                         <div class="row" style="background-color: rgb(0, 0, 0)">
                             <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
                                 <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;margin-bottom: 2px;">
-                                    <img src="clash.jpg" style="height: 7vh;">
+                                    <img src="{% static 'images/clash.jpg' %}" style="height: 7vh;">
                                 </div>
                                 <div class="col-lg-9 mt-3" style=" height: 6vh; display:flex;align-items: center; justify-content: center;color: white">
                                     <h5>LOGIN</h5>
@@ -42,7 +44,7 @@
                                     <div class="col-lg-3 mt-1">
                                     </div>
                                     <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; align-items: center;">
-                                        <img src="ieee.jpeg" style="height: 5vh;margin-left: 4px;">
+                                        <img src="{% static 'images/ieee.jpeg' %}" style="height: 5vh;margin-left: 4px;">
                                     </div>
                                 </div>
                             </div>
@@ -56,19 +58,19 @@
                                 <div class="col-lg-12 name1">
                                         <div class = "form-group nam1" >
                                                 <label for = "name"> Name </label>
-                                                <input type = "text"   placeholder="Your Name " id="team">
+                                                <input type = "text" name="name1"  placeholder="Your Name " id="team">
                                                 </div>
                                 </div>
                                 <div class="col-lg-12 num1">
                                         <div class  = "form-group nam1">
                                                 <label for = "contact">Contact Number</label>
-                                                <input type = "text"   placeholder="Your Contact No. " id = "contactno">
+                                                <input type = "text" name="phone1"  placeholder="Your Contact No. " id = "contactno">
                                                 </div>
                                 </div>
                                 <div class="col-lg-12 email1">
                                         <div class = "form-group nam1">
                                                 <label for = "email">Email-id</label>
-                                                <input type = "email"   placeholder="Your Email" id = "email">
+                                                <input type = "email" name="email2"  placeholder="Your Email" id = "email">
                                                 </div>
                                 </div>
                             </div>
@@ -85,14 +87,14 @@
                                 <div class = "col-lg-12 name1" style = "top: -3vh;">
                                     
                                         <div class = "form-group nam1">
-                                                <label for = "name" >Team Name</label>
-                                                <input type = "text"   placeholder="Your Team Name" id = "team_name" >
+                                                <label for = "username" >Team Name</label>
+                                                <input type = "text" name="username" placeholder="Your Team Name" id = "team_name" >
                                             </div>
                                 </div>
                                 <div class = "col-lg-12 tpassword" style = "top:-3vh">
                                         <div class = "form-group nam1">
                                                 <label for = "password" >Password</label>
-                                                <input type = "password"    placeholder="Password" id = "pass" >
+                                                <input type = "password" name="password" placeholder="Password" id = "pass" >
                                             </div>   
                                 </div>
                                 <div class = "col-lg-12 t2c" >
@@ -112,7 +114,7 @@
                                                
                                               
                                         <div class = "col-lg-12 button" >
-                                                <button type="button"class="btn btn-dark" style = " background-color: rgb(20, 173, 20) ;color:white; border:none;height:7vh;font-size:13px;width: 8vw;border-radius:5px;display: flex;align-items: center;justify-content: center;padding-top: 11px"> LOGIN</button>
+                                                <button type="submit" class="btn btn-dark" style = " background-color: rgb(20, 173, 20) ;color:white; border:none;height:7vh;font-size:13px;width: 8vw;border-radius:5px;display: flex;align-items: center;justify-content: center;padding-top: 11px">LOGIN</button>
                                         </div>
                                     </div>
                                     
@@ -125,19 +127,19 @@
                                         <div class="col-lg-12 name1">
                                                 <div class = "form-group nam1">
                                                         <label for = "name"> Name </label>
-                                                        <input type = "text"   placeholder="Your Name" id="team">
+                                                        <input type = "text" name="name1"  placeholder="Your Name" id="team">
                                                         </div>
                                         </div>
                                         <div class="col-lg-12 num1">
                                                 <div class  = "form-group nam1">
                                                         <label for = "contact"> Contact No.</label>
-                                                        <input type = "text"   placeholder="Your Contact No. " id = "contactno">
+                                                        <input type = "text" name="phone2"  placeholder="Your Contact No. " id = "contactno">
                                                         </div>
                                         </div>
                                         <div class="col-lg-12 email1">
                                                 <div class = "form-group nam1">
                                                         <label for = "email"> Email-id</label>
-                                                        <input type = "email"   placeholder="Your Email" id = "email">
+                                                        <input type = "email" name="email2"  placeholder="Your Email" id = "email">
                                                         </div>
                                         </div>
                                     </div>
@@ -155,23 +157,4 @@
         </form>
 
     </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </html>
