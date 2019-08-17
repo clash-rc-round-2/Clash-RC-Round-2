@@ -26,6 +26,7 @@ class UserProfile(models.Model):
 
 class Question(models.Model):
     title_number = models.CharField(max_length=50)
+    attempt = models.IntegerField(default=0)
     question = models.CharField(max_length=5000)
     totalSub = models.IntegerField(default=0)
     totalSuccessfulSub = models.IntegerField(default=0)

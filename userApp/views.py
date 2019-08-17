@@ -31,14 +31,21 @@ def file(request, username, qn):
         user = User.objects.get(username=username)
         content = request.POST['content']
         question = Question.objects.get(pk=qn)
+        att = question.attempt
         submission = Submission(code=content, user=user, que=question)
         submission.save()
         os.chdir(f'{cwd}/data/usersCode/{username}')
-        os.mkdir(f'question{qn}')
+        try:
+            os.mkdir(f'question{qn}')
+        except(FileExistsError):
+            pass
         os.chdir(f'question{qn}/')
-        codefile = open(f"code{qn}.cpp", "w+")
+        codefile = open(f"code{qn}.{att}.cpp", "w+")
         codefile.write(content)
         codefile.close()
+        question.attempt += 1
+        question.save()
+        print(question.attempt)
         return redirect(reverse("detail"))
 
     elif request.method == 'GET':
