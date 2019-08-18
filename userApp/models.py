@@ -33,6 +33,7 @@ class Question(models.Model):
 
 class MultipleQues(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    que = models.ForeignKey(Question, on_delete=models.CASCADE,default="1")
     scoreQuestion = models.IntegerField(default=0)
     attempts = models.IntegerField(default=0)
 

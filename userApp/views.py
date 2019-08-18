@@ -41,7 +41,10 @@ def file(request, username, qn):
         que = Question.objects.get(pk=qn)
         submission = Submission(code=content, user=user, que=que)
         submission.save()
-        mulQue = MultipleQues(user=user)
+        try:
+            mulQue = MultipleQues.objects.get(user=user,que= que)
+        except (MultipleQues.DoesNotExist):
+            mulQue = MultipleQues(user=user,que=que)
         att = mulQue.attempts
         os.chdir(f'{cwd}/data/usersCode/{username}')
 
