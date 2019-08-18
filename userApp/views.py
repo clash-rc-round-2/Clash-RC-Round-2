@@ -41,10 +41,12 @@ def file(request, username, qn):
         que = Question.objects.get(pk=qn)
         submission = Submission(code=content, user=user, que=que)
         submission.save()
+
         try:
-            mulQue = MultipleQues.objects.get(user=user,que= que)
+            mulQue = MultipleQues.objects.get(user=user, que=que)
         except (MultipleQues.DoesNotExist):
-            mulQue = MultipleQues(user=user,que=que)
+            mulQue = MultipleQues(user=user, que=que)
+
         att = mulQue.attempts
         os.chdir(f'{cwd}/data/usersCode/{username}')
 
@@ -65,4 +67,4 @@ def file(request, username, qn):
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
-        return render(request, 'userApp/question.html', context={'question': question, 'user': user})
+        return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user})
