@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from .models import Question, Submission, UserProfile, MultipleQues
-import os
+from .models import Question, Submission, UserProfile
+from django.http import Http404
+import os,subprocess
 
 cwd = os.getcwd()
 
@@ -38,28 +39,31 @@ def file(request, username, qn):
     if request.method == 'POST':
         user = User.objects.get(username=username)
         content = request.POST['content']
-        que = Question.objects.get(pk=qn)
-        submission = Submission(code=content, user=user, que=que)
+        question = Question.objects.get(pk=qn)
+        att = question.attempt
+        submission = Submission(code=content, user=user, que=question)
         submission.save()
-        try:
-            mulQue = MultipleQues.objects.get(user=user,que= que)
-        except (MultipleQues.DoesNotExist):
-            mulQue = MultipleQues(user=user,que=que)
-        att = mulQue.attempts
-        os.chdir(f'{cwd}/data/usersCode/{username}')
+        os.chdir(cwd + '/data/usersCode/' + username)
 
         try:
-            os.mkdir(f'question{qn}')
-        except(FileExistsError):
+            os.mkdir('question'+str(qn))
+        except FileExistsError:
             pass
 
-        os.chdir(f'question{qn}/')
-        codefile = open(f"code{qn}.{att}.cpp", "w+")
+        os.chdir('question'+str(qn)+'/')
+        path =os.getcwd()
+        codefile = open('code'+str(qn)+'.'+str(att)+'.cpp', "w+")
         codefile.write(content)
         codefile.close()
-        mulQue.attempts += 1
-        mulQue.save()
-        print(mulQue.attempts)
+        question.attempt += 1
+        question.save()
+        print(question.attempt)
+        p = subprocess.Popen("python main.py", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                             shell=True)
+        in1 = str(path)
+        in1.encode('utf-8')
+        p.communicate(bytes(in1, 'utf-8'))
+        p.wait()
         return redirect(reverse("detail"))
 
     elif request.method == 'GET':
