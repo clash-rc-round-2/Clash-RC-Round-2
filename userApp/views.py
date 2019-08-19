@@ -29,9 +29,10 @@ def signup(request):
         return render(request, 'userApp/clashlogin.html')
 
 
+
 def detail(request):
     all_questions = Question.objects.all()
-    return render(request, 'userApp/loggedin.html', context={'all_questions': all_questions})
+    return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions})
 
 
 def file(request, username, qn):
@@ -65,4 +66,4 @@ def file(request, username, qn):
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
-        return render(request, 'userApp/question.html', context={'question': question, 'user': user})
+        return render(request, 'userApp/index2.html', context={'question': question, 'user': user})
