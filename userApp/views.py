@@ -3,9 +3,17 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile
 from django.http import Http404
-import os,subprocess
+import os, subprocess
 
 cwd = os.getcwd()
+
+
+def instruct(request):
+    if request.method == 'POST':
+        return redirect(reverse("signup"))
+
+    elif request.method == 'GET':
+        return render(request, 'userApp/instpgclash.html')
 
 
 def signup(request):
@@ -32,7 +40,7 @@ def signup(request):
 
 def detail(request):
     all_questions = Question.objects.all()
-    return render(request, 'userApp/loggedin.html', context={'all_questions': all_questions})
+    return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions})
 
 
 def file(request, username, qn):
@@ -43,16 +51,27 @@ def file(request, username, qn):
         att = question.attempt
         submission = Submission(code=content, user=user, que=question)
         submission.save()
+        # <<<<<<< HEAD
         os.chdir(cwd + '/data/usersCode/' + username)
+        # =======
 
         try:
-            os.mkdir('question'+str(qn))
+            mulQue = MultipleQues.objects.get(user=user, que=que)
+        except (MultipleQues.DoesNotExist):
+            mulQue = MultipleQues(user=user, que=que)
+
+        att = mulQue.attempts
+        # os.chdir('{cwd}/data/usersCode/{username}')
+        # >>>>>>> 448e02a593aab99f252105c8706a901ef4c53430
+
+        try:
+            os.mkdir('question' + str(qn))
         except FileExistsError:
             pass
 
-        os.chdir('question'+str(qn)+'/')
-        path =os.getcwd()
-        codefile = open('code'+str(qn)+'.'+str(att)+'.cpp', "w+")
+        os.chdir('question' + str(qn) + '/')
+        path = os.getcwd()
+        codefile = open('code' + str(qn) + '.' + str(att) + '.cpp', "w+")
         codefile.write(content)
         codefile.close()
         question.attempt += 1
@@ -69,4 +88,4 @@ def file(request, username, qn):
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
-        return render(request, 'userApp/question.html', context={'question': question, 'user': user})
+        return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user})

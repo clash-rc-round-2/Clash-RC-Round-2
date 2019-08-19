@@ -1,9 +1,10 @@
+{% load static %}
 <html>
-
 <head>
     <title>Instruction Page Clash</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel = "stylesheet" type = "text/css" href="{% static 'css/styleme.css' %}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="styleme.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
@@ -11,11 +12,15 @@
 </head>
 
 <body>
+      <!--<form action="user/allque">-->
+      <form method="post">
+          {% csrf_token %}
     <div class="container-fluid">
         <div class="row" style="height: 7vh;background-color: #000000;color: white">
             <div class="col-lg-1 " style="height: 7vh">
-                    <img class="img-fluid" src="clash.jpeg" alt="PISB LOGO"
+                    <img class="img-fluid" src="{% static 'images/clash.jpeg' %}" alt="PISB LOGO"
                     style="height: 7vh ;position: relative;bottom:0.5vh;margin-top: 2px;margin-left: 15px">
+
             </div>
             <div class="col-lg-1" style="text-align: center; height: 7vh">
 
@@ -27,7 +32,7 @@
 
             </div>
             <div class="col-lg-2 mt-1" style="height: 7vh" style="display: flex; align-items: center;">
-                <img src="ieee.jpeg" alt="PISB LOGO"
+                <img src="{% static 'images/ieee.jpeg' %}" alt="PISB LOGO"
                     style="height: 5vh;margin-left: 89.5px;margin-top: 3px;">
             </div>
         </div>
@@ -56,7 +61,8 @@
                                 </div>
                                 <div class="col-lg-12"
                                     style="height: 15vh;justify-content: center;display: flex;align-items: center">
-                                    <button type="button" class="btn" style="background-color: rgb(20, 173, 20);display: flex;align-items: center;justify-content: center;font-size: 13px;height: 7vh;color: white">PROCEED</button>
+
+                                    <button type="submit" class="btn" style="background-color: rgb(20, 173, 20);display: flex;align-items: center;justify-content: center;font-size: 13px;height: 7vh;color: white" >PROCEED</button>
                                 </div>
                             </div>
                         </div>
@@ -71,6 +77,7 @@
             </div>
         </div>
     </div>
+      </form>
 </body>
 
 </html>
