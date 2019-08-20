@@ -20,6 +20,7 @@ def signup(request):
         user = User.objects.create_user(username=username, password=password)
         userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
                                   email2=email2)
+        userprofile.save()
         os.chdir('%s/data/usersCode' % cwd)
         os.mkdir(username)
         login(request, user)
@@ -27,7 +28,6 @@ def signup(request):
 
     elif request.method == 'GET':
         return render(request, 'userApp/clashlogin.html')
-
 
 
 def detail(request):
@@ -69,3 +69,11 @@ def file(request, username, qn):
         question = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
         return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user})
+
+
+def instructions(request):
+    return render(request, 'userApp/instpgclash.html')
+
+
+def leader(request):
+    return render(request, 'userApp/leaderboard_RC(blue).html')

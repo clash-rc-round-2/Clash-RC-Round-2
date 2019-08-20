@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     phone1 = models.CharField(max_length=10)
     phone2 = models.CharField(max_length=10)
     name1 = models.CharField(max_length=100)
-    name2 = models.CharField(max_length=100)
+    name2 = models.CharField(max_length=100, null=True)
     latestSubTime = models.TimeField(default='00:00')
 
     def __str__(self):
