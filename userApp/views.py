@@ -29,9 +29,10 @@ def signup(request):
         return render(request, 'userApp/clashlogin.html')
 
 
+
 def detail(request):
     all_questions = Question.objects.all()
-    return render(request, 'userApp/loggedin.html', context={'all_questions': all_questions})
+    return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions})
 
 
 def file(request, username, qn):

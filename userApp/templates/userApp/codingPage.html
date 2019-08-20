@@ -25,7 +25,7 @@
     <style>
         body {
             font-family: 'Biryani', sans-serif;
-            background: url('1111111.jpg');
+            background: url('{% static 'images/1111111.jpg' %}');
             color: #d7e9f8;
             margin: 0;
             padding: 0;
@@ -112,6 +112,7 @@
                 <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;">
                     <img src="{% static 'images/clash.jpg' %}" style="height: 7vh;margin-bottom: 2px;">
                 </div>
+                <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;"><img src="{% static 'images/clash.jpg' %}" style="height: 7vh;margin-bottom: 2px;"></div>
                 <div class="col-lg-9 mt-3" style=" height: 6vh; display:flex;align-items: center; justify-content: center;"><h5 style="margin-bottom: 10px">CODING PAGE</h5></div>
             </div>
             <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;">
@@ -189,7 +190,8 @@
                     <div class="row">
                         <div class="col-lg-12" style="border: 0px solid steelblue; height:57vh;">
                             <textarea class="col-lg-12 " style="color:white; height: 54vh; resize: none; border-radius: 5px; background-color: rgb(0, 0, 0);border: none;" readonly>
-                                {{question.question}}
+                                {{ question.title_number }}
+                                {{ question.question }}
                             </textarea>
                         </div>
                     </div>
