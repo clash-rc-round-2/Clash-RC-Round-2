@@ -49,9 +49,9 @@ def file(request, username, qn):
         os.chdir(cwd + '/data/usersCode/' + username)
 
         try:
-            mulQue = MultipleQues.objects.get(user=user, que=que)
+            mulQue = MultipleQues.objects.get(user=user, que=question)
         except MultipleQues.DoesNotExist:
-            mulQue = MultipleQues(user=user, que=que)
+            mulQue = MultipleQues(user=user, que=question)
         mulQue.save()
         att = mulQue.attempts
 
@@ -92,10 +92,15 @@ def leader(request):
         list = []
         for n in range(1, 7):
             que = Question.objects.get(pk=n)
-            user1 = MultipleQues.objects.filter(user=user.user, que=que).first
-            list.append(user1)
+            try:
+                mulQue = MultipleQues.objects.get(user=user.user, que=que)
+                list.append(mulQue.scoreQuestion)
+            except MultipleQues.DoesNotExist:
+                list.append(0)
         list.append(user.totalScore)
         dict[user.user] = list
+
+    print(dict)
     sorted(dict.items(), key=lambda items: items[1][6])
     return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict})
 
