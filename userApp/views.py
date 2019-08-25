@@ -63,7 +63,7 @@ def file(request, username, qn):
         mulQue.attempts += 1
         mulQue.save()
         print(mulQue.attempts)
-        return redirect(reverse("detail"))
+        return redirect("submission", username=username, qn=qn)
 
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
@@ -77,3 +77,15 @@ def instructions(request):
 
 def leader(request):
     return render(request, 'userApp/leaderboard_RC(blue).html')
+
+
+def submission(request, username, qn):
+    user = User.objects.get(username=username)
+    que = Question.objects.get(pk=qn)
+    allSubmission = Submission.objects.all()
+    userQueSub = list()
+    for submissions in allSubmission:
+        if submissions.que == que and submissions.user == user:
+            userQueSub.append(submissions)
+
+    return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub})
