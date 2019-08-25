@@ -1,3 +1,4 @@
+{% load static %}
 <B4->
     <!DOCTYPE html>
     <html lang="en">
@@ -11,7 +12,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Biryani&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styleR2.css">
+
+        <link rel="stylesheet" href="{% static 'css/styleR2.css' %}">
         
     </head>
 
@@ -19,7 +21,7 @@
         <div class="container-fluid">
             <div class="row" style="background-color: rgb(0, 0, 0);color: white">
                 <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
-                    <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;"><img src="clash.jpg" style="height: 7vh;margin-bottom: 2px;"></div>
+                    <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;"><img src="{% static 'images/clash.jpg' %}" style="height: 7vh;margin-bottom: 2px;"></div>
                     <div class="col-lg-9 mt-3" style=" height: 6vh; display:flex;align-items: center; justify-content: center;"><h5 style="margin-bottom: 10px">LEADERBOARD</h5></div>
                 </div>
                 <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;">
@@ -37,7 +39,7 @@
                             <button class="btn btn-danger"style="font-size: 12px;width: 110px;padding-top: 8px;height: 5vh; ">Log Out</button>
                         </div>
                         <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex;align-items: center;">
-                            <img src="ieee.png" style="height: 5vh;margin-left: 4px">
+                            <img src="{% static 'images/ieee.png' %}" style="height: 5vh;margin-left: 4px">
                         </div>
                     </div>
                 </div>
@@ -62,204 +64,23 @@
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
                 <table class="table table-striped table-hover">
                     <tbody style="margin-left: 10vw; margin-right:right">
+                    {% for key,value in dict.items %}
+
                         <tr>
-                            <td class="c2-rank ">1.</td>
-                            <td class="c2-name">XYZ </td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
+                                <td class="c2-rank ">{{ forloop.counter }}</td>
+                                <td class="c2-name">{{ key }}</td>
+                                {% for var in value %}
+                                    <td class="c2 ">{{ var }}</td>
+                                {% endfor %}
+                                <!--<td class="c2 ">40</td>
+                                <td class="c2 ">40</td>
+                                <td class="c2 ">40</td>
+                                <td class="c2 ">40</td>
+                                <td class="c2">40</td>-->
+                                <!--<td class="c2-result">{{ value }}</td>-->
                         </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZ</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
-                        <tr>
-                            <td class="c2-rank">1.</td>
-                            <td class="c2-name">XYZl </td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
-                        </tr>
+                    {% endfor %}
+
                     </tbody>
                 </table>
             </div>

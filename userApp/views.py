@@ -1,19 +1,13 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from .models import Question, Submission, UserProfile
+from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import Http404
 import os, subprocess
+import array
 
 cwd = os.getcwd()
-
-
-def instruct(request):
-    if request.method == 'POST':
-        return redirect(reverse("signup"))
-
-    elif request.method == 'GET':
-        return render(request, 'userApp/instpgclash.html')
+n = 0
 
 
 def signup(request):
@@ -29,6 +23,7 @@ def signup(request):
         user = User.objects.create_user(username=username, password=password)
         userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
                                   email2=email2)
+        userprofile.save()
         os.chdir('%s/data/usersCode' % cwd)
         os.mkdir(username)
         login(request, user)
@@ -51,18 +46,14 @@ def file(request, username, qn):
         att = question.attempt
         submission = Submission(code=content, user=user, que=question)
         submission.save()
-        # <<<<<<< HEAD
         os.chdir(cwd + '/data/usersCode/' + username)
-        # =======
 
         try:
             mulQue = MultipleQues.objects.get(user=user, que=que)
-        except (MultipleQues.DoesNotExist):
+        except MultipleQues.DoesNotExist:
             mulQue = MultipleQues(user=user, que=que)
-
+        mulQue.save()
         att = mulQue.attempts
-        # os.chdir('{cwd}/data/usersCode/{username}')
-        # >>>>>>> 448e02a593aab99f252105c8706a901ef4c53430
 
         try:
             os.mkdir('question' + str(qn))
@@ -89,3 +80,22 @@ def file(request, username, qn):
         question = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
         return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user})
+
+
+def instructions(request):
+    return render(request, 'userApp/instpgclash.html')
+
+
+def leader(request):
+    dict = {}
+    for user in UserProfile.objects.all():
+        list = []
+        for n in range(1, 7):
+            que = Question.objects.get(pk=n)
+            user1 = MultipleQues.objects.filter(user=user.user, que=que).first
+            list.append(user1)
+        list.append(user.totalScore)
+        dict[user.user] = list
+    sorted(dict.items(), key=lambda items: items[1][6])
+    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict})
+
