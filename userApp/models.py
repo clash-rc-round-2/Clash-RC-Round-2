@@ -50,7 +50,7 @@ class Submission(models.Model):
     subTime = models.TimeField(default='00:00')
     subScore = models.IntegerField(default=0)
     correctTestCases = models.IntegerField(default=0)
-    TestCasesPercentage = models.IntegerField(default=0)
+    TestCasesPercentage = models.IntegerField(default=0)         # (TestCasesPercentage = correctTestCases / 6) * 100
 
     def __str__(self):
             return self.user.username + ' - ' + self.que.titleQue

@@ -20,7 +20,7 @@
             <div class="col-lg-5" style=" height: 7vh;">
                 <div class="row">
                     <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                        <button class="btn btn-block" onclick="href = '/user/allque';" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh; color: white">Question Hub</button>
+                        <button class="btn btn-block" onclick="windows.location.href = '/user/allque';" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh; color: white">Question Hub</button>
                     </div>
                     <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
                         <button class="btn btn-block" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh;color: white ">Leaderboard</button>
@@ -64,7 +64,7 @@
                             <td class="col-md-3">
                                 <div class="progress" id="progressStyle">
                                     <div class="progress-bar bg-success" style="width:{{ submission.TestCasesPercentage }}%;text-align: center">
-                                        {{ submission.correctTestCasesPercentage }}%
+                                        {{ submission.TestCasesPercentage }}%
                                     </div>
                                 </div>
                             </td>
