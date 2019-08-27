@@ -33,7 +33,7 @@
                             <button class="btn btn-block" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh;color: white ">Question Hub</button>
                         </div>
                         <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                            <button class="btn btn-block" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh;color: white ">Leaderboard</button>
+                            <button class="btn btn-block"  style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh;color: white ">Leaderboard</button>
                         </div>
                         <div class="col-lg-3 mt-1" style="display: flex; justify-content: center;align-items: center;height: 6vh">
                             <button class="btn btn-danger"style="font-size: 12px;width: 110px;padding-top: 8px;height: 5vh; ">Log Out</button>
@@ -57,25 +57,23 @@
                         <th class="w"><p class="h">Q5</p></th>
                         <th class="w"><p class="h">Q6</p></th>
                         <th class="w-t"><p class="h-total">TOTAL</p></th>
-
                     </tr>
                 </thead>
             </table>
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
                 <table class="table table-striped table-hover">
                     <tbody style="margin-left: 10vw; margin-right:right">
+                    {% for user in allusers %}
                         <tr>
-                            <td class="c2-rank ">1.</td>
-                            <td class="c2-name">XYZ </td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2 ">40</td>
-                            <td class="c2">40</td>
-                            <td class="c2-result">400</td>
+                            <td class="c2-rank ">{{ forloop.counter }}</td>
+                            <td class="c2-name">{{ user.user.username }}</td>
+                            {% for mark in allmarks %}
+                                  <td class="c2 ">{{ mark.scoreQuestion }}</td>
+                            {% endfor %}
+                            <td class="c2-result">{{ user.user.totalScore }}</td>
                         </tr>
-                        <tr>
+                    {% endfor %}
+                    <!-- <tr>
                             <td class="c2-rank">1.</td>
                             <td class="c2-name">XYZ</td>
                             <td class="c2">40</td>
@@ -261,7 +259,7 @@
                             <td class="c2">40</td>
                             <td class="c2">40</td>
                             <td class="c2-result">400</td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
