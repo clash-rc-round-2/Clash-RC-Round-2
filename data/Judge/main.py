@@ -25,8 +25,8 @@ def configSandbox(args, inputFile, outFile):
     # sandbox configuration
     cookbook = {
         'args': args[1:],               # targeted program
-        'stdin': sys.stdin,             # input to targeted program
-        'stdout': sys.stdout,           # output from targeted program
+        'stdin': inputFile,             # input to targeted program
+        'stdout': outFile,           # output from targeted program
         'stderr': sys.stderr,           # error from targeted program
         'quota': dict(wallclock=30000,  # 30 sec
                       cpu=2000,         # 2 sec
