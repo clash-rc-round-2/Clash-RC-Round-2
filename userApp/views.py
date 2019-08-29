@@ -5,7 +5,8 @@ from .models import Question, Submission, UserProfile, MultipleQues
 import os
 
 
-cwd = os.getcwd()
+path = os.getcwd()
+path1 = path + '/data/usersCode'
 
 
 def signup(request):
@@ -22,21 +23,20 @@ def signup(request):
         userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
                                   email2=email2)
         userprofile.save()
-        os.chdir('%s/data/usersCode' % cwd)
-        os.mkdir(username)
+        os.system('mkdir {}/{}'.format(path1, username))
         login(request, user)
-        return redirect(reverse("detail"))
+        return redirect(reverse("questionHub"))
 
     elif request.method == 'GET':
         return render(request, 'userApp/clashlogin.html')
 
 
-def detail(request):
+def questionHub(request):
     all_questions = Question.objects.all()
     return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions})
 
 
-def file(request, username, qn):
+def codeSave(request, username, qn):
     if request.method == 'POST':
         user = User.objects.get(username=username)
         content = request.POST['content']
@@ -50,15 +50,14 @@ def file(request, username, qn):
             mulQue = MultipleQues(user=user, que=que)
 
         att = mulQue.attempts
-        os.chdir(f'{cwd}/data/usersCode/{username}')
 
         try:
-            os.mkdir(f'question{qn}')
+            os.system('mkdir {}/{}/question{}'.format(path1, username, qn))
+
         except FileExistsError:
             pass
 
-        os.chdir(f'question{qn}/')
-        codefile = open(f"code{qn}.{att}.cpp", "w+")
+        codefile = open("{}/{}/question{}/code{}-{}.cpp".format(path1, username, qn, qn, att), "w+")
         codefile.write(content)
         codefile.close()
         mulQue.attempts += 1
@@ -93,3 +92,12 @@ def submission(request, username, qn):
             userQueSub.append(submissions)
 
     return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub})
+
+
+def runCode(request, username, qn):
+    user = User.objects.get(username=username)
+    que = Question.objects.get(pk=qn)
+    mulQue = MultipleQues.objects.get(user=user, que=que)
+    attempts = mulQue.attempts
+    os.system('python main.py '+ '{}/{}/question{}/code{}-{}.cpp'.format(path1, username, qn, qn, attempts) + ' '+
+              username + ' ' + qn + ' ' + attempts)

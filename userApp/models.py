@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     phone2 = models.CharField(max_length=10)
     name1 = models.CharField(max_length=100)
     name2 = models.CharField(max_length=100, null=True)
-    junior = models.BooleanField(default=True)           # True if Junior(FE) else False if Senior(SE,TE,BE)
+    junior = models.BooleanField(default=True)       # True if Junior(FE) else False if Senior(SE,TE,BE)
     latestSubTime = models.TimeField(default='00:00')
 
     def __str__(self):
@@ -49,7 +49,8 @@ class Submission(models.Model):
     subTime = models.TimeField(default='00:00')
     subScore = models.IntegerField(default=0)
     correctTestCases = models.IntegerField(default=0)
-    TestCasesPercentage = models.IntegerField(default=0)         # (TestCasesPercentage = correctTestCases / 6) * 100
+    TestCasesPercentage = models.IntegerField(default=0)
+    # (TestCasesPercentage = correctTestCases / NO_OF_QUESTIONS) * 100
 
     def __str__(self):
             return self.user.username + ' - ' + self.que.titleQue

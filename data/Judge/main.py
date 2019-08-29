@@ -41,17 +41,32 @@ def configSandbox(args, inputFile, outFile):
     return os.EX_OK
 
 def compare():
-    #comparing.
+
 
 def compile():
     #compilation
 
-def runTestCases():
+def runtestcases():
     #runTestCases
 
 def main():
+    # main.py is called from views.py by command
+
+    #os.system('python main.py '+ '{}/{}/question{}/code{}-{}.cpp'.format(path1, username, qn, qn, attempts) + ' '+
+    #          username + ' ' + qn + ' ' + attempts)
+
+    filename = sys.argv[1]                    # FileName
+    extension = sys.argv[1].split(".")    # C or CPP
+    username = sys.argv[2]                    # Username
+    queID = sys.argv[3]                       # Question ID
+
+
+
     # Configuration of Sandbox
     # calling configSandbox()
     # calling compile()
     # calling runTestCases()
     # calling compare()
+
+
+
