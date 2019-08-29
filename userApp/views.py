@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
 import os
 
+
 cwd = os.getcwd()
 
 
@@ -45,7 +46,7 @@ def file(request, username, qn):
 
         try:
             mulQue = MultipleQues.objects.get(user=user, que=que)
-        except (MultipleQues.DoesNotExist):
+        except MultipleQues.DoesNotExist:
             mulQue = MultipleQues(user=user, que=que)
 
         att = mulQue.attempts
@@ -53,7 +54,7 @@ def file(request, username, qn):
 
         try:
             os.mkdir(f'question{qn}')
-        except(FileExistsError):
+        except FileExistsError:
             pass
 
         os.chdir(f'question{qn}/')
@@ -76,7 +77,10 @@ def instructions(request):
 
 
 def leader(request):
-    return render(request, 'userApp/leaderboard_RC(blue).html')
+    allusers = UserProfile.objects.order_by("totalScore").reverse()
+    allmarks = MultipleQues.objects.order_by("pk")
+
+    return render(request, 'userApp/leaderboard_RC(blue).html', context={'allusers': allusers, 'allmarks': allmarks})
 
 
 def submission(request, username, qn):

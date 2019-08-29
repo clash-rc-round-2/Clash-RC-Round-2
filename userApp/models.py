@@ -1,5 +1,4 @@
 from django.db import models
-import uuid
 from django.contrib.auth.models import User
 
 NO_OF_QUESTIONS = 6
@@ -37,7 +36,7 @@ class Question(models.Model):
 
 class MultipleQues(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    que = models.ForeignKey(Question, on_delete=models.CASCADE, default="1")
+    que = models.ForeignKey(Question, on_delete=models.CASCADE)
     scoreQuestion = models.IntegerField(default=0)
     attempts = models.IntegerField(default=0)
 
