@@ -62,14 +62,20 @@
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
                 <table class="table table-striped table-hover">
                     <tbody style="margin-left: 10vw; margin-right:right">
-                    {% for user in allusers %}
+                    {% for key,value in dict.items %}
+
                         <tr>
-                            <td class="c2-rank ">{{ forloop.counter }}</td>
-                            <td class="c2-name">{{ user.user.username }}</td>
-                            {% for mark in allmarks %}
-                                  <td class="c2 ">{{ mark.scoreQuestion }}</td>
-                            {% endfor %}
-                            <td class="c2-result">{{ user.user.totalScore }}</td>
+                                <td class="c2-rank ">{{ forloop.counter }}</td>
+                                <td class="c2-name">{{ key }}</td>
+                                {% for var in value %}
+                                    <td class="c2 ">{{ var }}</td>
+                                {% endfor %}
+                                <!--<td class="c2 ">40</td>
+                                <td class="c2 ">40</td>
+                                <td class="c2 ">40</td>
+                                <td class="c2 ">40</td>
+                                <td class="c2">40</td>-->
+                                <!--<td class="c2-result">{{ value }}</td>-->
                         </tr>
                     {% endfor %}
                     <!-- <tr>
