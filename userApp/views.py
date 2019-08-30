@@ -76,7 +76,22 @@ def instructions(request):
 
 
 def leader(request):
-    return render(request, 'userApp/leaderboard_RC(blue).html')
+    dict = {}
+    for user in UserProfile.objects.all():
+        list = []
+        for n in range(1, 7):
+            que = Question.objects.get(pk=n)
+            try:
+                mulQue = MultipleQues.objects.get(user=user.user, que=que)
+                list.append(mulQue.scoreQuestion)
+            except MultipleQues.DoesNotExist:
+                list.append(0)
+        list.append(user.totalScore)
+        dict[user.user] = list
+
+    print(dict)
+    sorted(dict.items(), key=lambda items: items[1][6])
+    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict})
 
 
 def submission(request, username, qn):
