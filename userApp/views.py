@@ -111,5 +111,9 @@ def runCode(request, username, qn):
     que = Question.objects.get(pk=qn)
     mulQue = MultipleQues.objects.get(user=user, que=que)
     attempts = mulQue.attempts
-    os.system('python main.py '+ '{}/{}/question{}/code{}-{}.cpp'.format(path1, username, qn, qn, attempts) + ' '+
+    os.system('python main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path1, username, qn, qn, attempts) + ' ' +
               username + ' ' + qn + ' ' + attempts)
+
+
+def timer():
+    # Will Complete this
