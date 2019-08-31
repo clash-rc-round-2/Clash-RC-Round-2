@@ -64,6 +64,22 @@ def compile(filename, username, extension, que_id):
     return return_value      # return 0 for success and 1 for error
 
 
+def compare(user_out, e_out):
+    user = open(user_out)
+    expected = open(e_out)
+
+    lines_user = user.readline()
+    lines_expected = expected.readline()
+
+    return_value = 0                                     # 0 for equal and 1 for different value
+
+    for i in range(len(lines_expected)):
+        if lines_expected[i] != lines_user[i]:
+            return_value = 1
+
+    return return_value
+
+
 def run_test_cases(test_case_no, filename, extension, username, que_id, attempts):
     input_file = input_path + '/question{}/input{}.txt'.format(que_id, test_case_no)
     input_f = open("input_file", "r")                            # standard input
@@ -77,7 +93,7 @@ def run_test_cases(test_case_no, filename, extension, username, que_id, attempts
     user_out_f.close()
 
     if result_value == 1:
-        result_value = compare(user_out_f, e_output_f)
+        result_value = compare(user_out_f, e_output_f)            # return 0 for equal and 1 for not equal
 
     return result_value
 
