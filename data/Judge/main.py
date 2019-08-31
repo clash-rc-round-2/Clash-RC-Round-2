@@ -1,6 +1,6 @@
 import os
-from sandbox import *
 import sys
+import sandbox
 
 NO_OF_QUESTIONS = 6
 
@@ -30,10 +30,10 @@ except AssertionError as e:
     sys.exit(os.EX_UNAVAILABLE)
 
 
-def config_sandbox(args, input_file, out_file):
+def config_sandbox(targeted_file, input_file, out_file):
     # sandbox configuration
     cookbook = {
-        'args': args[1:],               # targeted program
+        'args': targeted_file,               # targeted program
         'stdin': input_file,             # input to targeted program
         'stdout': out_file,              # output from targeted program
         'stderr': sys.stderr,           # error from targeted program
@@ -44,19 +44,11 @@ def config_sandbox(args, input_file, out_file):
     # create a sandbox instance and execute till end
     msb = sandbox.Sandbox(**cookbook)
     msb.run()
-    # verbose statistics
-    sys.stderr.write("result: %(result)s\ncpu: %(cpu)dms\nmem: %(mem)dkB\n" %
-        msb.probe())
-    return os.EX_OK
-
-
-def probe(self):
-    # add custom entries into the probe dict
-    d = sandbox.probe(self, False)
+    d = Sandbox.probe(msb)
     d['cpu'] = d['cpu_info'][0]
     d['mem'] = d['mem_info'][1]
-    d['result'] = self.result
-    return d
+    d['result'] = msb.result
+    return msb.result
 
 
 def compile(filename, username, extension, que_id):
@@ -69,7 +61,7 @@ def compile(filename, username, extension, que_id):
         return_value = os.system('g++ ' + '-o ' + '{}/{}/solution{} '.format(path_userCode, username, que_id) +
                                  path_userCode + '/{}/question{}/{}.cpp'.format(username, que_id, filename))
 
-    return return_value      # return 0 for success and 1 for
+    return return_value      # return 0 for success and 1 for error
 
 
 def run_test_cases(test_case_no, filename, extension, username, que_id, attempts):
@@ -78,12 +70,12 @@ def run_test_cases(test_case_no, filename, extension, username, que_id, attempts
     code_file = path_userCode + '/{}/question{}/{}.{}'.format(username, que_id, filename, extension)
     code_f = open('output_file', os.O_RDWR)
 
-    output_of_code = os.system('./{}/{}/solution{}'.format(path_userCode, username, que_id))
+    result = config_sandbox()
 
 
 def main():
     filename = sys.argv[1]                    # FileName
-    extension = sys.argv[1].split(".")        # C or CPP
+    extension = sys.argv[1].split(".")        # C or CPP or python
     username = sys.argv[2]                    # Username
     que_id = sys.argv[3]                      # Question ID
     attempts = int(sys.argv[4])               # attempts
