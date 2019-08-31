@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     name2 = models.CharField(max_length=100, null=True)
     junior = models.BooleanField(default=True)       # True if Junior(FE) else False if Senior(SE,TE,BE)
     latestSubTime = models.TimeField(default='00:00')
-    choice = models.CharField(default='cpp')       # for the extension the code C or CPP or python
+    choice = models.CharField(max_length=5, default='cpp')       # for the extension the code C or CPP or python
 
     def __str__(self):
             return self.user.username

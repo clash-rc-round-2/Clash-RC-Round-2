@@ -113,5 +113,5 @@ def runCode(request, username, qn):
     attempts = mulQue.attempts
     extension = UserProfile.objects.get(user=user).choice
 
-    output_code = os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path1, username, qn, qn, attempts, extension)
-                           + ' ' + username + ' ' + qn + ' ' + attempts)
+    output_code = os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path1, username, qn, qn
+                          , attempts, extension) + ' ' + username + ' ' + qn + ' ' + attempts)
