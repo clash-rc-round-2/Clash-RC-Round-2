@@ -116,4 +116,10 @@ def main():
             run_code = run_test_cases(i+1, filename, username, extension, que_id, attempts)  # calling runTestCases()
             out_list.append(1 if run_code else 0)
 
-    return out_list
+    total_file_path = path_userCode + '/{}/question{}/total_output.txt'.format(username, que_id)
+    total_file = open('total_file_path', 'w+')
+
+    for i in out_list:
+        total_file.write("%d" % i)
+
+    return 0
