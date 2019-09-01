@@ -113,5 +113,13 @@ def runCode(request, username, qn):
     attempts = mulQue.attempts
     extension = UserProfile.objects.get(user=user).choice
 
-    output_code = os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path1, username, qn, qn
+    run_code = os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path1, username, qn, qn
                           , attempts, extension) + ' ' + username + ' ' + qn + ' ' + attempts)
+
+    # for i in range(len(run_code)):
+    #     if run_code[i]:
+    #         mulQue.scoreQuestion += 4
+    #     else:
+    #         mulQue.scoreQuestion -= 2
+
+    return render(request, 'userApp/testCases 111.html')
