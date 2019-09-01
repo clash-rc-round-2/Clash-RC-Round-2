@@ -48,7 +48,7 @@ def config_sandbox(targeted_file, input_file, out_file):
     d['cpu'] = d['cpu_info'][0]
     d['mem'] = d['mem_info'][1]
     d['result'] = msb.result
-    return msb.result
+    return msb.result                 # return 1 if complied successfully..
 
 
 def compile(filename, username, extension, que_id):
@@ -71,13 +71,13 @@ def compare(user_out, e_out):
     lines_user = user.readline()
     lines_expected = expected.readline()
 
-    return_value = 0                                     # 0 for equal and 1 for different value
+    same = True                                     # False if not same else True
 
     for i in range(len(lines_expected)):
         if lines_expected[i] != lines_user[i]:
-            return_value = 1
+            same = False
 
-    return return_value
+    return same
 
 
 def run_test_cases(test_case_no, filename, extension, username, que_id, attempts):
@@ -88,14 +88,16 @@ def run_test_cases(test_case_no, filename, extension, username, que_id, attempts
     e_output_file = output_path + '/question{}/expected_output{}.txt'.format(que_id, test_case_no)
     e_output_f = open('output_file', 'r')                        # expected/standard output
 
-    result_value = config_sandbox(filename, input_f, user_out_f)
+    result_value = config_sandbox(filename, input_f, user_out_f)   #
     input_f.close()
     user_out_f.close()
 
-    if result_value == 1:
-        result_value = compare(user_out_f, e_output_f)            # return 0 for equal and 1 for not equal
+    same_output = False
 
-    return result_value
+    if result_value == 1:
+        same_output = compare(user_out_f, e_output_f)            # False if different and True if same
+
+    return same_output                                 # True if same else False
 
 
 def main():
@@ -107,6 +109,17 @@ def main():
 
     return_value = compile(filename, username, extension, que_id)                          # calling compile()
 
+    out_list = list()
+
     if return_value == 0:
         for i in range(0, NO_OF_QUESTIONS-1):
             run_code = run_test_cases(i+1, filename, username, extension, que_id, attempts)  # calling runTestCases()
+            out_list.append(1 if run_code else 0)
+
+    total_file_path = path_userCode + '/{}/question{}/total_output.txt'.format(username, que_id)
+    total_file = open('total_file_path', 'w+')
+
+    for i in out_list:
+        total_file.write("%d" % i)
+
+    return 0
