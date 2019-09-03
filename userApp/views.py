@@ -2,11 +2,40 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
+from django.http import HttpResponseRedirect, HttpResponse
+import datetime
 import os
 
-
+global starttime
+global end_time
 path = os.getcwd()
 path1 = path + '/data/usersCode'
+
+
+def timer(request):
+    if request.method == 'GET':
+        return render(request, 'userApp/timer.html')
+
+    elif request.method == 'POST':
+        global starttime
+        global end_time
+        start = datetime.datetime.now()
+        time = start.second + start.minute * 60 + start.hour * 60 * 60
+        starttime = time
+        end_time = time + 7200
+        return HttpResponse(" time is set ")
+
+
+def calculate():
+    time = datetime.datetime.now()
+    nowsec = (time.hour * 60 * 60) + (time.minute * 60) + time.second
+    global starttime
+    global end_time
+    diff = end_time - nowsec
+    if nowsec < end_time:
+        return diff
+    else:
+        return 0
 
 
 def signup(request):
@@ -33,7 +62,11 @@ def signup(request):
 
 def questionHub(request):
     all_questions = Question.objects.all()
-    return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions})
+    var = calculate()
+    if var != 0:
+        return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions, 'time': var})
+    else:
+        return render(request, 'userApp/final.html')
 
 
 def codeSave(request, username, qn):
@@ -68,7 +101,11 @@ def codeSave(request, username, qn):
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
-        return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user})
+        var = calculate()
+        if var != 0:
+            return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user, 'time': var})
+        else:
+            return render(request, 'userApp/final.html')
 
 
 def instructions(request):
@@ -91,7 +128,7 @@ def leader(request):
 
     print(dict)
     sorted(dict.items(), key=lambda items: items[1][6])
-    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict})
+    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1)})
 
 
 def submission(request, username, qn):
@@ -102,8 +139,12 @@ def submission(request, username, qn):
     for submissions in allSubmission:
         if submissions.que == que and submissions.user == user:
             userQueSub.append(submissions)
+    var = calculate()
+    if var != 0:
+        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time':var})
+    else:
+        return render(request, 'userApp/final.html')
 
-    return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub})
 
 
 def runCode(request, username, qn):
@@ -111,5 +152,5 @@ def runCode(request, username, qn):
     que = Question.objects.get(pk=qn)
     mulQue = MultipleQues.objects.get(user=user, que=que)
     attempts = mulQue.attempts
-    os.system('python main.py '+ '{}/{}/question{}/code{}-{}.cpp'.format(path1, username, qn, qn, attempts) + ' '+
+    os.system('python main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path1, username, qn, qn, attempts) + ' ' +
               username + ' ' + qn + ' ' + attempts)
