@@ -6,7 +6,7 @@ import os
 
 
 path = os.getcwd()
-path_usercode = path + '/data/usersCode'
+path1 = path + '/data/usersCode'
 
 
 def signup(request):
@@ -23,7 +23,7 @@ def signup(request):
         userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
                                   email2=email2)
         userprofile.save()
-        os.system('mkdir {}/{}'.format(path_usercode, username))
+        os.system('mkdir {}/{}'.format(path1, username))
         login(request, user)
         return redirect(reverse("questionHub"))
 
@@ -52,12 +52,12 @@ def codeSave(request, username, qn):
         att = mulQue.attempts
 
         try:
-            os.system('mkdir {}/{}/question{}'.format(path_usercode, username, qn))
+            os.system('mkdir {}/{}/question{}'.format(path1, username, qn))
 
         except FileExistsError:
             pass
 
-        codefile = open("{}/{}/question{}/code{}-{}.cpp".format(path_usercode, username, qn, qn, att), "w+")
+        codefile = open("{}/{}/question{}/code{}-{}.cpp".format(path1, username, qn, qn, att), "w+")
         codefile.write(content)
         codefile.close()
         mulQue.attempts += 1
@@ -113,18 +113,5 @@ def runCode(request, username, qn):
     attempts = mulQue.attempts
     extension = UserProfile.objects.get(user=user).choice
 
-    os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn
-             , attempts, extension) + ' ' + username + ' ' + str(qn) + ' ' + str(attempts))
-
-    total_out_path = path_usercode + '/{}/question{}/total_output.txt'.format(username, qn)
-    total_file = open('total_out_path', 'r')
-
-    code = total_file.readline()
-
-    for i in range(len(code)):
-        if code[i]:
-            mulQue.scoreQuestion += 4
-        else:
-            mulQue.scoreQuestion -= 2
-
-    return render(request, 'userApp/testCases 111.html')
+    output_code = os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path1, username, qn, qn
+                          , attempts, extension) + ' ' + username + ' ' + qn + ' ' + attempts)
