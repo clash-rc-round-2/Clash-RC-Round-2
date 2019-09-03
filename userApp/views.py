@@ -128,7 +128,10 @@ def leader(request):
 
     print(dict)
     sorted(dict.items(), key=lambda items: items[1][6])
+
     return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1)})
+
+    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict})
 
 
 def submission(request, username, qn):
@@ -141,10 +144,9 @@ def submission(request, username, qn):
             userQueSub.append(submissions)
     var = calculate()
     if var != 0:
-        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time':var})
+        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var})
     else:
         return render(request, 'userApp/final.html')
-
 
 
 def runCode(request, username, qn):
