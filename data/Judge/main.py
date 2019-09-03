@@ -1,6 +1,6 @@
 import os
 import sys
-import sandbox
+from sandbox import *
 
 NO_OF_QUESTIONS = 6
 
@@ -42,7 +42,7 @@ def config_sandbox(targeted_file, input_file, out_file):
                       memory=8388608,   # 8 MB
                       disk=1048576)}    # 1 MB
     # create a sandbox instance and execute till end
-    msb = sandbox.Sandbox(**cookbook)
+    msb = Sandbox(**cookbook)
     msb.run()
     d = Sandbox.probe(msb)
     d['cpu'] = d['cpu_info'][0]
@@ -51,14 +51,14 @@ def config_sandbox(targeted_file, input_file, out_file):
     return msb.result                 # return 1 if complied successfully..
 
 
-def compile(filename, username, extension, que_id):
+def compile(filename, extension):
     return_value = 1         # By default error while running file.
     if extension == 'c':
-        return_value = os.system('gcc ' + '-o ' + '{}/{}/solution{} '.format(path_userCode, username, que_id) +
+        return_value = os.system('gcc ' + '-o ' + '{} '.format(filename) +
                                  path + '/{}.c'.format(filename))
 
     elif extension == 'cpp':
-        return_value = os.system('g++ ' + '-o ' + '{}/{}/solution{} '.format(path_userCode, username, que_id) +
+        return_value = os.system('g++ ' + '-o ' + '{} '.format(filename) +
                                  path + '/{}.cpp'.format(filename))
 
     return return_value      # return 0 for success and 1 for error
@@ -81,12 +81,12 @@ def compare(user_out, e_out):
 
 
 def run_test_cases(test_case_no, filename, username, que_id):
-    input_file = input_path + '/question{}/input{}.txt'.format(que_id, test_case_no)
-    input_f = open("{}".format(input_file), "r")                            # standard input
+    input_file = input_path + '/question{}'.format(que_id)
+    input_f = open("{}/input{}.txt".format(input_file, test_case_no), "r")                       # standard input
     user_out_file = path_userCode + '/{}/question{}'.format(username, que_id)
     user_out_f = open('{}/output{}.txt'.format(user_out_file, test_case_no), "w+")                # user's output
     e_output_file = output_path + '/question{}/expected_output{}.txt'.format(que_id, test_case_no)
-    e_output_f = open('{}'.format(e_output_file), 'r')                        # expected/standard output
+    e_output_f = open('{}'.format(e_output_file), 'r')                                       # expected/standard output
 
     result_value = config_sandbox(filename, input_f, user_out_f)   #
     input_f.close()
@@ -105,9 +105,8 @@ def main():
     extension = sys.argv[1].split(".")[1]     # C or CPP or python
     username = sys.argv[2]                    # Username
     que_id = sys.argv[3]                      # Question ID
-    attempts = int(sys.argv[4])               # attempts
 
-    return_value = compile(filename, username, extension, que_id)                          # calling compile()
+    return_value = compile(filename, extension)                          # calling compile()
 
     out_list = list()
 

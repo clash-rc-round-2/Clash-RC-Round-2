@@ -114,14 +114,14 @@ def runCode(request, username, qn):
     extension = UserProfile.objects.get(user=user).choice
 
     os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path_usercode, username, qn, qn
-             , attempts) + ' ' + username + ' ' + str(qn) + ' ' + str(attempts))
+             , attempts) + ' ' + username + ' ' + str(qn))
 
     total_out_path = path_usercode + '/{}/question{}'.format(username, qn)
     total_file = open('{}/total_output.txt'.format(total_out_path), 'r')
 
     code = total_file.readline()
 
-    if code == "111111":
+    if code == "11111":
         mulQue.scoreQuestion += 4
     else:
         mulQue.scoreQuestion -= 2
