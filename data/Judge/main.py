@@ -48,18 +48,18 @@ def config_sandbox(targeted_file, input_file, out_file):
     d['cpu'] = d['cpu_info'][0]
     d['mem'] = d['mem_info'][1]
     d['result'] = msb.result
-    return msb.result
+    return msb.result                 # return 1 if complied successfully..
 
 
 def compile(filename, username, extension, que_id):
     return_value = 1         # By default error while running file.
     if extension == 'c':
         return_value = os.system('gcc ' + '-o ' + '{}/{}/solution{} '.format(path_userCode, username, que_id) +
-                                 path_userCode + '/{}/question{}/{}.c'.format(username, que_id, filename))
+                                 path + '/{}.c'.format(filename))
 
     elif extension == 'cpp':
         return_value = os.system('g++ ' + '-o ' + '{}/{}/solution{} '.format(path_userCode, username, que_id) +
-                                 path_userCode + '/{}/question{}/{}.cpp'.format(username, que_id, filename))
+                                 path + '/{}.cpp'.format(filename))
 
     return return_value      # return 0 for success and 1 for error
 
@@ -71,31 +71,33 @@ def compare(user_out, e_out):
     lines_user = user.readline()
     lines_expected = expected.readline()
 
-    return_value = 0                                     # 0 for equal and 1 for different value
+    same = True                                     # False if not same else True
 
     for i in range(len(lines_expected)):
         if lines_expected[i] != lines_user[i]:
-            return_value = 1
+            same = False
 
-    return return_value
+    return same
 
 
-def run_test_cases(test_case_no, filename, extension, username, que_id, attempts):
+def run_test_cases(test_case_no, filename, username, que_id):
     input_file = input_path + '/question{}/input{}.txt'.format(que_id, test_case_no)
-    input_f = open("input_file", "r")                            # standard input
-    user_out_file = path_userCode + '/{}/question{}/output{}.txt'.format(username, que_id, test_case_no)
-    user_out_f = open('user_out_file', os.O_RDWR)                # user's output
+    input_f = open("{}".format(input_file), "r")                            # standard input
+    user_out_file = path_userCode + '/{}/question{}'.format(username, que_id)
+    user_out_f = open('{}/output{}.txt'.format(user_out_file, test_case_no), "w+")                # user's output
     e_output_file = output_path + '/question{}/expected_output{}.txt'.format(que_id, test_case_no)
-    e_output_f = open('output_file', 'r')                        # expected/standard output
+    e_output_f = open('{}'.format(e_output_file), 'r')                        # expected/standard output
 
-    result_value = config_sandbox(filename, input_f, user_out_f)
+    result_value = config_sandbox(filename, input_f, user_out_f)   #
     input_f.close()
     user_out_f.close()
 
-    if result_value == 1:
-        result_value = compare(user_out_f, e_output_f)            # return 0 for equal and 1 for not equal
+    same_output = False
 
-    return result_value
+    if result_value == 1:
+        same_output = compare(user_out_f, e_output_f)            # False if different and True if same
+
+    return same_output                                 # True if same else False
 
 
 def main():
@@ -107,6 +109,20 @@ def main():
 
     return_value = compile(filename, username, extension, que_id)                          # calling compile()
 
+    out_list = list()
+
     if return_value == 0:
         for i in range(0, NO_OF_QUESTIONS-1):
-            run_code = run_test_cases(i+1, filename, username, extension, que_id, attempts)  # calling runTestCases()
+            run_code = run_test_cases(i+1, filename, username, que_id)  # calling runTestCases()
+            out_list.append(1 if run_code else 0)
+
+    total_file_path = path_userCode + '/{}/question{}'.format(username, que_id)
+    total_file = open('{}/total_output.txt'.format(total_file_path), 'w+')
+
+    for i in out_list:
+        total_file.write("%d" % i)
+
+    return 0
+
+
+a = main()
