@@ -2,11 +2,41 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
+from django.http import HttpResponse
+import datetime
 import os
 
+global starttime
+global end_time
 
 path = os.getcwd()
 path_usercode = path + '/data/usersCode'
+
+
+def timer(request):
+    if request.method == 'GET':
+        return render(request, 'userApp/timer.html')
+
+    elif request.method == 'POST':
+        global starttime
+        global end_time
+        start = datetime.datetime.now()
+        time = start.second + start.minute * 60 + start.hour * 60 * 60
+        starttime = time
+        end_time = time + 7200
+        return HttpResponse(" time is set ")
+
+
+def calculate():
+    time = datetime.datetime.now()
+    nowsec = (time.hour * 60 * 60) + (time.minute * 60) + time.second
+    global starttime
+    global end_time
+    diff = end_time - nowsec
+    if nowsec < end_time:
+        return diff
+    else:
+        return 0
 
 
 def signup(request):
@@ -33,7 +63,11 @@ def signup(request):
 
 def questionHub(request):
     all_questions = Question.objects.all()
-    return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions})
+    var = calculate()
+    if var != 0:
+        return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions, 'time': var})
+    else:
+        return render(request, 'userApp/final.html')
 
 
 def codeSave(request, username, qn):
@@ -91,7 +125,7 @@ def leader(request):
 
     print(dict)
     sorted(dict.items(), key=lambda items: items[1][6])
-    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict})
+    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1)})
 
 
 def submission(request, username, qn):
@@ -102,8 +136,11 @@ def submission(request, username, qn):
     for submissions in allSubmission:
         if submissions.que == que and submissions.user == user:
             userQueSub.append(submissions)
-
-    return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub})
+    var = calculate()
+    if var != 0:
+        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var})
+    else:
+        return render(request, 'userApp/final.html')
 
 
 def runCode(request, username, qn):
@@ -113,10 +150,14 @@ def runCode(request, username, qn):
     attempts = mulQue.attempts
     extension = UserProfile.objects.get(user=user).choice
 
+    print('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path_usercode, username, qn, qn
+             , attempts-1) + ' ' + username + ' ' + str(qn))
+
     os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path_usercode, username, qn, qn
-             , attempts) + ' ' + username + ' ' + str(qn))
+             , attempts-1) + ' ' + username + ' ' + str(qn))
 
     total_out_path = path_usercode + '/{}/question{}'.format(username, qn)
+    print(total_out_path)
     total_file = open('{}/total_output.txt'.format(total_out_path), 'r')
 
     code = total_file.readline()
