@@ -8,6 +8,7 @@ import os
 
 global starttime
 global end_time
+global duration
 
 path = os.getcwd()
 path_usercode = path + '/data/usersCode'
@@ -18,12 +19,14 @@ def timer(request):
         return render(request, 'userApp/timer.html')
 
     elif request.method == 'POST':
+        global duration
         global starttime
         global end_time
+        duration=request.POST.get('duration')
         start = datetime.datetime.now()
         time = start.second + start.minute * 60 + start.hour * 60 * 60
         starttime = time
-        end_time = time + 7200
+        end_time = time + int(duration)
         return HttpResponse(" time is set ")
 
 
