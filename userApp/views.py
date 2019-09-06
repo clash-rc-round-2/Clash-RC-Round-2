@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth import login
+from django.contrib.auth import login,logout
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse
@@ -178,3 +178,18 @@ def runCode(request, username, qn):
         mulQue.scoreQuestion -= 2
 
     return render(request, 'userApp/TestCases 111.html')
+
+
+def user_logout(request):
+    user = MultipleQues.objects.get(user=request.user)
+    object =  MultipleQues.objects.order_by("scoreQuestion")
+    rank = 0
+    for n in object:
+        rank += 1
+        if str(n.user.username) == str(request.user.username):
+            break
+
+    dict = {'rank': rank, 'name': request.user.username, 'score': n.scoreQuestion}
+    logout(request)
+    return render(request,  'userApp/clash result blue2.html', context=dict)
+
