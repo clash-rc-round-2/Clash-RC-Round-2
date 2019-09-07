@@ -14,6 +14,7 @@ path_usercode = path + '/data/usersCode'
 
 NO_OF_QUESTIONS = 6
 
+
 def timer(request):
     if request.method == 'GET':
         return render(request, 'userApp/timer.html')
@@ -77,16 +78,19 @@ def codeSave(request, username, qn):
         content = request.POST['content']
         extension = request.POST['ext']
 
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.choice = extension
+
         que = Question.objects.get(pk=qn)
         submission = Submission(code=content, user=user, que=que)
         submission.save()
 
         try:
-            mulQue = MultipleQues.objects.get(user=user, que=que)
+            mul_que = MultipleQues.objects.get(user=user, que=que)
         except MultipleQues.DoesNotExist:
-            mulQue = MultipleQues(user=user, que=que)
+            mul_que = MultipleQues(user=user, que=que)
 
-        att = mulQue.attempts
+        att = mul_que.attempts
 
         try:
             os.system('mkdir {}/{}/question{}'.format(path_usercode, username, qn))
@@ -94,12 +98,12 @@ def codeSave(request, username, qn):
         except FileExistsError:
             pass
 
-        codefile = open("{}/{}/question{}/code{}-{}.cpp".format(path_usercode, username, qn, qn, att), "w+")
+        codefile = open("{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att, extension), "w+")
         codefile.write(content)
         codefile.close()
-        mulQue.attempts += 1
-        mulQue.save()
-        print(mulQue.attempts)
+        mul_que.attempts += 1
+        mul_que.save()
+        print(mul_que.attempts)
         return redirect("submission", username=username, qn=qn)
 
     elif request.method == 'GET':
@@ -147,12 +151,13 @@ def submission(request, username, qn):
 
 def runCode(request, username, qn):
     user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
     que = Question.objects.get(pk=qn)
     mulQue = MultipleQues.objects.get(user=user, que=que)
     attempts = mulQue.attempts
 
-    os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path_usercode, username, qn, qn,
-             attempts-1) + ' ' + username + ' ' + str(qn))
+    os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
+             attempts-1, user_profile.choice) + ' ' + username + ' ' + str(qn))
 
     total_out_path = path_usercode + '/{}/question{}'.format(username, qn)
     print(total_out_path)
@@ -166,7 +171,7 @@ def runCode(request, username, qn):
 
     for i in range(0, NO_OF_QUESTIONS):
         var = code % 100
-        # output_list.append(var)
+        output_list.append(var)
         code = code / 100
 
     '''
