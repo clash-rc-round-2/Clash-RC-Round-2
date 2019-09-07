@@ -181,15 +181,17 @@ def runCode(request, username, qn):
 
 
 def user_logout(request):
-    user = MultipleQues.objects.get(user=request.user)
-    object =  MultipleQues.objects.order_by("scoreQuestion")
+    user = UserProfile.objects.get(user=request.user)
+    object =  UserProfile.objects.order_by("totalScore")
     rank = 0
     for n in object:
         rank += 1
-        if str(n.user.username) == str(request.user.username):
+        if str(n.user) == str(request.user.username):
             break
 
-    dict = {'rank': rank, 'name': request.user.username, 'score': n.scoreQuestion}
+    dict = {'rank': rank, 'name': request.user.username, 'score': user.totalScore}
     logout(request)
     return render(request,  'userApp/clash result blue2.html', context=dict)
+
+
 
