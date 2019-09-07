@@ -78,7 +78,7 @@ def codeSave(request, username, qn):
         extension = request.POST['ext']
 
         que = Question.objects.get(pk=qn)
-        submission = Submission(code=content, user=user, que=que, choice=extension)
+        submission = Submission(code=content, user=user, que=que)
         submission.save()
 
         try:
@@ -126,7 +126,6 @@ def leader(request):
         list.append(user.totalScore)
         dict[user.user] = list
 
-    print(dict)
     sorted(dict.items(), key=lambda items: items[1][6])
     return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1)})
 
