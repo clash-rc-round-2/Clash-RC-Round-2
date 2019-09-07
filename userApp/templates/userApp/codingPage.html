@@ -116,7 +116,7 @@
                         <button class="btn btn-block"  data-toggle="tab" onclick="location.href='/leaderboard';" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh; color: white">Leaderboard</button>
                     </div>
                     <div class="col-lg-3 mt-1" style="display: flex; justify-content: center;align-items: center;height: 6vh">
-                        <button class="btn btn-danger"style="font-size: 12px;width: 110px;padding-top: 8px;height: 5vh; ">Log Out</button>
+                        <button class="btn btn-danger" data-toggle="tab" onclick="location.href = '/logout';" style="font-size: 12px;width: 110px;padding-top: 8px;height: 5vh; ">Log Out</button>
                     </div>
                     <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex;align-items: center;">
                         <img src="{% static 'images/ieee.jpeg' %}" style="height: 5vh;margin-left: 4px">
@@ -125,7 +125,6 @@
             </div>
         </div>
         <div class="row" style="height: 2vh"></div>
-
             <div class="row" id="box">
                 <div class="col-lg-12" style="height: 9vh;display: flex;align-items: center;">
                     <div class="col-lg-2"></div>
@@ -225,14 +224,13 @@
                     <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh;">
                         <ul class="nav nav-tabs" id="tab" style="margin-left: 2px">
                             <li class="nav-item">
-                               <a class="nav-link active" data-toggle="tab" href="#home">C</a>
+                               <input type="radio" name="ext" checked value="c">C
                            </li>
                            <li class="nav-item">
-                               <a class="nav-link" data-toggle="tab" href="#menu1">C++</a>
+                               <input type="radio" name="ext" checked value="cpp">C++
                            </li>
                         </ul>
                     </div>
-
                 </div>
                 <div class="col-lg-0 ml-3 mr-3" style="height: 8vh;">
                     <div class="col-lg-6"></div>
@@ -357,5 +355,4 @@
         }
     </script>
 </body>
-
 </html>

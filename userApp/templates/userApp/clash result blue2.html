@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +21,7 @@ Clash Result Page
                 border-color:rgba(215, 233, 248, 0.979);
             }
             #l{
-                background-image: url("bg2.jpeg");
+                background-image: url("{% static 'images/bg2.jpeg' %}");
        
                 background-size: cover;
                 color:#daffef;
@@ -32,9 +33,6 @@ Clash Result Page
         background-color: black;
     
     }
-      
-     
-            
         </style>
 </head>
 
@@ -42,7 +40,7 @@ Clash Result Page
     <div class="container-fluid">
         <div class="row" id="l">
             <div class="col-lg-5 topcol" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
-                <div class="col-lg-3 topcol" style=" height: 6vh; display:flex;align-items: center;justify-content: center;"><img src="clash.jpeg "style="height:5vh;width:6vw;"></div>
+                <div class="col-lg-3 topcol" style=" height: 6vh; display:flex;align-items: center;justify-content: center;"><img src="{% static 'images/clash.jpg' %}"style="height:5vh;width:6vw;"></div>
                 <div class="col-lg-9 topcol" style=" height: 6vh; display:flex;align-items: center; justify-content: center;"><h5>RESULT</h5></div>
             </div>
             <div class="col-lg-2 topcol" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: #d7e9f8">
@@ -52,7 +50,7 @@ Clash Result Page
                 <div class="row">
                  <div class="col-lg-9 topcol"></div>
                     <div class="col-lg-3 mt-1 topcol" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                        <img src="ieee.jpeg" style="height: 5vh;">
+                        <img src="{% static 'images/ieee.jpeg' %}" style="height: 5vh;">
                     </div>
                 </div>
             </div>
