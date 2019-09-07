@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse
@@ -8,25 +8,23 @@ import os
 
 global starttime
 global end_time
-global duration
 
 path = os.getcwd()
 path_usercode = path + '/data/usersCode'
 
+NO_OF_QUESTIONS = 6
 
 def timer(request):
     if request.method == 'GET':
         return render(request, 'userApp/timer.html')
 
     elif request.method == 'POST':
-        global duration
         global starttime
         global end_time
-        duration=request.POST.get('duration')
         start = datetime.datetime.now()
         time = start.second + start.minute * 60 + start.hour * 60 * 60
         starttime = time
-        end_time = time + int(duration)
+        end_time = time + 7200
         return HttpResponse(" time is set ")
 
 
@@ -58,7 +56,7 @@ def signup(request):
         userprofile.save()
         os.system('mkdir {}/{}'.format(path_usercode, username))
         login(request, user)
-        return redirect(reverse("questionHub"))
+        return render(request, "userApp/instpgclash.html")
 
     elif request.method == 'GET':
         return render(request, 'userApp/clashlogin.html')
@@ -77,8 +75,10 @@ def codeSave(request, username, qn):
     if request.method == 'POST':
         user = User.objects.get(username=username)
         content = request.POST['content']
+        extension = request.POST['ext']
+
         que = Question.objects.get(pk=qn)
-        submission = Submission(code=content, user=user, que=que)
+        submission = Submission(code=content, user=user, que=que, choice=extension)
         submission.save()
 
         try:
@@ -109,7 +109,7 @@ def codeSave(request, username, qn):
 
 
 def instructions(request):
-    return render(request, 'userApp/instpgclash.html')
+    return render(request, 'userApp/QuestionHub.html')
 
 
 def leader(request):
@@ -151,23 +151,48 @@ def runCode(request, username, qn):
     que = Question.objects.get(pk=qn)
     mulQue = MultipleQues.objects.get(user=user, que=que)
     attempts = mulQue.attempts
-    extension = UserProfile.objects.get(user=user).choice
 
-    print('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path_usercode, username, qn, qn
-             , attempts-1) + ' ' + username + ' ' + str(qn))
-
-    os.popen('python data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path_usercode, username, qn, qn
-             , attempts-1) + ' ' + username + ' ' + str(qn))
+    os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.cpp'.format(path_usercode, username, qn, qn,
+             attempts-1) + ' ' + username + ' ' + str(qn))
 
     total_out_path = path_usercode + '/{}/question{}'.format(username, qn)
     print(total_out_path)
     total_file = open('{}/total_output.txt'.format(total_out_path), 'r')
 
-    code = total_file.readline()
+    # code will have text in form '1020301020'
+    # output_list will contain (10, 20 , 30, 10, 20)  for 5 test cases
 
-    if code == "11111":
-        mulQue.scoreQuestion += 4
-    else:
-        mulQue.scoreQuestion -= 2
+    code = int(total_file.readline()[::-1])       # This will reverse the Code
+    output_list = list()
+
+    for i in range(0, NO_OF_QUESTIONS):
+        var = code % 100
+        # output_list.append(var)
+        code = code / 100
+
+    '''
+        Sandbox will return(save) these values in total_output.txt
+        10 = right answer (PASS)
+        20 = wrong answer (FAIL)
+        30 = TLE
+        40 = compile time error (CLE)
+    '''
+
+    com_time_error = False                 # For Compile time error for all program
+
+    for i in output_list:
+        if i == 40:
+            com_time_error = True
+
+    if com_time_error:
+        for i in output_list:
+            i = 40
+        error_path = path_usercode + '/{}/question{}'.format(username, qn)
+        error_file = open('{}/error.txt'.format(error_path), 'r')
 
     return render(request, 'userApp/TestCases 111.html')
+
+
+def user_logout(request):
+    logout(request)
+    return render(request, 'userApp/clash result blue.html')
