@@ -166,13 +166,17 @@ def runCode(request, username, qn):
     attempts = mul_que.attempts
     submission = Submission.objects.get(user=user, que=que)
 
+    '''
+    
+    JUST FOR CHECKING I AM TAKING OUTPUT FROM THE SANBOX AS 1010101010
+    
     os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
              attempts-1, user_profile.choice) + ' ' + username + ' ' + str(qn))
-
     total_out_path = path_usercode + '/{}/question{}'.format(username, qn)
     print(total_out_path)
     total_file = open('{}/total_output.txt'.format(total_out_path), 'r')
     code = int(total_file.readline()[::-1])       # This will reverse the Code
+    '''
 
     '''
         code will have text in form '1020301020'
@@ -185,6 +189,7 @@ def runCode(request, username, qn):
         40 = compile time error (CTE)
     '''
 
+    code = 1010101010                # just for checking it is working or not
     output_list = list()
     correct_list = list()
 
@@ -203,7 +208,7 @@ def runCode(request, username, qn):
             output_list.append('CTE')
         code = code / 100
 
-    if output_list == correct_list:
+    if output_list == correct_list:               # if all are correct then Score = 100
         mul_que.scoreQuestion = 100
 
     com_time_error = False
@@ -221,13 +226,28 @@ def runCode(request, username, qn):
             wrg_ans = True
             submission.subStatus = 'WA'
 
+    error_text = 'No Error Found, Complied Successfully!'
     if com_time_error:
         for i in output_list:                  # assigning each element with 40 (CTE will be for every test case)
             i = 40
         error_path = path_usercode + '/{}/question{}'.format(username, qn)
         error_file = open('{}/error.txt'.format(error_path), 'r')
+        error_text = error_file.readline()
 
-    dict = {'com_status': submission.subStatus, 'output_list': output_list}
+    # total_score =                            # for partial marking
+
+    no_of_pass = 0
+    for i in output_list:
+        if i == 'PASS':
+            no_of_pass += 1
+
+    submission.correctTestCases = no_of_pass
+    submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
+
+    # output_list_row1 = output_list.copy(0,3)
+
+    dict = {'com_status': submission.subStatus, 'output_list': output_list, 'score': mul_que.scoreQuestion, 'error':
+            error_text}
 
     return render(request, 'userApp/TestCases 111.html', dict)
 

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +10,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Biryani&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Test Cases 111.css">
+  <link rel="stylesheet" href="{% static 'css/Test Cases 111.css' %}">
 </head>
 <body>
         <!--  Header Bar-->
         <div class="container-fluid">
                 <div class="row" style="background-color:black;color: white">
                         <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
-                            <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;color: white"><img src="clash.jpg" style="height: 7vh;margin-bottom: 2px;"></div>
+                            <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;color: white"><img src="{% static 'images/clash.jpg' %}" style="height: 7vh;margin-bottom: 2px;"></div>
                             <div class="col-lg-9 mt-3" style=" height: 6vh; display:flex;align-items: center; justify-content: center;color: #ffffff"><h5>TESTCASES</h5></div>
                         </div>
                         <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: #ffffff">
@@ -34,7 +35,7 @@
                                     <button class="btn btn-danger" onclick="location.href = '/logout';" style="width: 110px;font-size: 12px;border: none;padding-top: 8px;height: 5vh;">Log Out</button>
                                 </div>
                                 <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                    <img src="IEEE_logo.png" style="height: 5vh;margin-right: 4px">
+                                    <img src="{% static 'images/IEEE_logo.png' %}" style="height: 5vh;margin-right: 4px">
                                 </div>
                             </div>
                         </div>
@@ -43,55 +44,32 @@
                   <!--d7e9f8!-->
         <div class="row">
 
-        
          <div class="col-lg-8" style="height:86vh;">
-            <div class="row">   
+<!--             {% for i in output_list %}-->
+             <div class="row">
                 <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
-                font-size: 15px; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;"><div class="spinner-border m-5" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>CASE 1</div>
-                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>CASE 2</div>
-                
-                </div>   
-                
-                <div class="row">   
-                        <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
-                        color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                            <span class="sr-only">Loading...</span>
-                          </div>CASE 3</div>
-                        <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw;
-                        color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                            <span class="sr-only">Loading...</span>
-                          </div>CASE 4</div>
-                        
-                        </div>     
-
-
-
-
-                        <div class="row">   
-                                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;align-items: center;
-                                color:#d7e9f8;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                  </div>CASE 5</div>
-                                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                  </div>CASE 6</div>
-                                
-                                </div>     
-
-                                <div class="row">   
+                font-size: 15px; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;">
+                    <div class="spinner-border m-5" role="status">
+                       <span class="sr-only">Loading...</span>
+                    </div>CASE 1: STATUS
+                </div>
+                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
+                    <div role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>CASE 2: STATUS
+                </div>
+            </div>
+<!--             {% endfor %}-->
+                                <div class="row">
                                         <div class="col-lg-3" style="justify-content: center;display: flex">
-                                            <div class="col-lg-6" style="background-color:skyblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">STATUS</div>
+                                            <div class="col-lg-6" style="background-color:skyblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{ com_status }}</div>
                                         </div>
-        
+
                                         <!--div class="col-lg-3" style="justify-content: center;display: flex">
                                                 <div class="col-lg-4" style="background-color:rgb(216, 196, 152);border: 1px solid rgba(1, 22, 1, 0.952);margin:0vw 1vw;height:15vh;width:15vh;border-radius:50%;justify-content:center;display:flex">Score</div>
                                             </div!-->
-                                        
-                                       
+
+
                                             <div class="col-lg-5" style="justify-content: center;display: flex">
                                                     <div class="col-lg-6" style="justify-content:center;display:flex;height:15vh;width:100vh;margin:2vw">
                                                             <button class="btn btn-danger" style=" height:9vh;width:8vw; border: #d7e9f8;">RETRY</button>
@@ -99,14 +77,11 @@
                                                 </div>
 
                                                 <div class="col-lg-3" style="justify-content: center;display: flex">
-                                                    <div class="col-lg-6" style="background-color:skyblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">SCORE</div>
+                                                    <div class="col-lg-6" style="background-color:skyblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{ score }}</div>
                                                 </div>
 
-                                        
-                                        </div>     
 
-
-
+                                        </div>
             </div>           
 
            
@@ -115,7 +90,7 @@
                 
              <div class="row">
                  
-                 <div class="row" style="height:40vh;width:60vw;margin:2vw 2vw; border:5px rgb(14, 247, 53)"></div>
+                 <div class="row" style="height:40vh;width:60vw;margin:2vw 2vw; border:5px rgb(14, 247, 53)">{{ error }}</div>
                              
                 </div>
 
