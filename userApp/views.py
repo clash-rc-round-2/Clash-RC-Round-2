@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 import datetime
 import os
 
@@ -82,6 +82,11 @@ def codeSave(request, username, qn):
         user_profile.choice = extension
 
         que = Question.objects.get(pk=qn)
+
+        temp_user = UserProfile.objects.get(user=user)
+        temp_user.qid = qn
+        temp_user.save()
+
         submission = Submission(code=content, user=user, que=que)
         submission.save()
 
@@ -200,3 +205,24 @@ def runCode(request, username, qn):
 def user_logout(request):
     logout(request)
     return render(request, 'userApp/clash result blue.html')
+
+
+def loadBuffer(request):
+    username = request.user.username
+    user = UserProfile.objects.get(user=request.user)
+    que = Question.objects.get(pk=user.qid)
+    mul_que = MultipleQues.objects.get(user=user.user, que=que)
+    attempts = mul_que.attempts
+    qn = user.qid
+    response_data = {}
+
+    codeFile = '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn, attempts - 2, user.choice)
+
+    f = open(codeFile, "r")
+    txt = f.read()
+
+    if not txt:
+        data = ""
+    response_data["txt"] = txt
+
+    return JsonResponse(response_data)

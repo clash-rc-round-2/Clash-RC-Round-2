@@ -17,6 +17,7 @@ class UserProfile(models.Model):
     latestSubTime = models.TimeField(default='00:00')
     timer = models.TimeField(default='00:00')
     choice = models.CharField(max_length=5, default='cpp')       # for the extension the code C or CPP or python
+    qid = models.IntegerField(default=0)
 
     def __str__(self):
             return self.user.username
