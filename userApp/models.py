@@ -17,7 +17,7 @@ class UserProfile(models.Model):
     latestSubTime = models.TimeField(default='00:00')
     timer = models.TimeField(default='00:00')
     choice = models.CharField(max_length=5, default='cpp')       # for the extension the code C or CPP or python
-    qid = models.IntegerField(default=0)
+    qid = models.IntegerField(default=0)                         # will store the current question
 
     def __str__(self):
             return self.user.username
@@ -48,7 +48,7 @@ class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     que = models.ForeignKey(Question, on_delete=models.CASCADE)
     code = models.CharField(max_length=1000)
-    subStatus = models.BooleanField(default=False)           # False for wrong submission and True for Correct
+    subStatus = models.CharField(default='WA', max_length=5)     # four type of submission status(WA, PASS, TLE, CTE)
     subTime = models.TimeField(default='00:00')
     subScore = models.IntegerField(default=0)
     correctTestCases = models.IntegerField(default=0)

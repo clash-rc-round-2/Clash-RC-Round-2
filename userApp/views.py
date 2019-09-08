@@ -14,6 +14,7 @@ path = os.getcwd()
 path_usercode = path + '/data/usersCode'
 
 NO_OF_QUESTIONS = 6
+NO_OF_TEST_CASES = 6
 
 
 def timer(request):
@@ -112,7 +113,7 @@ def codeSave(request, username, qn):
         mul_que.attempts += 1
         mul_que.save()
         print(mul_que.attempts)
-        return redirect("submission", username=username, qn=qn)
+        return redirect("runCode", username=username, qn=qn)
 
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
@@ -161,8 +162,9 @@ def runCode(request, username, qn):
     user = User.objects.get(username=username)
     user_profile = UserProfile.objects.get(user=user)
     que = Question.objects.get(pk=qn)
-    mulQue = MultipleQues.objects.get(user=user, que=que)
-    attempts = mulQue.attempts
+    mul_que = MultipleQues.objects.get(user=user, que=que)
+    attempts = mul_que.attempts
+    submission = Submission.objects.get(user=user, que=que)
 
     os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
              attempts-1, user_profile.choice) + ' ' + username + ' ' + str(qn))
@@ -170,39 +172,64 @@ def runCode(request, username, qn):
     total_out_path = path_usercode + '/{}/question{}'.format(username, qn)
     print(total_out_path)
     total_file = open('{}/total_output.txt'.format(total_out_path), 'r')
-
-    # code will have text in form '1020301020'
-    # output_list will contain (10, 20 , 30, 10, 20)  for 5 test cases
-
     code = int(total_file.readline()[::-1])       # This will reverse the Code
-    output_list = list()
-
-    for i in range(0, NO_OF_QUESTIONS):
-        var = code % 100
-        output_list.append(var)
-        code = code / 100
 
     '''
+        code will have text in form '1020301020'
+        output_list will contain (10, 20, 30, 10, 20)  for 5 test cases
+
         Sandbox will return(save) these values in total_output.txt
         10 = right answer (PASS)
-        20 = wrong answer (FAIL)
-        30 = TLE
-        40 = compile time error (CLE)
+        20 = wrong answer (WA)
+        30 = Time Limit Exceed (TLE)
+        40 = compile time error (CTE)
     '''
 
-    com_time_error = False                 # For Compile time error for all program
+    output_list = list()
+    correct_list = list()
+
+    for i in range(0, NO_OF_TEST_CASES):
+        correct_list.append('PASS')               # list of all PASS test Cases
+
+    for i in range(0, NO_OF_TEST_CASES):
+        var = code % 100
+        if var == 10:
+            output_list.append('PASS')
+        elif var == 20:
+            output_list.append('WA')
+        elif var == 30:
+            output_list.append('TLE')
+        elif var == 40:
+            output_list.append('CTE')
+        code = code / 100
+
+    if output_list == correct_list:
+        mul_que.scoreQuestion = 100
+
+    com_time_error = False
+    tle_error = False
+    wrg_ans = False
 
     for i in output_list:
         if i == 40:
             com_time_error = True
+            submission.subStatus = 'CTE'
+        elif i == 30:
+            tle_error = True
+            submission.subStatus = 'TLE'
+        elif i == 20:
+            wrg_ans = True
+            submission.subStatus = 'WA'
 
     if com_time_error:
-        for i in output_list:
+        for i in output_list:                  # assigning each element with 40 (CTE will be for every test case)
             i = 40
         error_path = path_usercode + '/{}/question{}'.format(username, qn)
         error_file = open('{}/error.txt'.format(error_path), 'r')
 
-    return render(request, 'userApp/TestCases 111.html')
+    dict = {'com_status': submission.subStatus, 'output_list': output_list}
+
+    return render(request, 'userApp/TestCases 111.html', dict)
 
 
 def user_logout(request):
