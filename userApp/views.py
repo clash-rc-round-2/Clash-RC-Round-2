@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse,JsonResponse
@@ -8,6 +8,7 @@ import os
 
 global starttime
 global end_time
+global duration
 
 path = os.getcwd()
 path_usercode = path + '/data/usersCode'
@@ -22,10 +23,12 @@ def timer(request):
     elif request.method == 'POST':
         global starttime
         global end_time
+        global duration
+        duration = request.POST.get('duration')
         start = datetime.datetime.now()
         time = start.second + start.minute * 60 + start.hour * 60 * 60
         starttime = time
-        end_time = time + 7200
+        end_time = time + int(duration)
         return HttpResponse(" time is set ")
 
 
@@ -60,7 +63,7 @@ def signup(request):
         return redirect(reverse("questionHub"))
 
     elif request.method == 'GET':
-        return render(request, 'userApp/clashlogin.html')
+        return render(request, "userApp/clashlogin.html")
 
 
 def questionHub(request):
@@ -118,7 +121,7 @@ def codeSave(request, username, qn):
 
 
 def instructions(request):
-    return render(request, 'userApp/instpgclash.html')
+    return render(request, 'userApp/QuestionHub.html')
 
 
 def leader(request):

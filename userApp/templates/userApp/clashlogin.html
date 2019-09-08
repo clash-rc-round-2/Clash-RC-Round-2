@@ -58,19 +58,20 @@
                                 <div class="col-lg-12 name1">
                                         <div class = "form-group nam1" >
                                                 <label for = "name"> Name </label>
-                                                <input type = "text" name="name1"  placeholder="Your Name " id="team">
+                                                <input type = "text" name="name1" required autocomplete="off" placeholder="Your Name " id="team">
                                                 </div>
                                 </div>
                                 <div class="col-lg-12 num1">
                                         <div class  = "form-group nam1">
                                                 <label for = "contact">Contact Number</label>
-                                                <input type = "text" name="phone1"  placeholder="Your Contact No. " id = "contactno">
+
+                                                <input type = "text" name="phone1"  placeholder="Your Contact No." maxlength="10" pattern="[7-9]{1}[0-9]{9}" required autocomplete="off" id = "contactno">
                                                 </div>
                                 </div>
                                 <div class="col-lg-12 email1">
                                         <div class = "form-group nam1">
                                                 <label for = "email">Email-id</label>
-                                                <input type = "email" name="email1"  placeholder="Your Email" id = "email">
+                                                <input type = "email" name="email1"  placeholder="Your Email"  required autocomplete="off" id = "email">
                                                 </div>
                                 </div>
                             </div>
@@ -102,10 +103,10 @@
                                         <div class = "col-lg-12" style = "padding-right:2vw; display:flex; justify-content:center; align-items:center;">
                                             <div class = "row radio">
                                                 <div class = "col-lg-6 radio_row" style = "padding-left: 4vw;">
-                                                    <label class = "radio-inline radi1"><input type = "radio" name = "optradio" checked ><b>Junior</b></label>
-                                                 </div>
+                                                    <label class = "radio-inline radi1"><input type = "radio" name = "junior" checked ><b>Junior</b></label>
+                                                </div>
                                                  <div class = "col-lg-6 radio_row" style = "padding-right: 6vw;">
-                                                        <label class = "radio-inline radi1"><input type = "radio" name = "optradio" checked ><b>Senior</b></label>
+                                                        <label class = "radio-inline radi1"><input type = "radio" name = "junior" checked ><b>Senior</b></label>
                                                  </div>
 
                                             </div>
