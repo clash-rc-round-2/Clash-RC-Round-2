@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from .models import Question, Submission, UserProfile, MultipleQues
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.contrib.auth import authenticate
 import datetime
 import os
 
@@ -68,12 +69,15 @@ def signup(request):
 
 
 def questionHub(request):
-    all_questions = Question.objects.all()
-    var = calculate()
-    if var != 0:
-        return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions, 'time': var})
+    if request.user.is_authenticated:
+        all_questions = Question.objects.all()
+        var = calculate()
+        if var != 0:
+            return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions, 'time': var})
+        else:
+            return render(request, 'userApp/final.html')
     else:
-        return render(request, 'userApp/final.html')
+        return redirect("signup")
 
 
 def codeSave(request, username, qn):
@@ -118,29 +122,46 @@ def codeSave(request, username, qn):
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
-        return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user})
+        var = calculate()
+        if var != 0:
+            return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user, 'time': var})
+        else:
+            return render(request, 'userApp/final.html')
 
 
 def instructions(request):
-    return render(request, 'userApp/QuestionHub.html')
+    if request.user.is_authenticated:
+        return render(request, 'userApp/QuestionHub.html')
+    else:
+        return redirect("signup")
 
 
 def leader(request):
-    dict = {}
-    for user in UserProfile.objects.all():
-        list = []
-        for n in range(1, 7):
-            que = Question.objects.get(pk=n)
-            try:
-                mulQue = MultipleQues.objects.get(user=user.user, que=que)
-                list.append(mulQue.scoreQuestion)
-            except MultipleQues.DoesNotExist:
-                list.append(0)
-        list.append(user.totalScore)
-        dict[user.user] = list
+    if request.user.is_authenticated:
+        dict = {}
+        for user in UserProfile.objects.all():
+            list = []
+            for n in range(1, 7):
+                que = Question.objects.get(pk=n)
+                try:
+                    mulQue = MultipleQues.objects.get(user=user.user, que=que)
+                    list.append(mulQue.scoreQuestion)
+                except MultipleQues.DoesNotExist:
+                    list.append(0)
+            list.append(user.totalScore)
+            dict[user.user] = list
 
-    sorted(dict.items(), key=lambda items: items[1][6])
-    return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1)})
+        print(dict)
+        sorted(dict.items(), key=lambda items: items[1][6])
+        var = calculate()
+        if var != 0:
+            return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1),
+                                                                                 'time': var})
+        else:
+            return render(request, 'userApp/final.html')
+
+    else:
+        return HttpResponseRedirect(reverse("signup"))
 
 
 def submission(request, username, qn):
@@ -167,8 +188,6 @@ def runCode(request, username, qn):
     submission = Submission.objects.get(user=user, que=que)
 
     '''
-        JUST FOR CHECKING I AM TAKING OUTPUT FROM THE SANBOX AS 1010101010
-    
         os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
              attempts-1, user_profile.choice) + ' ' + username + ' ' + str(qn))
 
