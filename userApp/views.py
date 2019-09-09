@@ -167,18 +167,11 @@ def runCode(request, username, qn):
     submission = Submission.objects.get(user=user, que=que)
 
     '''
+        JUST FOR CHECKING I AM TAKING OUTPUT FROM THE SANBOX AS 1010101010
     
-    JUST FOR CHECKING I AM TAKING OUTPUT FROM THE SANBOX AS 1010101010
-    
-    os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
+        os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
              attempts-1, user_profile.choice) + ' ' + username + ' ' + str(qn))
-    total_out_path = path_usercode + '/{}/question{}'.format(username, qn)
-    print(total_out_path)
-    total_file = open('{}/total_output.txt'.format(total_out_path), 'r')
-    code = int(total_file.readline()[::-1])       # This will reverse the Code
-    '''
 
-    '''
         code will have text in form '1020301020'
         output_list will contain (10, 20, 30, 10, 20)  for 5 test cases
 
@@ -193,10 +186,10 @@ def runCode(request, username, qn):
     output_list = list()
     correct_list = list()
 
-    for i in range(0, NO_OF_TEST_CASES):
+    for i in range(1, NO_OF_TEST_CASES):
         correct_list.append('PASS')               # list of all PASS test Cases
 
-    for i in range(0, NO_OF_TEST_CASES):
+    for i in range(1, NO_OF_TEST_CASES):
         var = code % 100
         if var == 10:
             output_list.append('PASS')
@@ -206,7 +199,11 @@ def runCode(request, username, qn):
             output_list.append('TLE')
         elif var == 40:
             output_list.append('CTE')
-        code = code / 100
+        code = int(code / 100)
+        print(var)
+
+    print(output_list)
+    print(correct_list)
 
     if output_list == correct_list:               # if all are correct then Score = 100
         mul_que.scoreQuestion = 100
@@ -231,10 +228,8 @@ def runCode(request, username, qn):
         for i in output_list:                  # assigning each element with 40 (CTE will be for every test case)
             i = 40
         error_path = path_usercode + '/{}/question{}'.format(username, qn)
-        error_file = open('{}/error.txt'.format(error_path), 'r')
+        error_file = open('{}/error.txt'.format(error_path), 'w+')
         error_text = error_file.readline()
-
-    # total_score =                            # for partial marking
 
     no_of_pass = 0
     for i in output_list:
@@ -243,8 +238,6 @@ def runCode(request, username, qn):
 
     submission.correctTestCases = no_of_pass
     submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
-
-    # output_list_row1 = output_list.copy(0,3)
 
     dict = {'com_status': submission.subStatus, 'output_list': output_list, 'score': mul_que.scoreQuestion, 'error':
             error_text}
