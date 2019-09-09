@@ -1,127 +1,158 @@
-import os
-import sys
-from sandbox import *
+import os, sys, subprocess
 
-NO_OF_QUESTIONS = 6
+path = sys.argv[1]
+user = sys.argv[2]
+que = int(sys.argv[3])
+att = int(sys.argv[4])
+lang = sys.argv[5]
+file = sys.argv[6]
 
-# paths
-path = os.getcwd()    # 'clash'
-path_userCode = path + '/data/usersCode'
-input_path = path + '/data/standard/input'
-output_path = path + '/data/standard/output'
-
-
-try:
+try :
     # check platform type
     system, machine = os.uname()[0], os.uname()[4]
-    if system not in ('Linux',) or machine not in ('i686', 'x86_64',):
+    if system not in ('Linux',) or machine not in ('i686', 'x86_64',) :
         raise AssertionError("Unsupported platform type.\n")
     # check package availability / version
     import sandbox
 
-    if not hasattr(sandbox, '__version__') or sandbox.__version__ < "0.3.4-3":
+    if not hasattr(sandbox, '__version__') or sandbox.__version__ < "0.3.4-3" :
         raise AssertionError("Unsupported sandbox version.\n")
     from sandbox import *
-except ImportError:
+except ImportError :
     sys.stderr.write("Required package(s) missing.\n")
     sys.exit(os.EX_UNAVAILABLE)
-except AssertionError as e:
+except AssertionError as e :
     sys.stderr.write(str(e))
     sys.exit(os.EX_UNAVAILABLE)
 
+NO_OF_QUESTIONS = 6
 
-def config_sandbox(targeted_file, input_file, out_file):
-    # sandbox configuration
+path_userCode = path + '/data/usersCode'
+input_path = path + '/data/standard/input'
+output_path = path + '/data/standard/output'
+
+def compile(user, extension, que, att) :
+    return_value = 1  # By default error while running file.
+    if extension == 'c':
+        os.chdir("{}/data/usersCode/{}/question{}".format(path, user, que))
+        return_value = subprocess.call(["gcc","code{}-{}.c".format(que.att), "-o" , "solution{}".format(que)])
+
+    elif extension == 'cpp':
+        os.chdir("{}/data/usersCode/{}/question{}".format(path, user, que))
+        return_value = subprocess.call(["g++", "code{}-{}.cpp".format(que, att), "-o", "solution{}".format(que)])
+
+    return return_value  # return 0 for success and 1 for error
+
+
+def run_test_cases(test_case_no, filename, user, que, att) :
+    input_file = "{}/question{}/input{}.txt".format(input_path, que, test_case_no)
+    input_f = open(input_file, "r")  # standard input
+    user_out_file = '{}/{}/question{}/output{}.txt'.format(path_userCode, user, que, test_case_no)
+    user_out_f = os.open(user_out_file, os.O_RDWR | os.O_CREAT)  # user's output
+
+    result_value = config_sandbox(que, input_f, user_out_f)
+    input_f.close()
+
+    os.close(user_out_f)
+
+    e_output_file = '{}/question{}/expected_output{}.txt'.format(output_path, que, test_case_no)
+
+    # !!!This is the success value
+    if result_value == 1:
+        result_value = compare(user_out_file, e_output_file)
+    else:  # !!! Add statements for other codes as well
+        result_value = 30
+
+    return result_value
+
+def config_sandbox(que, in_file_fd, user_out_fd) :
     cookbook = {
-        'args': targeted_file,          # targeted program
-        'stdin': input_file,            # input to targeted program
-        'stdout': out_file,             # output from targeted program
-        'stderr': sys.stderr,           # error from targeted program
-        'quota': dict(wallclock=30000,  # 30 sec
-                      cpu=2000,         # 2 sec
-                      memory=8388608,   # 8 MB
-                      disk=1048576)}    # 1 MB
+        'args' : "solution{}".format(que),  # targeted program
+        'stdin' : in_file_fd,  # input to targeted program
+        'stdout' : user_out_fd,  # output from targeted program
+        'stderr' : sys.stderr,  # error from targeted program
+        'quota' : dict(wallclock=30000,  # 30 sec
+                       cpu=2000,  # 2 sec
+                       memory=268435456,  # 256 MB
+                       disk=1048576)
+    }  # 1 MB
     # create a sandbox instance and execute till end
-    msb = Sandbox(**cookbook)
+    msb = sandbox.Sandbox(**cookbook)
     msb.run()
+    # print "\n"
     d = Sandbox.probe(msb)
     d['cpu'] = d['cpu_info'][0]
     d['mem'] = d['mem_info'][1]
     d['result'] = msb.result
-    return msb.result                 # return 1 if complied successfully..
+    # print("This is the output code", msb.result)
+    return msb.result
 
 
-def compile(filename, extension):
-    return_value = 1         # By default error while running file.
-    if extension == 'c':
-        return_value = os.system('gcc ' + '-o ' + '{} '.format(filename) +
-                                 path + '/{}.c'.format(filename))
-
-    elif extension == 'cpp':
-        return_value = os.system('g++ ' + '-o ' + '{} '.format(filename) +
-                                 path + '/{}.cpp'.format(filename))
-
-    return return_value      # return 0 for success and 1 for error
-
-
-def compare(user_out, e_out):
+def compare(user_out, e_out) :
     user = open(user_out)
     expected = open(e_out)
 
     lines_user = user.readline()
+    l1 = [i.strip() for i in lines_user]
     lines_expected = expected.readline()
+    l2 = [i.strip() for i in lines_expected]
+    if (len(l1) == len(l2)) :
+        for i in range(len(l1)) :  # check if files of equal length
+            if l1[i] == l2[i] :
+                flag = 1
+            else :
+                flag = 0
+                break
+        if flag == 1 :
+            flag = 10
+            return flag
+        else :
+            # print "not same"
+            flag = 20
+            return flag
 
-    same = True                                     # False if not same else True
-
-    for i in range(len(lines_expected)):
-        if lines_expected[i] != lines_user[i]:
-            same = False
-
-    return same
-
-
-def run_test_cases(test_case_no, filename, username, que_id):
-    input_file = input_path + '/question{}'.format(que_id)
-    input_f = open("{}/input{}.txt".format(input_file, test_case_no), "r")                       # standard input
-    user_out_file = path_userCode + '/{}/question{}'.format(username, que_id)
-    user_out_f = open('{}/output{}.txt'.format(user_out_file, test_case_no), "w+")                # user's output
-    e_output_file = output_path + '/question{}/expected_output{}.txt'.format(que_id, test_case_no)
-    e_output_f = open('{}'.format(e_output_file), 'r')                                       # expected/standard output
-
-    result_value = config_sandbox(filename, input_f, user_out_f)   #
-    input_f.close()
-    user_out_f.close()
-
-    same_output = False
-
-    if result_value == 1:
-        same_output = compare(user_out_f, e_output_f)            # False if different and True if same
-
-    return same_output                                 # True if same else False
+    return 20
 
 
-def main():
-    filename = sys.argv[1].split(".")[0]      # FileName
-    extension = sys.argv[1].split(".")[1]     # C or CPP or python
-    username = sys.argv[2]                    # Username
-    que_id = sys.argv[3]                      # Question ID
+def main() :
+    filename = file.split(".")[0]  # FileName
+    extension = file.split(".")[1]  # C or CPP or python
 
-    return_value = compile(filename, extension)                          # calling compile()
+    # err_file = open(f"{path_userCode}/{user}/question{que}/error.txt", "w+")
 
-    out_list = list()
+    result = []
+    return_value = compile(user, extension, que, att)  # calling compile()
 
-    if return_value == 0:
-        for i in range(0, NO_OF_QUESTIONS-1):
-            run_code = run_test_cases(i+1, filename, username, que_id)  # calling runTestCases()
-            out_list.append(1 if run_code else 0)
+    if return_value == 0 :
+        # os.remove(err_file)
 
-    total_file_path = path_userCode + '/{}/question{}'.format(username, que_id)
-    total_file = open('{}/total_output.txt'.format(total_file_path), 'w+')
+        for i in range(0, 5) :
+            run_code = run_test_cases(i + 1, filename, user, que, att)  # calling runTestCases()
+            result.append(run_code)
+    else :
+        result = 40
 
-    for i in out_list:
-        total_file.write("%d" % i)
-
-    return 0
+    return result
 
 
-a = main()
+p = main()
+#print(p)
+
+ans = 0
+ans = p[0]
+
+if ans != 40:
+    for i in range(0,5):
+        ans = ans*100+p[i]
+else:
+    ans = 4040404040
+
+print(str(ans))
+sys.exit(0)
+
+'''
+10 = right answer
+20 = wrong answer
+30 = TLE
+40 = compile time error
+'''

@@ -95,15 +95,15 @@ def codeSave(request, username, qn):
         temp_user.qid = qn
         temp_user.save()
 
-        submission = Submission(code=content, user=user, que=que)
-        submission.save()
-
         try:
             mul_que = MultipleQues.objects.get(user=user, que=que)
         except MultipleQues.DoesNotExist:
             mul_que = MultipleQues(user=user, que=que)
 
         att = mul_que.attempts
+
+        submission = Submission(code=content, user=user, que=que)
+        submission.save()
 
         try:
             os.system('mkdir {}/{}/question{}'.format(path_usercode, username, qn))
@@ -116,8 +116,15 @@ def codeSave(request, username, qn):
         codefile.close()
         mul_que.attempts += 1
         mul_que.save()
-        print(mul_que.attempts)
-        return redirect("runCode", username=username, qn=qn)
+
+        os.chdir(f"{path}/data/Judge")
+
+        ans = subprocess.Popen(['python2', "main.py", path, username, str(qn), str(att), extension,
+                                f"{path_usercode}/{username}/question{qn}/code{qn}-{att}.{extension}"],stdout=subprocess.PIPE)
+        (out,err) = ans.communicate()
+        print("received output is",out)
+
+        return redirect("runCode", username=username, qn=qn, att=att)
 
     elif request.method == 'GET':
         question = Question.objects.get(pk=qn)
@@ -164,7 +171,7 @@ def leader(request):
         return HttpResponseRedirect(reverse("signup"))
 
 
-def submission(request, username, qn):
+def submission(request, username, qn, att):
     user = User.objects.get(username=username)
     que = Question.objects.get(pk=qn)
     allSubmission = Submission.objects.all()
@@ -179,13 +186,13 @@ def submission(request, username, qn):
         return render(request, 'userApp/final.html')
 
 
-def runCode(request, username, qn):
+def runCode(request, username, qn, att):
     user = User.objects.get(username=username)
     user_profile = UserProfile.objects.get(user=user)
     que = Question.objects.get(pk=qn)
     mul_que = MultipleQues.objects.get(user=user, que=que)
     attempts = mul_que.attempts
-    submission = Submission.objects.get(user=user, que=que)
+    submission = Submission.objects.get(user=user, que=que, attempts=att)
 
     '''
         os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
