@@ -14,7 +14,7 @@ path = os.getcwd()
 path_usercode = path + '/data/usersCode'
 
 NO_OF_QUESTIONS = 6
-NO_OF_TEST_CASES = 6
+NO_OF_TEST_CASES = 5
 
 
 def timer(request):
@@ -182,14 +182,14 @@ def runCode(request, username, qn):
         40 = compile time error (CTE)
     '''
 
-    code = 1010101010                # just for checking it is working or not
+    code = 1010201010                # just for checking it is working or not
     output_list = list()
     correct_list = list()
 
-    for i in range(1, NO_OF_TEST_CASES):
+    for i in range(0, NO_OF_TEST_CASES):
         correct_list.append('PASS')               # list of all PASS test Cases
 
-    for i in range(1, NO_OF_TEST_CASES):
+    for i in range(0, NO_OF_TEST_CASES):
         var = code % 100
         if var == 10:
             output_list.append('PASS')
@@ -213,13 +213,13 @@ def runCode(request, username, qn):
     wrg_ans = False
 
     for i in output_list:
-        if i == 40:
+        if i == 'CTE':
             com_time_error = True
             submission.subStatus = 'CTE'
-        elif i == 30:
+        elif i == 'TLE':
             tle_error = True
             submission.subStatus = 'TLE'
-        elif i == 20:
+        elif i == 'WA':
             wrg_ans = True
             submission.subStatus = 'WA'
 
@@ -238,6 +238,7 @@ def runCode(request, username, qn):
 
     submission.correctTestCases = no_of_pass
     submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
+    submission.save()
 
     dict = {'com_status': submission.subStatus, 'output_list': output_list, 'score': mul_que.scoreQuestion, 'error':
             error_text}
