@@ -1,0 +1,3 @@
+/home/gauravghati/clash/data/usersCode/fdvdfgdr/question1/code1-0.cpp:1:1: error: ‘fd’ does not name a type
+ fd fverfververer evrcewv
+ ^~

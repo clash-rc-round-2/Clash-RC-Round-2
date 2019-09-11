@@ -122,7 +122,7 @@
                                 <button class="btn btn-block" type="button" onclick="location.href='{% url 'questionHub' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Question Hub</button>
                             </div>
                             <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                <button class="btn btn-block"  type="button" onclick="location.href='{% url 'leader' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Leaderboard</button>
+                                <button class="btn btn-block"  type="button" onclick="location.href='{% url 'leader' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Submissions</button>
                             </div>
                             <!-- The Modal -->
                             <div class="modal fade" id="logout">
@@ -167,7 +167,7 @@
                             Score
                         </div>
                         <div class="col-lg-5" style="border: 1px solid #daffef;display: flex; justify-content: center;align-items: center;height: 35px;font-size: 25px;color: #d7e9f8;padding-top: 8px; ">
-                            100
+                            {{ total_score }}
                         </div>
                     </div>
                     <div class="col-lg-4"></div>
@@ -202,7 +202,7 @@
                                 <a class="nav-link" data-toggle="tab" onclick="location.href='4';">4</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab"onclick="location.href='5';">5</a>
+                                <a class="nav-link" data-toggle="tab" onclick="location.href='5';">5</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" onclick="location.href='6';">6</a>
@@ -211,9 +211,10 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12" style="border: 0px solid steelblue; height:57vh;">
-                            <textarea class="col-lg-12 " style="color:white; height: 54vh; resize: none; border-radius: 5px; background-color: rgb(0, 0, 0);border: none;" readonly>
+                            <textarea class="col-lg-12" style="color:white; height: 54vh; resize: none; border-radius: 5px; background-color: rgb(0, 0, 0);border: none;" readonly>
                                  {{ question.titleQue }}
-                                {{ question.question }}
+
+{{ question.question }}
                             </textarea>
                         </div>
 
@@ -259,13 +260,15 @@
             </div>
             <div class="row">
                 <div class="col-lg-5 ml-3 mr-3" style="border: 0px solid rgb(64, 179, 255);height: 8vh;display: flex;justify-content: center;align-items: center;">
-                    <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh;">
+                    <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh; background: black;">
                         <ul class="nav nav-tabs" id="tab" style="margin-left: 2px">
                             <li class="nav-item">
-                                <input type="radio" name="ext" checked value="c">C
+                                <input type="radio" name="ext" checked value="c">
+                                <label style="margin-right: 1.2vw;">C</label>
                            </li>
                            <li class="nav-item">
-                               <input type="radio" name="ext" checked value="cpp">C++
+                               <input type="radio" name="ext" checked value="cpp">
+                               <label style="margin-right: 1.2vw;">C++</label>
                            </li>
                         </ul>   
                     </div>
@@ -276,21 +279,20 @@
                 </div>
                 <div class="col-lg-6 " style="border: 0px solid rgb(95, 178, 255); height: 8vh; display: flex;justify-content: center;align-items: center;">
                     <div class="col-lg-6 mt-3">
-                        <button class="btn btn-block" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
+                        <button class="btn btn-block" data-toggle="tab" type="button" onclick="buffer()" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
                         <button class="btn btn-block" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color:#0091bd;color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block" type="submit" formmethod="post" onclick="location.href='/user/{{user.username}}/{{question.IDNumber}}' ;"style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
+                        <button class="btn btn-block" type="submit" formmethod="post" onclick="location.href='/user/{{user.username}}/{{question.IDNumber}}';"style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12" style=" height: 3vh; display: flex; justify-content: center; align-items: center;"></div>
             </div>
-            
-        
+
         <div class="row" style="background-color: #000">
             <div class="col-lg-12" style="font-size: 15px; border: 2px solid black; height:7vh; display: flex; justify-content: center; align-items: center; color: white">
                 &copy PICT IEEE STUDENT BRANCH
@@ -412,7 +414,27 @@
             rbutton.disabled=false;
             run.classList.remove('disabled');
         }
+
+    function buffer(){
+    console.log("LoadBuffer")
+        $.ajax({
+            url : '{% url 'loadBuffer' %}',
+            method: "POST",
+            dataType : "json",
+            success : function (data) {
+                   var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+                         lineNumbers: true,
+                         theme: 'theme/3024-night',
+                         matchBrackets: true,
+                         mode: "text/x-csrc"
+                   });
+                   console.log(data["text"]);
+                   var txt = data["txt"];
+                   editor.setValue(txt);
+            }
+        });
+    }
+
     </script>
 </body>
-
 </html>

@@ -135,10 +135,13 @@ def codeSave(request, username, qn):
 
     elif request.method == 'GET':
         que = Question.objects.get(pk=qn)
+        user_profile = UserProfile.objects.get(user=request.user)
         user = User.objects.get(username=username)
+
         var = calculate()
         if var != 0:
-            return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var})
+            return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var,
+                                                                       'total_score': user_profile.totalScore})
         else:
             return render(request, 'userApp/final.html')
 
@@ -166,8 +169,6 @@ def leader(request):
             dict[user.user] = list
 
         sorted(dict.items(), key=lambda items: (items[1][6], user.latestSubTime))
-        return render(request, 'userApp/leaderboard.html', context={'dict': dict, 'range': range(1, 7, 1)})
-
         var = calculate()
         if var != 0:
             return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1),
@@ -178,7 +179,7 @@ def leader(request):
         return HttpResponseRedirect(reverse("signup"))
 
 
-def submission(request, username):
+def submission(request, username, ):
     user = User.objects.get(username=username)
     allSubmission = Submission.objects.all()
     userQueSub = list()
@@ -243,16 +244,22 @@ def runCode(request, username, qn, att):
         code = int(code / 100)
         print(code)
 
+    flag = True                              # for checking condition of multiple submission
     print(output_list)
     print(correct_list)
 
     if output_list == correct_list:               # if all are correct then Score = 100
-        mul_que.scoreQuestion = 100
-        submission.subStatus = 'PASS'
-        mul_que.save()
+        if mul_que.scoreQuestion == 0:
+            mul_que.scoreQuestion = 100
+            submission.subStatus = 'PASS'
+            mul_que.save()
+        else:
+            submission.subStatus = 'PASS'
+            flag = False
 
-    user_profile.totalScore = mul_que.scoreQuestion
-    user_profile.save()
+    if flag:
+        user_profile.totalScore += mul_que.scoreQuestion
+        user_profile.save()
 
     com_time_error = False
     tle_error = False
