@@ -121,15 +121,16 @@ def codeSave(request, username, qn):
         codefile = open("{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att, extension), "w+")
         codefile.write(content)
         codefile.close()
-        mul_que.attempts += 1
-        mul_que.save()
 
         ans = subprocess.Popen(['python2', "{}/data/Judge/main.py".format(path), path, username, str(qn), str(att),
                                 extension, "{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att,
                                 extension)], stdout=subprocess.PIPE)
         (out, err) = ans.communicate()
-        submission = Submission(code=content, user=user, que=que, out=out)
+        submission = Submission(code=content, user=user, que=que, attempt=att,out=out)
         submission.save()
+
+        mul_que.attempts += 1
+        mul_que.save()
 
         return redirect("runCode", username=username, qn=qn, att=att)
 
@@ -218,7 +219,6 @@ def runCode(request, username, qn, att):
     '''
 
     code = int(submission.out)
-    print(code)
     output_list = list()
     correct_list = list()
 

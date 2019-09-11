@@ -1,3 +1,0 @@
-/home/gauravghati/clash/data/usersCode/dfsdfsdf/question1/code1-0.cpp:1:1: error: ‘sdfsdvxcvsdfhvbghj’ does not name a type
- sdfsdvxcvsdfhvbghj
- ^~~~~~~~~~~~~~~~~~

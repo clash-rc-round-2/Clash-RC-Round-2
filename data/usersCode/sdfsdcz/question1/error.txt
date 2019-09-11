@@ -1,3 +1,0 @@
-/home/gauravghati/clash/data/usersCode/sdfsdcz/question1/code1-0.cpp:1:1: error: ‘dfgsdfgdfvrgert’ does not name a type
- dfgsdfgdfvrgert
- ^~~~~~~~~~~~~~~

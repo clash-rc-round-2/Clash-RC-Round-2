@@ -103,7 +103,8 @@
 </head>
 
 <body>
-    <form>
+    <form method="post">
+        {% csrf_token %}
     <div class="container-fluid">
             <div class="row" style="background-color: #000">
                     <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
@@ -228,7 +229,7 @@
                     </div>
                     <div class="row">    
                         <div class="col-lg-12" id="xx" style="height:60vh;">
-                            <textarea class="col-lg-12" id="editor" style="height: 54vh; resize: none; border-radius: 5px;"></textarea>
+                            <textarea name="content" class="col-lg-12" id="editor" style="height: 54vh; resize: none; border-radius: 5px;"></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -281,7 +282,7 @@
                         <button class="btn btn-block" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color:#0091bd;color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block" type="submit" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
+                        <button class="btn btn-block" type="submit" formmethod="post" onclick="location.href='/user/{{user.username}}/{{question.IDNumber}}' ;"style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
                     </div>
                 </div>
             </div>
