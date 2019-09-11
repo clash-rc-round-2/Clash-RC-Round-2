@@ -6,16 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
-    <!-- Staticaly linked pages -->
+    <title>Coding Page</title>
+    <link rel = "stylesheet" type = "text/css" href="{% static 'css/bootstrap.css' %}">
     <script src="{% static 'javascript/ClashCodingPage/lib/codemirror.js' %}"></script>
     <script src="{% static 'javascript/ClashCodingPage/mode/clike/clike.js' %}" type="text/javascript"></script>
     <script src="{% static 'javascript/ClashCodingPage/addon/edit/matchbrackets.js' %}"></script>
     <link rel="stylesheet" href="{% static 'javascript/ClashCodingPage/theme/3024-night.css' %}">
     <link rel="stylesheet" href="{% static 'javascript/ClashCodingPage/lib/codemirror.css' %}">
 
-    <link href="https://fonts.googleapis.com/css?family=Biryani&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -25,13 +23,16 @@
     <style>
         body {
             font-family: 'Biryani', sans-serif;
-            background: url('{% static 'images/1111111.jpg' %}');
+            background: url("{% static 'images/1111111.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: 100%;
             color: #d7e9f8;
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
         }
+
         #close {
             background-color: #f0f0f0;
             font-size: 25px;
@@ -44,20 +45,25 @@
             color: rgb(43, 43, 43);
             border-radius: 5px;
         }
+
         #run.disabled:hover {
             cursor: not-allowed;
         }
+
         #close:hover {
             background-color: red;
             color: white;
         }
+
         .CodeMirror {
             height: 90%;
             margin-top: 5vh;
         }
+
         #box{
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
+
         #tab li {
             width: 89.3px;
             text-align: center;
@@ -65,12 +71,14 @@
             font-size: 20px;
             border-bottom: 2px solid #d7e9f8;
         }
+
         #brt{
             background-color: none;
             border: 1px solid #d7e9f8;
         }
+
         .nav-tabs>li>a {
-            background-color: #000000;
+            background-color: #000000; 
             border-color: #777777;
             color:#d7e9f8;
         }
@@ -79,11 +87,13 @@
             background-color: #666;
             border: 1px solid #888888;
         }
+
         input[type="radio"] {
             -ms-transform: scale(1.5); /* IE 9 */
             -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
             transform: scale(1.5);
         }
+
         .CodeMirror {
             margin-top: 0;
             border-radius: 5px;
@@ -93,39 +103,61 @@
 </head>
 
 <body>
-    <form method="post">
-        {% csrf_token %}
+    <form>
     <div class="container-fluid">
-        <div class="row" style="background-color: rgb(0, 0, 0);color: white">
-            <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
-                <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;">
-                    <img src="{% static 'images/clash.jpg' %}" style="height: 7vh;margin-bottom: 2px;">
+            <div class="row" style="background-color: #000">
+                    <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
+                        <div class="col-lg-3" style=" height: 7vh;">
+                            <img src="{% static 'images/clash.jpg' %}" style="width: 5vw; height:7vh; display:flex;align-items: center;justify-content: center;color: white">
+                        </div>
+                        <div class="col-lg-9" style="padding-top: 2vh;height: 6vh; display: flex; align-items: center; justify-content: center; color: white"><h5>CODING PAGE</h5></div>
+                    </div>
+                    <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: white">
+                        {{time}}
+                    </div>
+                    <div class="col-lg-5" style=" height: 7vh;">
+                        <div class="row">
+                            <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                                <button class="btn btn-block" type="button" onclick="location.href='{% url 'questionHub' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Question Hub</button>
+                            </div>
+                            <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                                <button class="btn btn-block"  type="button" onclick="location.href='{% url 'leader' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Leaderboard</button>
+                            </div>
+                            <!-- The Modal -->
+                            <div class="modal fade" id="logout">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                    
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                            <h4 class="modal-title" style="color: black;">Are you sure you want to logout?</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                    
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                            <p style="color: black;">Logging out will cause termination of your game and your score till this moment will be counted as your Final Score.
+                                            </div>
+                                    
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" onclick="location.href='{% url 'logout' %}'" data-dismiss="modal">Log Out</button>
+                                            </div>
+                                    
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="col-lg-3 mt-1" style="display: flex; justify-content: center; align-items: center;">
+                                <button class="btn btn-danger btn-block"  type="button" data-toggle="modal" data-target="#logout"   style="font-size: 14px; padding-left: 0; padding-right: 0;">Log Out</button>
+                            </div>
+                            <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                                <img src="{% static 'images/IEEE_logo.png' %}"  style="height: 5vh;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;"><img src="{% static 'images/clash.jpg' %}" style="height: 7vh;margin-bottom: 2px;"></div>
-                <div class="col-lg-9 mt-3" style=" height: 6vh; display:flex;align-items: center; justify-content: center;"><h5 style="margin-bottom: 10px">CODING PAGE</h5></div>
-            </div>
-            <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;">
-                {{ time }}
-            </div>
-            <div class="col-lg-5" style=" height: 7vh;">
-                <div class="row" style="display: flex;justify-content: center;align-items: center;">
-                    <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                        <button class="btn btn-block" data-toggle="tab" onclick="location.href = '/user/allque';" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh;color: white">Question Hub</button>
-                    </div>
-                    <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                        <button class="btn btn-block"  data-toggle="tab" onclick="location.href='/leaderboard';" style="font-size: 12px;width: 120px;background-color: #3a8196;padding-top: 8px;height: 5vh; color: white">Leaderboard</button>
-                    </div>
-                    <div class="col-lg-3 mt-1" style="display: flex; justify-content: center;align-items: center;height: 6vh">
-                        <button class="btn btn-danger"style="font-size: 12px;width: 110px;padding-top: 8px;height: 5vh; ">Log Out</button>
-                    </div>
-                    <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex;align-items: center;">
-                        <img src="{% static 'images/ieee.jpeg' %}" style="height: 5vh;margin-left: 4px">
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row" style="height: 2vh"></div>
-
+        
             <div class="row" id="box">
                 <div class="col-lg-12" style="height: 9vh;display: flex;align-items: center;">
                     <div class="col-lg-2"></div>
@@ -138,9 +170,9 @@
                         </div>
                     </div>
                     <div class="col-lg-4"></div>
-
+                    
                     <div class="col-lg-4" style=" height: 6vh;display: flex; justify-content: center;align-items: center;">
-                        <span id="fname" style="margin-right: 10px;">No file choosen</span>
+                        <span id="fname" style="margin-right: 10px;">No file chosen</span>
                         <input type="file" id="fileLoader" name="files" title="Load File" style="display: none;" />
                         <button class="btn btn-block" id="br" style="width: 130px;height:35px;font-size: 15px;display: flex; justify-content: center;align-items: center;padding-top: 8px;background-color: #3a8196;color: white ">
                             Browse
@@ -149,7 +181,7 @@
                 </div>
             </div>
 
-           <div class="row">
+            <div class="row">
 
                 <div class="col-lg-5 ml-3 mr-3" style=" height: 64vh; ">
                     <div class="row" style="height: 2vh"></div>
@@ -169,7 +201,7 @@
                                 <a class="nav-link" data-toggle="tab" onclick="location.href='4';">4</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" onclick="location.href='5';">5</a>
+                                <a class="nav-link" data-toggle="tab"onclick="location.href='5';">5</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" onclick="location.href='6';">6</a>
@@ -179,10 +211,11 @@
                     <div class="row">
                         <div class="col-lg-12" style="border: 0px solid steelblue; height:57vh;">
                             <textarea class="col-lg-12 " style="color:white; height: 54vh; resize: none; border-radius: 5px; background-color: rgb(0, 0, 0);border: none;" readonly>
-                                {{ question.titleQue }}
+                                 {{ question.titleQue }}
                                 {{ question.question }}
                             </textarea>
                         </div>
+
                     </div>
                 </div>
                 <div class="col-lg-0 ml-3" style="height: 64vh;">
@@ -193,30 +226,33 @@
                     <div class="row">
                         <div class="col-lg-3 " style="height: 4vh;color: #d7e9f8;font-size: 20px;margin-top: 35px">Code Editor</div>
                     </div>
-                    <div class="row">
+                    <div class="row">    
                         <div class="col-lg-12" id="xx" style="height:60vh;">
-                            <textarea class="col-lg-12" name="content" id="editor" style="height: 54vh; resize: none; border-radius: 5px;"></textarea>
+                            <textarea class="col-lg-12" id="editor" style="height: 54vh; resize: none; border-radius: 5px;"></textarea>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-3 mt-2" id="con" style="height:0;font-size: 0;color: #d7e9f8;">
+                        <div class="col-lg-3 mt-1" id="con" style="height:0;font-size: 0;color: #d7e9f8;">
                             Console:
                         </div>
-                        <div class="col-lg-7 mt-2"></div>
-                        <div class="col-lg-2 mt-2" id="closediv" style="height: 0;opacity: 0;">
-                            <a href="#" id="close" class="float-right">&times;</a>
+                        <div class="col-lg-7 mt-1"></div>
+                        <div class="col-lg-2 mt-1" id="closediv" style="height: 0;opacity: 0;">
+                            <a href="#" id="close" class="float-right" style="font-size: 25px;padding-top: 5px;">&times;</a>
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        <div class="col-lg-4" id="hidden" style="opacity: 0;height: 0;">
-                            <textarea class="col-lg-12" id="texthidden" style="height: 0;border-radius: 5px;resize: none;background-color: #000;color: #d7e9f8;" readonly>Actual Output:</textarea>
-                        </div>
-                        <div class="col-lg-4" id="hidden1" style="opacity: 0;height: 0;">
-                            <textarea class="col-lg-12" id="texthidden1" style="height: 0;border-radius: 5px;resize: none;background-color: #000;color: #d7e9f8;" readonly>Expected Output:</textarea>
-                        </div>
-                        <div class="col-lg-4" id="hidden2" style="opacity: 0;height: 0;">
-                            <textarea class="col-lg-12" id="texthidden2" style="height: 0;border-radius: 5px;resize: none;background-color: #000;color: #d7e9f8;" readonly>Status:</textarea>
-                        </div>
+                    <div class="row no-gutters" style="background: rgba(0, 0, 0, 0.5);opacity: 0;border-radius: 5px" id="row">
+                            <div class="col-lg-12" id="hidden" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;border-radius: 5px;text-align: center;overflow: auto">
+                                <div class="col-lg-12" style="height: 3vh;border-bottom: 1px solid #d7e9f8;">
+                                    Status
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mt-2" id="hidden1" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;text-align: center;border-radius: 5px;">
+                                Actual Output
+                                </div>
+                            <div class="col-lg-6 mt-2" id="hidden2" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;text-align: center;border-radius: 5px;">
+                                Expected Output
+                            </div>
+                        
                     </div>
                 </div>
             </div>
@@ -230,7 +266,7 @@
                            <li class="nav-item">
                                <input type="radio" name="ext" checked value="cpp">C++
                            </li>
-                        </ul>
+                        </ul>   
                     </div>
 
                 </div>
@@ -239,29 +275,32 @@
                 </div>
                 <div class="col-lg-6 " style="border: 0px solid rgb(95, 178, 255); height: 8vh; display: flex;justify-content: center;align-items: center;">
                     <div class="col-lg-6 mt-3">
-                        <button class="btn btn-block" data-toggle="tab" onclick="buffer()" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
+                        <button class="btn btn-block" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
+                        <button class="btn btn-block" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color:#0091bd;color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block"  type="submit" onclick="href = '/user/{{ user.username }}/{{ question.IDNumber }}/submission';" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
+                        <button class="btn btn-block" type="submit" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12" style=" height: 3vh; display: flex; justify-content: center; align-items: center;"></div>
             </div>
-
-        <div class="row" style="background-color: #111">
-            <div class="col-lg-12" style="border: 2px solid black;height:7vh;display: flex;justify-content: center;align-items: center;color: #ffffff">
+            
+        
+        <div class="row" style="background-color: #000">
+            <div class="col-lg-12" style="font-size: 15px; border: 2px solid black; height:7vh; display: flex; justify-content: center; align-items: center; color: white">
                 &copy PICT IEEE STUDENT BRANCH
             </div>
         </div>
     </div>
+    
     </form>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
-
+    <script src="{% static 'javascript/ClashCodingPage/jquery.js' %}"></script>
+    <script src="{% static 'javascript/ClashCodingPage/bootstrap.js' %}"></script>
+<!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>-->
     <script>
         var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
             lineNumbers: true,
@@ -269,9 +308,11 @@
             matchBrackets: true,
             mode: "text/x-csrc"
         });
+        
+
+
         var editor = document.getElementById('editor');
         var div = document.getElementById('hidden');
-        var text = document.getElementById('texthidden');
         var run = document.getElementById('run');
         var div2 = document.getElementById('xx');
         var con = document.getElementById('con');
@@ -280,14 +321,15 @@
         var div3 = document.getElementById('hidden1');
         var div4 = document.getElementById('hidden2');
         var browse = document.getElementById('br');
-        var text1 = document.getElementById('texthidden1');
-        var text2 = document.getElementById('texthidden2');
         var rbutton= document.getElementById('rbtn');
         var ftext= document.getElementById('fname');
         var real= document.getElementById('fileLoader');
+        var row=document.getElementById('row');
+
         browse.addEventListener('click',function(){
             real.click();
         });
+
         real.addEventListener("change",function(){
             if(real.value) {
                 ftext.innerHTML= real.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
@@ -296,85 +338,82 @@
                 real.innerHTML= "No file chosen";
             }
         });
+
         rbutton.onclick= function (){
             run.click();
+            rbutton.disabled= true;
         }
+
         run.onclick = function () {
             div2.style.transition = 'height 0.5s';
-            div2.style.height = '28vh';
+            div2.style.height = '26vh';
+
             editor.style.transition = 'height 0.5s';
             editor.style.height = '24vh';
+
             div.style.transition = 'height 0.5s';
-            div.style.height = '27vh';
+            div.style.height = '14vh';
             div.style.opacity = '1';
-            text.style.transition = 'height 0.5s';
-            text.style.height = '21vh';
-            text1.style.transition = 'height 0.5s';
-            text1.style.height = '21vh';
-            text2.style.transition = 'height 0.5s';
-            text2.style.height = '21vh';
+
+            row.style.transition = 'height 0.5s';
+            row.style.opacity = '1';
+
             con.style.transition = 'height 0.05s';
             con.style.height = '4vh';
             con.style.fontSize = '18px';
             con.style.color= '#d7e9f8';
-            div3.style.transition = 'height 0.05s';
-            div3.style.height = '4vh';
+
+            div3.style.transition = 'height 0.5s';
+            div3.style.height = '8vh';
             div3.style.opacity = '1';
-            div4.style.transition = 'height 0.05s';
-            div4.style.height = '4vh';
+
+            div4.style.transition = 'height 0.5s';
+
+            div4.style.height = '8vh';
             div4.style.opacity = '1';
+
             closediv.style.transition = 'height 0.05s';
+
             closediv.style.opacity = '1';
+
             run.disabled = true;
             run.classList.add('disabled');
         }
+
         close.onclick = function () {
             div2.style.transition = 'height 0.5s';
             div2.style.height = '60vh';
+
             editor.style.transition = 'height 0.5s';
             editor.style.height = '54vh';
+
             div.style.transition = 'height 0.5s';
             div.style.height = '0';
+
             div.style.opacity = '0';
-            text.style.transition = 'height 0.5s';
-            text.style.height = '0';
-            text1.style.transition = 'height 0.5s';
-            text1.style.height = '0';
-            text2.style.transition = 'height 0.5s';
-            text2.style.height = '0';
+
             con.style.transition = 'height 0.5s';
             con.style.height = '0';
             con.style.fontSize = '0';
+
             div3.style.transition = 'height 0.5s';
             div3.style.height = '0';
             div3.style.opacity = '0';
+
             div4.style.transition = 'height 0.5s';
             div4.style.height = '0';
             div4.style.opacity = '0';
+
             closediv.style.transition = 'height 0.5s';
             closediv.style.opacity = '0';
+
+            row.style.height= '0'
+
             run.disabled = false;
+            rbutton.disabled=false;
             run.classList.remove('disabled');
         }
-    function buffer(){
-    console.log("LoadBuffer")
-        $.ajax({
-            url : '{% url 'loadBuffer' %}',
-            method: "POST",
-            dataType : "json",
-            success : function (data) {
-                    var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-                        lineNumbers: true,
-                        theme: 'theme/3024-night',
-                        matchBrackets: true,
-                        mode: "text/x-csrc"
-                    });
-                console.log(data["text"]);
-                var txt = data["txt"];
-                editor.setValue(txt);
-            }
-        });
-    }
     </script>
 </body>
+
 </html>

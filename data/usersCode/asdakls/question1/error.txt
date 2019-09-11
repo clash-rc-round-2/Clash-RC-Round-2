@@ -1,0 +1,3 @@
+/home/gauravghati/myenv/clash/data/usersCode/asdakls/question1/code1-0.cpp:1:1: error: ‘wefghmngfdsxcvb’ does not name a type
+ wefghmngfdsxcvb
+ ^~~~~~~~~~~~~~~

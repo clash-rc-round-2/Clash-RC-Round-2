@@ -1,0 +1,3 @@
+/home/gauravghati/clash/data/usersCode/fgsdf/question1/code1-0.cpp:1:1: error: ‘cvbcvbhr’ does not name a type
+ cvbcvbhr rtyr tyrt rytyrtr r yrt
+ ^~~~~~~~

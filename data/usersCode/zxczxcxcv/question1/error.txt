@@ -1,0 +1,3 @@
+/home/gauravghati/clash/data/usersCode/zxczxcxcv/question1/code1-0.cpp:1:1: error: ‘fgdfgfvbcvbcvbdhdfgdf’ does not name a type
+ fgdfgfvbcvbcvbdhdfgdf
+ ^~~~~~~~~~~~~~~~~~~~~

@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
+from django.db import IntegrityError, Error
 from .models import Question, Submission, UserProfile, MultipleQues
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.contrib.auth import authenticate
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
-import os
+import os, subprocess
 
 global starttime
 global end_time
@@ -26,7 +26,7 @@ def timer(request):
         global starttime
         global end_time
         global duration
-        duration = request.POST.get('duration')
+        duration = 7200                                              # request.POST.get('duration')
         start = datetime.datetime.now()
         time = start.second + start.minute * 60 + start.hour * 60 * 60
         starttime = time
@@ -48,24 +48,35 @@ def calculate():
 
 def signup(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        name1 = request.POST.get('name1')
-        name2 = request.POST.get('name2')
-        phone1 = request.POST.get('phone1')
-        phone2 = request.POST.get('phone2')
-        email1 = request.POST.get('email1')
-        email2 = request.POST.get('email2')
-        user = User.objects.create_user(username=username, password=password)
-        userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
-                                  email2=email2)
-        userprofile.save()
-        os.system('mkdir {}/{}'.format(path_usercode, username))
-        login(request, user)
-        return redirect(reverse("questionHub"))
+        try:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            name1 = request.POST.get('name1')
+            name2 = request.POST.get('name2')
+            phone1 = request.POST.get('phone1')
+            phone2 = request.POST.get('phone2')
+            email1 = request.POST.get('email1')
+            email2 = request.POST.get('email2')
+
+            if username == "" or password == "":
+                return render(request, 'userApp/login.html')
+
+            user = User.objects.create_user(username=username, password=password)
+            userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
+                                      email2=email2)
+            userprofile.save()
+            os.system('mkdir {}/{}'.format(path_usercode, username))
+            login(request, user)
+            return redirect(reverse("instructions"))
+
+        except IntegrityError:
+            return HttpResponse("you have already been registered.")
+
+        except HttpResponseForbidden:
+            return render(request, 'userApp/login.html')
 
     elif request.method == 'GET':
-        return render(request, "userApp/clashlogin.html")
+        return render(request, "userApp/login.html")
 
 
 def questionHub(request):
@@ -73,7 +84,7 @@ def questionHub(request):
         all_questions = Question.objects.all()
         var = calculate()
         if var != 0:
-            return render(request, 'userApp/QuestionHub.html', context={'all_questions': all_questions, 'time': var})
+            return render(request, 'userApp/qhub.html', context={'all_questions': all_questions, 'time': var})
         else:
             return render(request, 'userApp/final.html')
     else:
@@ -81,15 +92,16 @@ def questionHub(request):
 
 
 def codeSave(request, username, qn):
+
     if request.method == 'POST':
+        que = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
+
         content = request.POST['content']
         extension = request.POST['ext']
 
         user_profile = UserProfile.objects.get(user=user)
         user_profile.choice = extension
-
-        que = Question.objects.get(pk=qn)
 
         temp_user = UserProfile.objects.get(user=user)
         temp_user.qid = qn
@@ -99,15 +111,10 @@ def codeSave(request, username, qn):
             mul_que = MultipleQues.objects.get(user=user, que=que)
         except MultipleQues.DoesNotExist:
             mul_que = MultipleQues(user=user, que=que)
-
         att = mul_que.attempts
-
-        submission = Submission(code=content, user=user, que=que)
-        submission.save()
 
         try:
             os.system('mkdir {}/{}/question{}'.format(path_usercode, username, qn))
-
         except FileExistsError:
             pass
 
@@ -117,28 +124,28 @@ def codeSave(request, username, qn):
         mul_que.attempts += 1
         mul_que.save()
 
-        os.chdir(f"{path}/data/Judge")
-
-        ans = subprocess.Popen(['python2', "main.py", path, username, str(qn), str(att), extension,
-                                f"{path_usercode}/{username}/question{qn}/code{qn}-{att}.{extension}"],stdout=subprocess.PIPE)
-        (out,err) = ans.communicate()
-        print("received output is",out)
+        ans = subprocess.Popen(['python2', "{}/data/Judge/main.py".format(path), path, username, str(qn), str(att),
+                                extension, "{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att,
+                                extension)], stdout=subprocess.PIPE)
+        (out, err) = ans.communicate()
+        submission = Submission(code=content, user=user, que=que, out=out)
+        submission.save()
 
         return redirect("runCode", username=username, qn=qn, att=att)
 
     elif request.method == 'GET':
-        question = Question.objects.get(pk=qn)
+        que = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
         var = calculate()
         if var != 0:
-            return render(request, 'userApp/codingPage.html', context={'question': question, 'user': user, 'time': var})
+            return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var})
         else:
             return render(request, 'userApp/final.html')
 
 
 def instructions(request):
     if request.user.is_authenticated:
-        return render(request, 'userApp/QuestionHub.html')
+        return render(request, 'userApp/instructions.html')
     else:
         return redirect("signup")
 
@@ -146,7 +153,7 @@ def instructions(request):
 def leader(request):
     if request.user.is_authenticated:
         dict = {}
-        for user in UserProfile.objects.all():
+        for user in UserProfile.objects.order_by("-totalScore"):
             list = []
             for n in range(1, 7):
                 que = Question.objects.get(pk=n)
@@ -158,26 +165,26 @@ def leader(request):
             list.append(user.totalScore)
             dict[user.user] = list
 
-        print(dict)
-        sorted(dict.items(), key=lambda items: items[1][6])
+        sorted(dict.items(), key=lambda items: (items[1][6], user.latestSubTime))
+        return render(request, 'userApp/leaderboard.html', context={'dict': dict, 'range': range(1, 7, 1)})
+
         var = calculate()
         if var != 0:
             return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1),
                                                                                  'time': var})
         else:
             return render(request, 'userApp/final.html')
-
     else:
         return HttpResponseRedirect(reverse("signup"))
 
 
-def submission(request, username, qn, att):
+def submission(request, username):
     user = User.objects.get(username=username)
-    que = Question.objects.get(pk=qn)
     allSubmission = Submission.objects.all()
     userQueSub = list()
+
     for submissions in allSubmission:
-        if submissions.que == que and submissions.user == user:
+        if submissions.user == user:
             userQueSub.append(submissions)
     var = calculate()
     if var != 0:
@@ -188,11 +195,13 @@ def submission(request, username, qn, att):
 
 def runCode(request, username, qn, att):
     user = User.objects.get(username=username)
-    user_profile = UserProfile.objects.get(user=user)
     que = Question.objects.get(pk=qn)
-    mul_que = MultipleQues.objects.get(user=user, que=que)
-    attempts = mul_que.attempts
-    submission = Submission.objects.get(user=user, que=que, attempts=att)
+    try:
+        mul_que = MultipleQues.objects.get(user=user, que=que)
+    except MultipleQues.DoesNotExist:
+        mul_que = MultipleQues(user=user, que=que)
+
+    submission = Submission.objects.get(user=user, que=que, attempt=att)
 
     '''
         os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
@@ -208,7 +217,8 @@ def runCode(request, username, qn, att):
         40 = compile time error (CTE)
     '''
 
-    code = 1010201010                # just for checking it is working or not
+    code = int(submission.out)
+    print(code)
     output_list = list()
     correct_list = list()
 
@@ -226,7 +236,7 @@ def runCode(request, username, qn, att):
         elif var == 40:
             output_list.append('CTE')
         code = int(code / 100)
-        print(var)
+        print(code)
 
     print(output_list)
     print(correct_list)
@@ -254,8 +264,8 @@ def runCode(request, username, qn, att):
         for i in output_list:                  # assigning each element with 40 (CTE will be for every test case)
             i = 40
         error_path = path_usercode + '/{}/question{}'.format(username, qn)
-        error_file = open('{}/error.txt'.format(error_path), 'w+')
-        error_text = error_file.readline()
+        error_file = open('{}/error.txt'.format(error_path), 'r')
+        error_text = error_file.read()
 
     no_of_pass = 0
     for i in output_list:
@@ -269,12 +279,29 @@ def runCode(request, username, qn, att):
     dict = {'com_status': submission.subStatus, 'output_list': output_list, 'score': mul_que.scoreQuestion, 'error':
             error_text}
 
-    return render(request, 'userApp/TestCases 111.html', dict)
+    return render(request, 'userApp/testcases.html', dict)
 
 
 def user_logout(request):
+    user = UserProfile.objects.get(user=request.user)
+    object = UserProfile.objects.order_by("-totalScore", "latestSubTime")
+    rank = 0
+    i = 0
+    dict = {}
+    for user in object:
+        if rank < 3:
+            dict[user.user] = user.totalScore
+            rank = rank + 1
+        else:
+            break
+
+    for user in object:
+        i += 1
+        if str(user.user) == str(request.user.username):
+            break
+
     logout(request)
-    return render(request, 'userApp/clash result blue.html')
+    return render(request, 'userApp/result.html', context={'dict':dict, 'rank': i, 'name': user.user, 'score': user.totalScore})
 
 
 def loadBuffer(request):
