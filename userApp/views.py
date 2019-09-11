@@ -92,7 +92,6 @@ def questionHub(request):
 
 
 def codeSave(request, username, qn):
-
     if request.method == 'POST':
         que = Question.objects.get(pk=qn)
         user = User.objects.get(username=username)
@@ -197,6 +196,8 @@ def submission(request, username):
 def runCode(request, username, qn, att):
     user = User.objects.get(username=username)
     que = Question.objects.get(pk=qn)
+    user_profile = UserProfile.objects.get(user=request.user)
+
     try:
         mul_que = MultipleQues.objects.get(user=user, que=que)
     except MultipleQues.DoesNotExist:
@@ -205,9 +206,6 @@ def runCode(request, username, qn, att):
     submission = Submission.objects.get(user=user, que=que, attempt=att)
 
     '''
-        os.popen('python2 data/Judge/main.py ' + '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn,
-             attempts-1, user_profile.choice) + ' ' + username + ' ' + str(qn))
-
         code will have text in form '1020301020'
         output_list will contain (10, 20, 30, 10, 20)  for 5 test cases
 
@@ -216,6 +214,8 @@ def runCode(request, username, qn, att):
         20 = wrong answer (WA)
         30 = Time Limit Exceed (TLE)
         40 = compile time error (CTE)
+        50 = core Dumped (RTE)
+        60 = Abnormal Termination (RTE)
     '''
 
     code = int(submission.out)
@@ -224,6 +224,8 @@ def runCode(request, username, qn, att):
 
     for i in range(0, NO_OF_TEST_CASES):
         correct_list.append('PASS')               # list of all PASS test Cases
+
+    check50 = False        # for checking return value is 50 or 60
 
     for i in range(0, NO_OF_TEST_CASES):
         var = code % 100
@@ -235,6 +237,9 @@ def runCode(request, username, qn, att):
             output_list.append('TLE')
         elif var == 40:
             output_list.append('CTE')
+        elif var == 50 or var == 60:
+            output_list.append('RTE')
+            check50 = True if var == 50 else False
         code = int(code / 100)
         print(code)
 
@@ -243,10 +248,16 @@ def runCode(request, username, qn, att):
 
     if output_list == correct_list:               # if all are correct then Score = 100
         mul_que.scoreQuestion = 100
+        submission.subStatus = 'PASS'
+        mul_que.save()
+
+    user_profile.totalScore = mul_que.scoreQuestion
+    user_profile.save()
 
     com_time_error = False
     tle_error = False
     wrg_ans = False
+    run_time_error = False
 
     for i in output_list:
         if i == 'CTE':
@@ -258,19 +269,30 @@ def runCode(request, username, qn, att):
         elif i == 'WA':
             wrg_ans = True
             submission.subStatus = 'WA'
+        elif i == 'RTE':
+            run_time_error = True
+            submission.subStatus = 'RTE'
 
-    error_text = 'No Error Found, Complied Successfully!'
+    error_text = 'No Error Found, Compiled Successfully!'
+
+    if run_time_error and check50:
+        error_text = 'Run Time Error! Core Dumped!'
+    elif run_time_error and (check50 is False):
+        error_text = 'Run Time Error! Abnormal Termination!'
+
     if com_time_error:
         for i in output_list:                  # assigning each element with 40 (CTE will be for every test case)
             i = 40
         error_path = path_usercode + '/{}/question{}'.format(username, qn)
         error_file = open('{}/error.txt'.format(error_path), 'r')
-        error_text = error_file.read()
+        error_text = error_file.readline()
 
     no_of_pass = 0
     for i in output_list:
         if i == 'PASS':
             no_of_pass += 1
+
+    print(error_text)
 
     submission.correctTestCases = no_of_pass
     submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
@@ -301,7 +323,8 @@ def user_logout(request):
             break
 
     logout(request)
-    return render(request, 'userApp/result.html', context={'dict':dict, 'rank': i, 'name': user.user, 'score': user.totalScore})
+    return render(request, 'userApp/result.html', context={'dict': dict, 'rank': i, 'name': user.user,
+                                                           'score': user.totalScore})
 
 
 def loadBuffer(request):

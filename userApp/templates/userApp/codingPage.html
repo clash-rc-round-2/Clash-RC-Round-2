@@ -103,7 +103,7 @@
 </head>
 
 <body>
-    <form method="post">
+    <form>
         {% csrf_token %}
     <div class="container-fluid">
             <div class="row" style="background-color: #000">
@@ -309,8 +309,6 @@
             matchBrackets: true,
             mode: "text/x-csrc"
         });
-        
-
 
         var editor = document.getElementById('editor');
         var div = document.getElementById('hidden');

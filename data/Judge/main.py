@@ -56,18 +56,21 @@ def run_test_cases(test_case_no, filename, user, que, att) :
 
     e_output_file = '{}/question{}/expected_output{}.txt'.format(output_path, que, test_case_no)
 
-    # !!!This is the success value
-    if result_value == 1:
+    if result_value == 1:                                               # !!!This is the success value
         result_value = compare(user_out_file, e_output_file)
-    else:  # !!! Add statements for other codes as well
+    elif result_value == 5:                                             # !!! Add statements for other codes as well
         result_value = 30
+    # elif result_value:
+    #     result_value = 50
+    else:
+        result_value = 60
 
     return result_value
 
 
-def config_sandbox(que, in_file_fd, user_out_fd) :
+def config_sandbox(que, in_file_fd, user_out_fd):
     cookbook = {
-        'args': "{}/{}/question{}/solution{}".format(path_userCode,user,que,que),  # targeted program
+        'args': "{}/{}/question{}/solution{}".format(path_userCode, user, que, que),  # targeted program
         'stdin': in_file_fd,  # input to targeted program
         'stdout': user_out_fd,  # output from targeted program
         'stderr': sys.stderr,  # error from targeted program
@@ -114,7 +117,7 @@ def compare(user_out, e_out):
     return 20
 
 
-def main() :
+def main():
     filename = file.split(".")[0]  # FileName
     extension = file.split(".")[1]  # C or CPP or python
 
@@ -159,3 +162,5 @@ sys.exit(0)
 # 20 = wrong answer
 # 30 = TLE
 # 40 = compile time error
+# 50 = RTE : core Dumped
+# 60 = Abnormal Termination

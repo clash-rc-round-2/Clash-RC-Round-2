@@ -1,2 +1,6 @@
 venv
-
+clash/__pychche__
+db.sqlite3
+README.md
+userApp/migrations
+userApp/__pycache__

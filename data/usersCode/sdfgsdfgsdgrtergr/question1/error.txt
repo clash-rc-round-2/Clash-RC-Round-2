@@ -1,0 +1,3 @@
+/home/gauravghati/clash/data/usersCode/sdfgsdfgsdgrtergr/question1/code1-0.cpp:1:1: error: ‘sdfsdfwevrwer34t3f’ does not name a type
+ sdfsdfwevrwer34t3f
+ ^~~~~~~~~~~~~~~~~~

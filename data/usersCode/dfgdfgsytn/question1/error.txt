@@ -1,0 +1,3 @@
+/home/gauravghati/clash/data/usersCode/dfgdfgsytn/question1/code1-0.cpp:1:1: error: ‘sdfsdfverwevwv3vert’ does not name a type
+ sdfsdfverwevwv3vert ervtertv34tvrt erv34v 343v354v
+ ^~~~~~~~~~~~~~~~~~~

@@ -104,11 +104,7 @@
                                        color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
                                            <span class="sr-only">Loading...</span>
                                          </div>CASE 4</div>       
-                                </div>     
-               
-               
-               
-               
+                                </div>
                                        <div class="row">   
                                                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;align-items: center;
                                                color:#d7e9f8;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
@@ -132,7 +128,7 @@
                                                       
                                                            <div class="col-lg-5" style="justify-content: center;display: flex">
                                                                    <div class="col-lg-6" style="justify-content: center; display: flex; height: 15vh; width: 100vh; margin:3vw">
-                                                                        <button class="btn btn-danger" type="button" onclick="window.location.href = '../user/{{user.username}}';" style="height:5vh; width:9vw; margin:1vh">RETRY</button>
+                                                                        <button class="btn btn-danger" type="button" onclick="history.back()" style="height:5vh; width:9vw; margin:1vh">RETRY</button>
                                                                    </div>
                                                                </div>
 
@@ -144,10 +140,10 @@
                
                           
                         <div class="col-lg-4" style="border: 5px solid rgba(243, 248, 243, 0.952); height:80vh;margin-top:3vh;border-radius: 10px">
-                               <strong style="text-align: center;margin-top: 15px;margin-bottom: 15px;justify-content: center;display: flex; color:#d7e9f8">CONSOLE</strong> 
-                               
+                               <strong style="text-align: center;margin-top: 15px;margin-bottom: 15px;justify-content: center;display: flex; color:#d7e9f8">CONSOLE</strong>
+                               {{ error }}
                             <div class="row">
-                                
+
                                 <div class="row" style="height:40vh;width:60vw;margin:2vw 2vw; border:5px rgb(14, 247, 53)"></div>
                                             
                             </div>

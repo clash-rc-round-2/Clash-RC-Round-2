@@ -1,0 +1,3 @@
+/home/gauravghati/clash/data/usersCode/zxvczxc/question1/code1-0.cpp:1:1: error: ‘asnda’ does not name a type
+ asnda,sc,xnasudiauwqw
+ ^~~~~
