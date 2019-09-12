@@ -122,7 +122,7 @@
                                 <button class="btn btn-block" type="button" onclick="location.href='{% url 'questionHub' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Question Hub</button>
                             </div>
                             <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                <button class="btn btn-block"  type="button" onclick="location.href='{% url 'leader' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Submissions</button>
+                                <button class="btn btn-block"  type="button" onclick="location.href='{% url 'submission' username=user.username qn=question_id %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Submissions</button>
                             </div>
                             <!-- The Modal -->
                             <div class="modal fade" id="logout">

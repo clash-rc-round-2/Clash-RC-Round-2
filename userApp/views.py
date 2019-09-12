@@ -86,7 +86,7 @@ def questionHub(request):
         if var != 0:
             return render(request, 'userApp/qhub.html', context={'all_questions': all_questions, 'time': var})
         else:
-            return render(request, 'userApp/final.html')
+            return render(request, 'userApp/result.html')
     else:
         return redirect("signup")
 
@@ -141,9 +141,10 @@ def codeSave(request, username, qn):
         var = calculate()
         if var != 0:
             return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var,
-                                                                       'total_score': user_profile.totalScore})
+                                                                       'total_score': user_profile.totalScore,
+                                                                       'question_id': user_profile.qid})
         else:
-            return render(request, 'userApp/final.html')
+            return render(request, 'userApp/result.html')
 
 
 def instructions(request):
@@ -171,27 +172,29 @@ def leader(request):
         sorted(dict.items(), key=lambda items: (items[1][6], user.latestSubTime))
         var = calculate()
         if var != 0:
-            return render(request, 'userApp/leaderboard_RC(blue).html', context={'dict': dict, 'range': range(1, 7, 1),
+            return render(request, 'userApp/leaderboard.html', context={'dict': dict, 'range': range(1, 7, 1),
                                                                                  'time': var})
         else:
-            return render(request, 'userApp/final.html')
+            return render(request, 'userApp/result.html')
     else:
         return HttpResponseRedirect(reverse("signup"))
 
 
-def submission(request, username, ):
+def submission(request, username, qn):
     user = User.objects.get(username=username)
-    allSubmission = Submission.objects.all()
+    all_submission = Submission.objects.all()
+    all_que = Question.objects.all()
     userQueSub = list()
 
-    for submissions in allSubmission:
-        if submissions.user == user:
-            userQueSub.append(submissions)
+    for submissions in all_submission:
+        for que in all_que:
+            if submissions.user == user and que.IDNumber == qn:
+                userQueSub.append(submissions)
     var = calculate()
     if var != 0:
         return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var})
     else:
-        return render(request, 'userApp/final.html')
+        return render(request, 'userApp/result.html')
 
 
 def runCode(request, username, qn, att):

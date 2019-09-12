@@ -1,0 +1,4 @@
+/home/gauravghati/clash/data/usersCode/csdfcwf/question1/code1-1.cpp: In function ‘int main()’:
+/home/gauravghati/clash/data/usersCode/csdfcwf/question1/code1-1.cpp:11:1: error: expected ‘;’ before ‘}’ token
+ }
+ ^

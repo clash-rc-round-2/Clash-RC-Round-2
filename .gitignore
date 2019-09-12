@@ -1,5 +1,5 @@
 venv
-clash/__pychche__
+clash/__pycache__
 db.sqlite3
 README.md
 userApp/migrations
