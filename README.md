@@ -1,5 +1,35 @@
 # Clash-RC-Round-2
 
+# Update 04
+
+Things remaining in this project:
+
+I) From Backend:
+- integrating waiting Page. (Timer Logic)
+- Username Space(Directory) issue.
+- Disabling back button according to the pages.
+- Accuracy of the Questions
+- Adding Python Sandbox
+- Integrating MySQL
+- Run Code by Ajax
+- Ajax load buffer issue
+- Browser issue
+- Authentications from all pages
+- Printing Test case status
+- Error Handling (when typed wrong URLs by users)
+- Ajax username in the login page
+- Displaying error on the console properly.
+
+II) From FrontEnd:
+- C and C++ Button
+- Login Page Player2 Animation
+- off Autocomplete
+- Flipflop for displaying time properly
+- question hub active button from each question
+- showing correct or wrong for each test cases.
+
+will remove task when it is done.
+
 # Update 03
 
 Guys, It's time to start working vigorously on this project.
