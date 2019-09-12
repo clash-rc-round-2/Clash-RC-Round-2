@@ -1,3 +1,0 @@
-/home/gauravghati/clash/data/usersCode/cvxcrtert/question1/code1-0.cpp:1:1: error: ‘xvcbxcvsgrtbwe’ does not name a type
- xvcbxcvsgrtbwe werewvr
- ^~~~~~~~~~~~~~

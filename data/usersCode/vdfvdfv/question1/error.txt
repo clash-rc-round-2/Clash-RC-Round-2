@@ -1,3 +1,0 @@
-/home/gauravghati/clash/data/usersCode/vdfvdfv/question1/code1-0.cpp:1:1: error: ‘dfrtrtrtbg’ does not name a type
- dfrtrtrtbg tg5t5tg5g rgb
- ^~~~~~~~~~

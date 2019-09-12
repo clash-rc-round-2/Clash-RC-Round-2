@@ -1,3 +1,0 @@
-/home/gauravghati/clash/data/usersCode/d,mfnv,m/question1/code1-0.cpp:1:1: error: ‘zcn’ does not name a type
- zcn,mxncsc akjscnx ,smxnc,mzxs skdnc
- ^~~

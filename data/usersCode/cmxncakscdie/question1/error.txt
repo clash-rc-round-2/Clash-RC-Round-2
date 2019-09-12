@@ -1,3 +1,0 @@
-/home/gauravghati/clash/data/usersCode/cmxncakscdie/question1/code1-0.cpp:1:1: error: ‘werwewerxwer’ does not name a type
- werwewerxwer wer3 4t34t 34t34
- ^~~~~~~~~~~~
