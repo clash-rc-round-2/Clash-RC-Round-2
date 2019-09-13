@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
-from django.db import IntegrityError, Error
+from django.db import IntegrityError
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
@@ -82,6 +82,27 @@ def signup(request):
 def questionHub(request):
     if request.user.is_authenticated:
         all_questions = Question.objects.all()
+        all_users = User.objects.all()
+
+        for que in all_questions:
+            for user in all_users:
+                try:
+                    mul_que = MultipleQues.objects.get(user=user, que=que)
+                except MultipleQues.DoesNotExist:
+                    mul_que = MultipleQues(user=user, que=que)
+                que.totalSub += mul_que.attempts
+                # try:
+                #     submissions = Submission.objects.get(user=user, que=que, subStatus='PASS')
+                #     que.totalSuccessfulSub += 1
+                # except Submission.DoesNotExist:
+                #     que.totalSuccessfulSub += 0
+                # except Submission.MultipleObjectsReturned:
+                #     que.totalSuccessfulSub += 0
+            try:
+                que.accuracy = (que.totalSuccessfulSub/que.totalSub) * 100
+            except ZeroDivisionError:
+                que.accuracy = 0
+
         var = calculate()
         if var != 0:
             return render(request, 'userApp/qhub.html', context={'all_questions': all_questions, 'time': var})
@@ -125,7 +146,7 @@ def codeSave(request, username, qn):
                                 extension, "{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att,
                                 extension)], stdout=subprocess.PIPE)
         (out, err) = ans.communicate()
-        submission = Submission(code=content, user=user, que=que, attempt=att,out=out)
+        submission = Submission(code=content, user=user, que=que, attempt=att, out=out)
         submission.save()
 
         mul_que.attempts += 1
@@ -173,7 +194,7 @@ def leader(request):
         var = calculate()
         if var != 0:
             return render(request, 'userApp/leaderboard.html', context={'dict': dict, 'range': range(1, 7, 1),
-                                                                                 'time': var})
+                                                                        'time': var})
         else:
             return render(request, 'userApp/result.html')
     else:
@@ -229,7 +250,7 @@ def runCode(request, username, qn, att):
     for i in range(0, NO_OF_TEST_CASES):
         correct_list.append('PASS')               # list of all PASS test Cases
 
-    check50 = False        # for checking return value is 50 or 60
+    check50 = False                               # for checking return value is 50 or 60
 
     for i in range(0, NO_OF_TEST_CASES):
         var = code % 100
@@ -247,21 +268,23 @@ def runCode(request, username, qn, att):
         code = int(code / 100)
         print(code)
 
-    flag = True                              # for checking condition of multiple submission
+    flag = True                                      # for checking condition of multiple submission
     print(output_list)
     print(correct_list)
 
-    if output_list == correct_list:               # if all are correct then Score = 100
+    if output_list == correct_list:                  # if all are correct then Score = 100
         if mul_que.scoreQuestion == 0:
+            que.totalSuccessfulSub += 1
             mul_que.scoreQuestion = 100
             submission.subStatus = 'PASS'
+            user_profile.totalScore += mul_que.scoreQuestion
+            que.save()
             mul_que.save()
         else:
             submission.subStatus = 'PASS'
             flag = False
 
     if flag:
-        user_profile.totalScore += mul_que.scoreQuestion
         user_profile.save()
 
     com_time_error = False
@@ -282,6 +305,7 @@ def runCode(request, username, qn, att):
         elif i == 'RTE':
             run_time_error = True
             submission.subStatus = 'RTE'
+        mul_que.scoreQuestion = 100 if submission.subStatus == 'PASS' else 0
 
     error_text = 'No Error Found, Compiled Successfully!'
 

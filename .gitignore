@@ -1,7 +1,6 @@
 venv
 clash/__pycache__
-db.sqlite3
 README.md
-userApp/migrations
 userApp/__pycache__
 .idea
+
