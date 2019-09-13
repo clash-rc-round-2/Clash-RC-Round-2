@@ -5,11 +5,12 @@ from django.db import IntegrityError, Error
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
-import os, subprocess
+import os
+import subprocess
 
-global starttime
-global end_time
-global duration
+starttime = 0
+end_time = 0
+duration = 0
 
 path = os.getcwd()
 path_usercode = path + '/data/usersCode'
