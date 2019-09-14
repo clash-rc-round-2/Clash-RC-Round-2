@@ -70,7 +70,7 @@ def signup(request):
             return redirect(reverse("instructions"))
 
         except IntegrityError:
-            return HttpResponse("you have already been registered.")
+            return render(request, 'userApp/login.html')
 
         except HttpResponseForbidden:
             return render(request, 'userApp/login.html')
@@ -380,3 +380,13 @@ def loadBuffer(request):
     response_data["txt"] = txt
 
     return JsonResponse(response_data)
+
+def check_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    if data['is_taken']:
+        data['error_message'] = 'username already exits.'
+
+    return JsonResponse(data)

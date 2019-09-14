@@ -148,18 +148,27 @@
             </div>
 
 
+    {% block javascript %}
+    <script>
+        $("#tm").change(function () {
+          var username = $(this).val();
+          $.ajax({
+            url: '{% url 'check_username' %}',
+            data: {
+                'username': username
+            },
+            dataType: 'json',
+            success: function (data) {
+              if (data.is_taken) {
+                alert(data.error_message);
+              }
+            }
+          });
+        });
+  </script>
+{% endblock %}
+
     </body>
     <script src="{% static 'javascript/clash_login.js' %}"></script>
     </form>
-
-
-
-
-
-
-
-
-
-
-
 </html>
