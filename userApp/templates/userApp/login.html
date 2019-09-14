@@ -76,7 +76,7 @@
                                     <div class ="block "style=" height:35vh; border-radius: 8px; border:1px solid black; background-color: rgba(0, 0, 0, 0.349);">
                                             <div class="row name"><center><p>TEAM NAME</p></center></div>
                                             <div class="inputBox">
-                                                <input type="text" name="username" required autocomplete="off" id="tm" onclick="tmc()">
+                                                <input type="text" name="username" required autocomplete="off" id="tm" onkeypress="return AvoidSpace(event)" onclick="tmc()">
                                                 <label id="tml">Team Name</label>
                                             </div>
                                             <div class="inputBox">
@@ -167,7 +167,14 @@
         });
   </script>
 {% endblock %}
-
+    <script>
+    function AvoidSpace(event) {
+    var k = event ? event.which : window.event.keyCode;
+    if (k == 32) return false;
+    if (k == 47) return false;
+    if (k == 92) return false;
+    if (k == 96) return false;
+    }</script>
     </body>
     <script src="{% static 'javascript/clash_login.js' %}"></script>
     </form>
