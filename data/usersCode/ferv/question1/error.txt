@@ -1,0 +1,3 @@
+/home/gauravghati/clash/data/usersCode/ferv/question1/code1-0.cpp:1:1: error: ‘dsvgasdfgsefwaefvsdwef’ does not name a type
+ dsvgasdfgsefwaefvsdwef wedf
+ ^~~~~~~~~~~~~~~~~~~~~~

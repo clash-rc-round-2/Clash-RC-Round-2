@@ -6,6 +6,7 @@ from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
 import os, subprocess
+import re
 
 global starttime
 global end_time
@@ -91,15 +92,8 @@ def questionHub(request):
                 except MultipleQues.DoesNotExist:
                     mul_que = MultipleQues(user=user, que=que)
                 que.totalSub += mul_que.attempts
-                # try:
-                #     submissions = Submission.objects.get(user=user, que=que, subStatus='PASS')
-                #     que.totalSuccessfulSub += 1
-                # except Submission.DoesNotExist:
-                #     que.totalSuccessfulSub += 0
-                # except Submission.MultipleObjectsReturned:
-                #     que.totalSuccessfulSub += 0
             try:
-                que.accuracy = (que.totalSuccessfulSub/que.totalSub) * 100
+                que.accuracy = round((que.totalSuccessfulSub * 100/que.totalSub), 1)
             except ZeroDivisionError:
                 que.accuracy = 0
 
@@ -307,7 +301,10 @@ def runCode(request, username, qn, att):
             submission.subStatus = 'RTE'
         mul_que.scoreQuestion = 100 if submission.subStatus == 'PASS' else 0
 
-    error_text = 'No Error Found, Compiled Successfully!'
+    error_text = 'Wrong Answer!'
+
+    if not (wrg_ans or tle_error or com_time_error or run_time_error):
+        error_text = 'No Error Found, Compiled Successfully! Your Answer is Correct!'
 
     if run_time_error and check50:
         error_text = 'Run Time Error! Core Dumped!'
@@ -320,6 +317,8 @@ def runCode(request, username, qn, att):
         error_path = path_usercode + '/{}/question{}'.format(username, qn)
         error_file = open('{}/error.txt'.format(error_path), 'r')
         error_text = error_file.readline()
+
+    error_text = re.sub('/.*?:', '', error_text)            # regular expression
 
     no_of_pass = 0
     for i in output_list:
@@ -380,6 +379,7 @@ def loadBuffer(request):
     response_data["txt"] = txt
 
     return JsonResponse(response_data)
+
 
 def check_username(request):
     username = request.GET.get('username', None)
