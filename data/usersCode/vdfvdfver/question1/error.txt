@@ -1,3 +1,0 @@
-/home/gauravghati/clash/data/usersCode/vdfvdfver/question1/code1-0.cpp:1:1: error: ‘gafgafdsg’ does not name a type
- gafgafdsg asdfasd fasd fa
- ^~~~~~~~~

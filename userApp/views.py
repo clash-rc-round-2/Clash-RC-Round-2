@@ -369,17 +369,69 @@ def loadBuffer(request):
     qn = user.qid
     response_data = {}
 
-    codeFile = '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn, attempts - 2, user.choice)
+    codeFile = '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn, attempts - 1, user.choice)
 
     f = open(codeFile, "r")
     txt = f.read()
-
     if not txt:
         data = ""
     response_data["txt"] = txt
 
     return JsonResponse(response_data)
 
+def run(request):
+    response_data = {}
+    username = request.POST.get('username')
+    user = UserProfile.objects.get(user=request.user)
+    que_no = request.POST.get('question_no')
+    ext = request.POST.get('ext')
+    code = request.POST.get('content')
+    status = str("")
+    e_output_file = "{}/data/standard/output/question{}/expected_output1.txt".format(path, que_no)
+    expec_out = open(e_output_file, "r")
+    expected = expec_out.readlines()
+    expec_out.close()
+    actual = str("")
+
+    try:
+        os.system('mkdir {}/{}/question{}'.format(path_usercode, username, que_no))
+    except FileExistsError:
+        pass
+
+    file = open("{}/{}/question{}/sample.{}".format(path_usercode,username,que_no,ext), "w+")
+    file.write(code)
+    file.close()
+
+    value = subprocess.Popen(["python2", "{}/data/Judge/runcode.py".format(path), path , path_usercode, username, str(que_no),ext],stdout=subprocess.PIPE)
+    (out,err) = value.communicate()
+
+    output = int(out)
+    if output == 10:
+        status = "Correct answer"
+        user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
+        user_out = open(user_out_file,"r")
+        actual = user_out.readlines()
+        user_out.close()
+    elif output == 20:
+        status = "Wrong Answer"
+        user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
+        user_out = open(user_out_file,"r")
+        actual = user_out.readlines()
+        user_out.close()
+    elif output == 30:
+        status = "Time limit exceed"
+    elif output == 40:
+        status = "Compile time error"
+    elif output == 50:
+        status = "Run time error : core dumped"
+    elif output == 60:
+        status = "Abnormal termination"
+
+    response_data["status"] = status
+    response_data["actual"] = actual
+    response_data["expected"] = expected
+
+    return JsonResponse(response_data)
 
 def check_username(request):
     username = request.GET.get('username', None)
