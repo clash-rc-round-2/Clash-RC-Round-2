@@ -16,7 +16,7 @@ path = os.getcwd()
 path_usercode = path + '/data/usersCode'
 
 NO_OF_QUESTIONS = 6
-NO_OF_TEST_CASES = 5
+NO_OF_TEST_CASES = 6
 
 
 def timer(request):
@@ -226,7 +226,7 @@ def runCode(request, username, qn, att):
 
     '''
         code will have text in form '1020301020'
-        output_list will contain (10, 20, 30, 10, 20)  for 5 test cases
+        output_list will contain (10, 20, 30, 10, 20)  for 6 test cases
 
         Sandbox will return(save) these values in total_output.txt
         10 = right answer (PASS)
@@ -331,8 +331,22 @@ def runCode(request, username, qn, att):
     submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
     submission.save()
 
-    dict = {'com_status': submission.subStatus, 'output_list': output_list, 'score': mul_que.scoreQuestion, 'error':
-            error_text}
+    status = 'PASS' if no_of_pass == NO_OF_TEST_CASES else 'FAIL'
+
+    # for i in output_list:
+    #     if i == 'WA' or i == 'RTE' or i == 'CTE':
+    #         i = 'FAIL'
+
+    test_case_1 = output_list[0]
+    test_case_2 = output_list[1]
+    test_case_3 = output_list[2]
+    test_case_4 = output_list[3]
+    test_case_5 = output_list[4]
+    test_case_6 = output_list[5]
+
+    dict = {'com_status': status, 'test_case_1': test_case_1, 'test_case_2': test_case_2, 'test_case_3': test_case_3,
+            'test_case_4': test_case_4, 'test_case_5': test_case_5, 'test_case_6': test_case_6,
+            'output_list': output_list, 'score': mul_que.scoreQuestion, 'error': error_text}
 
     return render(request, 'userApp/testcases.html', dict)
 
@@ -379,6 +393,7 @@ def loadBuffer(request):
 
     return JsonResponse(response_data)
 
+
 def run(request):
     response_data = {}
     username = request.POST.get('username')
@@ -398,24 +413,25 @@ def run(request):
     except FileExistsError:
         pass
 
-    file = open("{}/{}/question{}/sample.{}".format(path_usercode,username,que_no,ext), "w+")
+    file = open("{}/{}/question{}/sample.{}".format(path_usercode, username, que_no, ext), "w+")
     file.write(code)
     file.close()
 
-    value = subprocess.Popen(["python2", "{}/data/Judge/runcode.py".format(path), path , path_usercode, username, str(que_no),ext],stdout=subprocess.PIPE)
-    (out,err) = value.communicate()
+    value = subprocess.Popen(["python2", "{}/data/Judge/runcode.py".format(path), path, path_usercode, username,
+                              str(que_no), ext], stdout=subprocess.PIPE)
+    (out, err) = value.communicate()
 
     output = int(out)
     if output == 10:
         status = "Correct answer"
         user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
-        user_out = open(user_out_file,"r")
+        user_out = open(user_out_file, "r")
         actual = user_out.readlines()
         user_out.close()
     elif output == 20:
         status = "Wrong Answer"
         user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
-        user_out = open(user_out_file,"r")
+        user_out = open(user_out_file, "r")
         actual = user_out.readlines()
         user_out.close()
     elif output == 30:
@@ -432,6 +448,7 @@ def run(request):
     response_data["expected"] = expected
 
     return JsonResponse(response_data)
+
 
 def check_username(request):
     username = request.GET.get('username', None)

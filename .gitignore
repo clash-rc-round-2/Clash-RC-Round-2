@@ -1,5 +1,7 @@
 venv
 clash/__pycache__
-README.md
 userApp/__pycache__
+userApp/migrations
 .idea
+db.sqlite3
+sandbox

@@ -1,0 +1,3 @@
+/home/gauravghati/clash2/data/usersCode/rvrfvr/question1/code1-0.cpp:1:1: error: ‘drthrtvhdtgthdgth’ does not name a type
+ drthrtvhdtgthdgth dgvg
+ ^~~~~~~~~~~~~~~~~
