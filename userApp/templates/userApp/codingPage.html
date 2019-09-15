@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8">
@@ -158,7 +158,7 @@
                     </div>
                 </div>
         <div class="row" style="height: 2vh"></div>
-        
+
             <div class="row" id="box">
                 <div class="col-lg-12" style="height: 9vh;display: flex;align-items: center;">
                     <div class="col-lg-2"></div>
@@ -224,6 +224,11 @@
                     <div class="col-lg-6"></div>
                 </div>
 
+                <div>
+                    <input type="text" id="user" hidden value={{user.username}}>
+                    <input type="text" id="queNo" hidden value={{question.IDNumber}}>
+                </div>
+
                 <div class="col-lg-6 ml-3" style="height: 64vh; border:0px solid rgb(79, 185, 255)">
                     <div class="row">
                         <div class="col-lg-3 " style="height: 4vh;color: #d7e9f8;font-size: 20px;margin-top: 35px">Code Editor</div>
@@ -250,7 +255,7 @@
                             </div>
                             <div class="col-lg-6 mt-2" id="hidden1" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;text-align: center;border-radius: 5px;">
                                 Actual Output
-                                </div>
+                            </div>
                             <div class="col-lg-6 mt-2" id="hidden2" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;text-align: center;border-radius: 5px;">
                                 Expected Output
                             </div>
@@ -279,7 +284,7 @@
                 </div>
                 <div class="col-lg-6 " style="border: 0px solid rgb(95, 178, 255); height: 8vh; display: flex;justify-content: center;align-items: center;">
                     <div class="col-lg-6 mt-3">
-                        <button class="btn btn-block" data-toggle="tab" type="button" onclick="buffer()" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
+                        <button class="btn btn-block" data-toggle="tab" type="button" id="buffer" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
                         <button class="btn btn-block" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color:#0091bd;color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
@@ -304,8 +309,9 @@
     <script src="{% static 'javascript/ClashCodingPage/jquery.js' %}"></script>
     <script src="{% static 'javascript/ClashCodingPage/bootstrap.js' %}"></script>
 <!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>-->
+    <script src="{% static 'javascript/jquery-3.4.1.min.js' %}"></script>
     <script>
-        var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+        var codeEditor = CodeMirror.fromTextArea(document.getElementById('editor'), {
             lineNumbers: true,
             theme: '3024-night',
             matchBrackets: true,
@@ -327,6 +333,7 @@
         var real= document.getElementById('fileLoader');
         var row=document.getElementById('row');
 
+
         browse.addEventListener('click',function(){
             real.click();
         });
@@ -340,48 +347,65 @@
             }
         });
 
-        rbutton.onclick= function (){
-            run.click();
-            rbutton.disabled= true;
-        }
+        $('document').ready(function(){
+            $('#rbtn').click(function(){
+                rbutton.disabled= true;
+                div2.style.transition = 'height 0.5s';
+                div2.style.height = '26vh';
 
-        run.onclick = function () {
-            div2.style.transition = 'height 0.5s';
-            div2.style.height = '26vh';
+                editor.style.transition = 'height 0.5s';
+                editor.style.height = '24vh';
 
-            editor.style.transition = 'height 0.5s';
-            editor.style.height = '24vh';
+                div.style.transition = 'height 0.5s';
+                div.style.height = '14vh';
+                div.style.opacity = '1';
 
-            div.style.transition = 'height 0.5s';
-            div.style.height = '14vh';
-            div.style.opacity = '1';
+                row.style.transition = 'height 0.5s';
+                row.style.opacity = '1';
 
-            row.style.transition = 'height 0.5s';
-            row.style.opacity = '1';
+                con.style.transition = 'height 0.05s';
+                con.style.height = '4vh';
+                con.style.fontSize = '18px';
+                con.style.color= '#d7e9f8';
 
-            con.style.transition = 'height 0.05s';
-            con.style.height = '4vh';
-            con.style.fontSize = '18px';
-            con.style.color= '#d7e9f8';
+                div3.style.transition = 'height 0.5s';
+                div3.style.height = '8vh';
+                div3.style.opacity = '1';
 
-            div3.style.transition = 'height 0.5s';
-            div3.style.height = '8vh';
-            div3.style.opacity = '1';
+                div4.style.transition = 'height 0.5s';
 
-            div4.style.transition = 'height 0.5s';
+                div4.style.height = '8vh';
+                div4.style.opacity = '1';
 
-            div4.style.height = '8vh';
-            div4.style.opacity = '1';
+                closediv.style.transition = 'height 0.05s';
 
-            closediv.style.transition = 'height 0.05s';
+                closediv.style.opacity = '1';
 
-            closediv.style.opacity = '1';
+                run.disabled = true;
+                run.classList.add('disabled');
+                $.ajax({
+                    url : '{% url 'run' %}',
+                    method: "POST",
+                    dataType : "json",
+                    data : { 'csrfmiddlewaretoken' : $('input[name="csrfmiddlewaretoken"]').val(),
+                             'username' : $('#user').val(),
+                             'question_no' : $('#queNo').val(),
+                             'ext' : $("input[name='ext']:checked"). val(),
+                             'content' : codeEditor.getValue(),
+                           },
+                    success : function (data) {
+                       var status = data["status"];
+                       var expected = data["expected"];
+                       var actual = data["actual"];
+                       $('#hidden').append(status);
+                       $('#hidden1').append(actual);
+                       $('#hidden2').append(expected);
+                    }
+                });
+            });
+        });
 
-            run.disabled = true;
-            run.classList.add('disabled');
-        }
-
-        close.onclick = function () {
+        $('#close').click(function(){
             div2.style.transition = 'height 0.5s';
             div2.style.height = '60vh';
 
@@ -413,28 +437,22 @@
             run.disabled = false;
             rbutton.disabled=false;
             run.classList.remove('disabled');
-        }
-
-    function buffer(){
-    console.log("LoadBuffer")
-        $.ajax({
-            url : '{% url 'loadBuffer' %}',
-            method: "POST",
-            dataType : "json",
-            success : function (data) {
-                   var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-                         lineNumbers: true,
-                         theme: 'theme/3024-night',
-                         matchBrackets: true,
-                         mode: "text/x-csrc"
-                   });
-                   console.log(data["text"]);
-                   var txt = data["txt"];
-                   editor.setValue(txt);
-            }
         });
-    }
 
+        $('document').ready(function(){
+            $('#buffer').click(function(){
+                $.ajax({
+                    url : '{% url 'loadBuffer' %}',
+                    method: "POST",
+                    dataType : "json",
+                    data : { 'csrfmiddlewaretoken' : $('input[name="csrfmiddlewaretoken"]').val() },
+                    success : function (data) {
+                       var txt = data["txt"];
+                       codeEditor.setValue(txt);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

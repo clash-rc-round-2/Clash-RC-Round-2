@@ -9,6 +9,7 @@ urlpatterns = [
     path('instructions', views.instructions, name='instructions'),
     path('checkUsername', views.check_username, name='check_username'),
     path('loadBuffer', views.loadBuffer, name='loadBuffer'),
+    path('run', views.run, name='run'),
     path('user/allque', views.questionHub, name='questionHub'),
     path('user/<username>/<int:qn>', views.codeSave, name='codeSave'),
     path('user/<username>/<int:qn>/submission', views.submission, name='submission'),
