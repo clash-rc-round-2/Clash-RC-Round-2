@@ -6,14 +6,17 @@ from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
 import os
-import subprocess
+import sys
+# import subprocess
+
+from judgeApp.views import exec_main
 
 starttime = 0
 end_time = 0
 duration = 0
 
-path = os.getcwd()
-path_usercode = path + '/data/usersCode'
+# path = os.getcwd()
+path_usercode = 'data/usersCode'
 
 NO_OF_QUESTIONS = 6
 NO_OF_TEST_CASES = 5
@@ -27,7 +30,7 @@ def timer(request):
         global starttime
         global end_time
         global duration
-        duration = 7200                                              # request.POST.get('duration')
+        duration = 7200  # request.POST.get('duration')
         start = datetime.datetime.now()
         time = start.second + start.minute * 60 + start.hour * 60 * 60
         starttime = time
@@ -105,29 +108,56 @@ def codeSave(request, username, qn):
 
         temp_user = UserProfile.objects.get(user=user)
         temp_user.qid = qn
+        temp_user.lang = extension
         temp_user.save()
 
         try:
             mul_que = MultipleQues.objects.get(user=user, que=que)
         except MultipleQues.DoesNotExist:
             mul_que = MultipleQues(user=user, que=que)
+            mul_que.save()
         att = mul_que.attempts
 
         try:
             os.system('mkdir {}/{}/question{}'.format(path_usercode, username, qn))
-        except FileExistsError:
+        except Error:
             pass
 
-        codefile = open("{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att, extension), "w+")
-        codefile.write(content)
-        codefile.close()
+        code_file = "{}/{}/question{}/code{}.{}".format(path_usercode, username, qn, att, extension)
 
-        ans = subprocess.Popen(['python2', "{}/data/Judge/main.py".format(path), path, username, str(qn), str(att),
-                                extension, "{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att,
-                                extension)], stdout=subprocess.PIPE)
-        (out, err) = ans.communicate()
-        submission = Submission(code=content, user=user, que=que, attempt=att,out=out)
-        submission.save()
+        content = str(content)
+
+        if extension != 'py':
+            sandbox_header = '#include"../../../include/sandbox.h"\n'
+            try:
+                # Inject the function call for install filters in the user code file
+                # Issue with design this way (look for a better solution (maybe docker))
+                # multiple main strings
+                before_main = content.split('main')[0] + 'main'
+                after_main = content.split('main')[1]
+                index = after_main.find('{') + 1
+                main = before_main + after_main[:index] + 'install_filters();' + after_main[index:]
+                with open(code_file, 'w+') as f:
+                    f.write(sandbox_header)
+                    f.write(main)
+                    f.close()
+
+            except IndexError:
+                with open(code_file, 'w+') as f:
+                    f.write(content)
+                    f.close()
+
+        else:
+            with open(code_file, 'w+') as f:
+                f.write('import temp\n')
+                f.write(content)
+                f.close()
+
+        testcase_values = exec_main(request, qn)
+        print(testcase_values)
+
+        sub = Submission(code=content, user=user, que=que, attempt=att)
+        sub.save()
 
         mul_que.attempts += 1
         mul_que.save()
@@ -174,7 +204,7 @@ def leader(request):
         var = calculate()
         if var != 0:
             return render(request, 'userApp/leaderboard.html', context={'dict': dict, 'range': range(1, 7, 1),
-                                                                                 'time': var})
+                                                                        'time': var})
         else:
             return render(request, 'userApp/result.html')
     else:
@@ -228,9 +258,9 @@ def runCode(request, username, qn, att):
     correct_list = list()
 
     for i in range(0, NO_OF_TEST_CASES):
-        correct_list.append('PASS')               # list of all PASS test Cases
+        correct_list.append('PASS')  # list of all PASS test Cases
 
-    check50 = False        # for checking return value is 50 or 60
+    check50 = False  # for checking return value is 50 or 60
 
     for i in range(0, NO_OF_TEST_CASES):
         var = code % 100
@@ -246,13 +276,13 @@ def runCode(request, username, qn, att):
             output_list.append('RTE')
             check50 = True if var == 50 else False
         code = int(code / 100)
-        print(code)
+        # print(code)
 
-    flag = True                              # for checking condition of multiple submission
-    print(output_list)
-    print(correct_list)
+    flag = True  # for checking condition of multiple submission
+    # print(output_list)
+    # print(correct_list)
 
-    if output_list == correct_list:               # if all are correct then Score = 100
+    if output_list == correct_list:  # if all are correct then Score = 100
         if mul_que.scoreQuestion == 0:
             mul_que.scoreQuestion = 100
             submission.subStatus = 'PASS'
@@ -292,7 +322,7 @@ def runCode(request, username, qn, att):
         error_text = 'Run Time Error! Abnormal Termination!'
 
     if com_time_error:
-        for i in output_list:                  # assigning each element with 40 (CTE will be for every test case)
+        for i in output_list:  # assigning each element with 40 (CTE will be for every test case)
             i = 40
         error_path = path_usercode + '/{}/question{}'.format(username, qn)
         error_file = open('{}/error.txt'.format(error_path), 'r')
@@ -303,14 +333,14 @@ def runCode(request, username, qn, att):
         if i == 'PASS':
             no_of_pass += 1
 
-    print(error_text)
+    # print(error_text)
 
     submission.correctTestCases = no_of_pass
     submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
     submission.save()
 
     dict = {'com_status': submission.subStatus, 'output_list': output_list, 'score': mul_que.scoreQuestion, 'error':
-            error_text}
+        error_text}
 
     return render(request, 'userApp/testcases.html', dict)
 
