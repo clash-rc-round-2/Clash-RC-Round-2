@@ -266,16 +266,14 @@
             <div class="row">
                 <div class="col-lg-5 ml-3 mr-3" style="border: 0px solid rgb(64, 179, 255);height: 8vh;display: flex;justify-content: center;align-items: center;">
                     <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh; background: black;">
-                        <ul class="nav nav-tabs" id="tab" style="margin-left: 2px">
-                            <li class="nav-item">
-                                <input type="radio" name="ext" checked value="c">
-                                <label style="margin-right: 1.2vw;">C</label>
-                           </li>
-                           <li class="nav-item">
-                               <input type="radio" name="ext" checked value="cpp">
-                               <label style="margin-right: 1.2vw;">C++</label>
-                           </li>
-                        </ul>   
+
+                                <input type="radio" name="ext" checked value="c" style="margin-right:5px">
+                                <label style="margin-right: 0.5vw;margin-top:10px;">C</label>
+                               <input type="radio" name="ext" checked value="cpp" style="margin-right:5px">
+                               <label style="margin-right: 0.5vw;margin-top:10px;">C++</label>
+                                <input type="radio" name="ext" checked value="cpp" style="margin-right:5px">
+                               <label style="margin-right: 0.5vw;margin-top:10px;">Python</label>
+
                     </div>
 
                 </div>
@@ -287,7 +285,7 @@
                         <button class="btn btn-block" data-toggle="tab" type="button" id="buffer" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block" type="button" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color:#0091bd;color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
+                        <button class="btn btn-block" type="button" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
                         <button class="btn btn-block" type="submit" formmethod="post" onclick="location.href='/user/{{user.username}}/{{question.IDNumber}}';"style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
