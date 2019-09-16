@@ -21,7 +21,7 @@ try:
 except ImportError :
     sys.stderr.write("Required package(s) missing.\n")
     sys.exit(os.EX_UNAVAILABLE)
-except AssertionError as e :
+except AssertionError as e:
     sys.stderr.write(str(e))
     sys.exit(os.EX_UNAVAILABLE)
 
@@ -103,7 +103,7 @@ def compare(user_out, e_out):
         for i in range(len(l1)):  # check if files of equal length
             if l1[i] == l2[i]:
                 flag = 1
-            else :
+            else:
                 flag = 0
                 break
         if flag == 1:

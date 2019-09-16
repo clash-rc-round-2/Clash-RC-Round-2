@@ -263,6 +263,7 @@ def runCode(request, username, qn, att):
         print(code)
 
     flag = True                                      # for checking condition of multiple submission
+    output_list.reverse()
     print(output_list)
     print(correct_list)
 

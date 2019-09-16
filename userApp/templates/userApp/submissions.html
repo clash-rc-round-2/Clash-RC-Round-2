@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                             <div class="col-lg-3 mt-1" style="display: flex; justify-content: center; align-items: center;">
-                                <button class="btn btn-danger btn-block" data-toggle="modal"  data-target="#logout" style="font-size: 14px; padding-left: 0; padding-right: 0;">Log Out</button>
+                                <button class="btn btn-danger btn-block" data-toggle="modal" type="button"  data-target="#logout" style="font-size: 14px; padding-left: 0; padding-right: 0;">Log Out</button>
                             </div>
                             <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
                                 <img src="{% static 'images/IEEE_logo.png'%}" style="height: 5vh;">
@@ -100,11 +100,11 @@
                                 <tbody>
                                  {% for submission in allSubmission %}
                                     <tr scope="row">
-                                        <td class="col-md-1 a1" style="text-align: center;">1</td>
+                                        <td class="col-md-1 a1" style="text-align: center;">{{ foorloop.counter }}</td>
                                         <td class="col-md-1"></td>
                                         <td class="col-md-1">
                                             <div id="textareaStyle">
-                                                <textarea disabled class="form-control" style="height: 5vh;resize: none;"></textarea>    
+                                                <textarea disabled class="form-control" style="height: 5vh;resize: none;">{{ time }}</textarea>
                                             </div>
                                         </td>
                                         <td class="col-md-1"></td>

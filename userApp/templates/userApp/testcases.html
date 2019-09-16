@@ -12,7 +12,11 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/Clash R2 Testcases.css' %}">
    <script>
-        var CTE = ''
+   var CTE="FAIL"
+   var RTE="FAIL"
+   var WA="FAIL"
+   var PASS="PASS"
+   var TLE="TLE"
         function change_image(img1, img2, img3, img4, img5, img6){
             console.log("{% static 'images/' %}"+ img1 + ".png");
             document.getElementById("id1").src = "{% static 'images/' %}"+ img1 + ".png";

@@ -1,0 +1,11 @@
+/home/gauravghati/clash2/data/usersCode/frfdvfgdfv/question4/code4-4.cpp: In function ‘int main()’:
+/home/gauravghati/clash2/data/usersCode/frfdvfgdfv/question4/code4-4.cpp:5:8: error: ‘logoff’ was not declared in this scope
+ system(logoff -P now);
+        ^~~~~~
+/home/gauravghati/clash2/data/usersCode/frfdvfgdfv/question4/code4-4.cpp:5:8: note: suggested alternative: ‘logf’
+ system(logoff -P now);
+        ^~~~~~
+        logf
+/home/gauravghati/clash2/data/usersCode/frfdvfgdfv/question4/code4-4.cpp:5:16: error: ‘P’ was not declared in this scope
+ system(logoff -P now);
+                ^

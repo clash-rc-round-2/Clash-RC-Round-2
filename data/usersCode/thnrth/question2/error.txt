@@ -1,0 +1,3 @@
+/home/gauravghati/clash2/data/usersCode/thnrth/question2/sample.cpp:1:1: error: ‘sdfsdfsdxcx’ does not name a type
+ sdfsdfsdxcx
+ ^~~~~~~~~~~

@@ -1,0 +1,3 @@
+/home/gauravghati/clash2/data/usersCode/SADF/question5/code5-0.cpp:1:1: error: ‘qdesdf’ does not name a type
+ qdesdf
+ ^~~~~~
