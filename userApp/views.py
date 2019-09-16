@@ -19,16 +19,31 @@ NO_OF_QUESTIONS = 6
 NO_OF_TEST_CASES = 6
 
 
+def waiting(request):
+    if request.user.is_authenticated:
+        return redirect(reverse("questionHub"))
+    else:
+        now = datetime.datetime.now()
+        global start
+        if now == start:
+            return redirect(reverse("signup"))
+        elif now > start:
+            return redirect(reverse("signup"))
+        else:
+            return render(request, 'userApp/waiting.html')
+
+
 def timer(request):
     if request.method == 'GET':
         return render(request, 'userApp/timer.html')
 
     elif request.method == 'POST':
-        global starttime
+        global starttime, start
         global end_time
         global duration
         duration = 7200                                              # request.POST.get('duration')
         start = datetime.datetime.now()
+        start = start + datetime.timedelta(0, 15)
         time = start.second + start.minute * 60 + start.hour * 60 * 60
         starttime = time
         end_time = time + int(duration)
