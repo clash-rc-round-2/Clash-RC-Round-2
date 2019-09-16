@@ -1,3 +1,0 @@
-/home/gauravghati/clash2/data/usersCode/CoderRappers/question5/sample.cpp:1:1: error: ‘deasdshhdshh’ does not name a type
- deasdshhdshh
- ^~~~~~~~~~~~

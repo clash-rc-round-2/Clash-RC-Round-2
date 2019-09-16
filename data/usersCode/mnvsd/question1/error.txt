@@ -1,3 +1,0 @@
-/home/gauravghati/clash2/data/usersCode/mnvsd/question1/code1-0.cpp:1:1: error: ‘fvfvafvsfdvasdv’ does not name a type
- fvfvafvsfdvasdv
- ^~~~~~~~~~~~~~~

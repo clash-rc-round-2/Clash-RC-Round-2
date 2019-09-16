@@ -1,3 +1,0 @@
-/home/gauravghati/clash2/data/usersCode/hjsgj/question5/code5-0.cpp:1:1: error: ‘fgtvbsduhidsv’ does not name a type
- fgtvbsduhidsv
- ^~~~~~~~~~~~~

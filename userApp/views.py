@@ -203,7 +203,7 @@ def submission(request, username, qn):
 
     for submissions in all_submission:
         for que in all_que:
-            if submissions.user == user and que.IDNumber == qn:
+            if submissions.user == user and que.IDNumber == qn+1:
                 userQueSub.append(submissions)
     var = calculate()
     if var != 0:
