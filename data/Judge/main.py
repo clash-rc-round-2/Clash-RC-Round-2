@@ -60,8 +60,8 @@ def run_test_cases(test_case_no, filename, user, que, att) :
         result_value = compare(user_out_file, e_output_file)
     elif result_value == 5:                                             # !!! Add statements for other codes as well
         result_value = 30
-    # elif result_value:
-    #     result_value = 50
+    elif result_value == 6:
+        result_value = 50
     else:
         result_value = 60
 
