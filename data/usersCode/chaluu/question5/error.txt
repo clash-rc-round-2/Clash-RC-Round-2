@@ -1,3 +1,0 @@
-/home/gauravghati/clash2/data/usersCode/chaluu/question5/code5-2.cpp:1:2: error: ‘lkjhgfdssdfghjkjhgfddfghjjghcfghjkjk’ does not name a type
- ;lkjhgfdssdfghjkjhgfddfghjjghcfghjkjk
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,3 +1,0 @@
-/home/gauravghati/clash2/data/usersCode/chaluu/question2/code2-1.cpp:1:1: error: ‘uyfcghjbknmhghg’ does not name a type
- uyfcghjbknmhghg
- ^~~~~~~~~~~~~~~

@@ -1,3 +1,0 @@
-/home/gauravghati/clash2/data/usersCode/fvvdvfsdfv/question4/code4-0.cpp:1:1: error: ‘zfsdv’ does not name a type
- zfsdv asfasd asd as
- ^~~~~
