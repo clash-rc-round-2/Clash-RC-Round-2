@@ -13,24 +13,31 @@
   <link rel="stylesheet" href="{% static 'css/Clash R2 Testcases.css' %}">
         <link rel="stylesheet" href="{% static 'css/timer.css' %}">
    <script>
-   var CTE="FAIL"
-   var RTE="FAIL"
-   var WA="FAIL"
-   var PASS="PASS"
-   var TLE="TLE"
-        function change_image(img1, img2, img3, img4, img5, img6){
-            console.log("{% static 'images/' %}"+ img1 + ".png");
-            document.getElementById("id1").src = "{% static 'images/' %}"+ img1 + ".png";
-            document.getElementById("id2").src = "{% static 'images/' %}"+ img2 + ".png";
-            document.getElementById("id3").src = "{% static 'images/' %}"+ img3 + ".png";
-            document.getElementById("id4").src = "{% static 'images/' %}"+ img4 + ".png";
-            document.getElementById("id5").src = "{% static 'images/' %}"+ img5 + ".png";
-            document.getElementById("id6").src = "{% static 'images/' %}"+ img6 + ".png";
+    <script>
+        function returnImage(status){
+            if(status == "CTE" || status == "RTE" || status == "WA" || status == "AT")
+            {return "FAIL";}
+
+           else if(status == "TLE") {return "TLE";}
+
+           else if(status == "AC") {return "PASS";}
+
+           else {return "FAIL";}
         }
-   </script>
+        function loadIcon(testlist){
+        console.log(testlist);
+
+            var i;
+            for(i = 1; i <= 6; i++){
+
+                document.getElementById("id" + i.toString()).src = "{% static 'images/' %}" + returnImage(testlist[i - 1]) + ".png";
+            }
+        }
+    </script>
 </head>
-<body onload="change_image({{ test_case_1 }}, {{ test_case_2 }}, {{ test_case_3 }}, {{ test_case_4 }}, {{ test_case_5 }}
-                , {{ test_case_6 }})">
+<!--<body onload="change_image({{ test_case_1 }}, {{ test_case_2 }}, {{ test_case_3 }}, {{ test_case_4 }}, {{ test_case_5 }}-->
+<!--                , {{ test_case_6 }})">-->
+<body onload="loadIcon({{ testcase }})">
 {% csrf_token%}
         <!--  Header Bar-->
         <div class="container-fluid">
@@ -101,10 +108,10 @@
                 <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
                 font-size: 15px; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;">
                     <span class="sr-only"></span>
-                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ test_case_1 }}</div><span><img id="id1" height="45vh" width="45vw"></span></div>
+                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.0 }}</div><span><img id="id1" height="45vh" width="45vw"></span></div>
                 <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
                     <span class="sr-only"></span>
-                    <div class="abc" style="justify-content: left;margin-right:9vw">{{ test_case_2 }}</div><span><img id="id2" height="40vh" width="40vw"></span></div>
+                    <div class="abc" style="justify-content: left;margin-right:9vw">{{ testcase.1 }}</div><span><img id="id2" height="40vh" width="40vw"></span></div>
 
                 </div>
 
@@ -112,21 +119,22 @@
                         <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
                         color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;">
                             <span class="sr-only"></span>
-                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ test_case_3 }}</div><span><img id="id3" height="45vh" width="45vw" ></span></div>
+                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.2 }}</div><span><img id="id3" height="45vh" width="45vw" ></span></div>
                         <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw;
                         color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
                             <span class="sr-only"></span>
-                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ test_case_4 }}</div><span><img id="id4" height="40vh" width="40vw"></span>
+
+                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.3 }}</div><span><img id="id4" height="40vh" width="40vw"></span>
                         </div>
                         </div>
 
 
                         <div class="row">
                                 <div class="col-lg-4" style ="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;align-items: center;color:#d7e9f8; font-weight: bold;border-radius: 10px">
-                                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ test_case_5 }}</div><span><img id="id5" height="45vh" width="45vw"></span></div>
+                                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.4 }}</div><span><img id="id5" height="45vh" width="45vw"></span></div>
                                 <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
                               <span class="sr-only"></span>
-                              <div class="fck" style="justify-content: left;margin-right:9vw">{{ test_case_6 }}</div><span><img id="id6" height="45vh" width="45vw" id="TLE"></span></div>
+                              <div class="fck" style="justify-content: left;margin-right:9vw">{{ testcase.5 }}</div><span><img id="id6" height="45vh" width="45vw" id="TLE"></span></div>
 
                                 </div>
 
