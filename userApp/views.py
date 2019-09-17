@@ -237,7 +237,7 @@ def codeSave(request, username, qn):
             if var != 0:
                 return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var,
                                                                            'total_score': user_profile.totalScore,
-                                                                           'question_id': user_profile.qid})
+                                                                           'question_id': qn})
             else:
                 return render(request, 'userApp/result.html')
     else:
@@ -279,7 +279,9 @@ def leader(request):
 
 def submission(request, username, qn):
     user = User.objects.get(username=username)
+    print(qn)
     que = Question.objects.get(pk=qn)
+    # all_submissions = Submission.objects.filter()
     all_submission = Submission.objects.all()
     userQueSub = list()
 
@@ -334,7 +336,7 @@ def loadBuffer(request):
     ext = request.POST.get('ext')
     response_data = {}
 
-    codeFile = '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn, attempts - 1, user.choice)
+    codeFile = '{}/{}/question{}/code{}.{}'.format(path_usercode, username, qn, attempts - 1, user.lang)
 
     f = open(codeFile, "r")
     txt = f.read()
