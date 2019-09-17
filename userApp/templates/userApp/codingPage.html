@@ -471,7 +471,11 @@
                     url : '{% url 'loadBuffer' %}',
                     method: "POST",
                     dataType : "json",
-                    data : { 'csrfmiddlewaretoken' : $('input[name="csrfmiddlewaretoken"]').val() },
+                    data : { 'csrfmiddlewaretoken' : $('input[name="csrfmiddlewaretoken"]').val(),
+                             'username' : $('#user').val(),
+                             'question_no' : $('#queNo').val(),
+                             'ext' : $("input[name='ext']:checked"). val(),
+                            },
                     success : function (data) {
                        var txt = data["txt"];
                        codeEditor.setValue(txt);

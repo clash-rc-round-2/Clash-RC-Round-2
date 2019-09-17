@@ -11,6 +11,9 @@ import re
 global starttime
 global end_time
 global duration
+global flag
+start = datetime.datetime(2020, 1, 1, 0, 0)
+flag = 'False'
 
 path = os.getcwd()
 path_usercode = path + '/data/usersCode'
@@ -23,14 +26,18 @@ def waiting(request):
     if request.user.is_authenticated:
         return redirect(reverse("questionHub"))
     else:
-        now = datetime.datetime.now()
-        global start
-        if now == start:
-            return redirect(reverse("signup"))
-        elif now > start:
-            return redirect(reverse("signup"))
-        else:
+        global flag
+        if flag == False:
             return render(request, 'userApp/waiting.html')
+        else:
+            now = datetime.datetime.now()
+            global start
+            if now == start:
+                return redirect(reverse("signup"))
+            elif now > start:
+                return redirect(reverse("signup"))
+            else:
+                return render(request, 'userApp/waiting.html')
 
 
 def timer(request):
@@ -41,7 +48,9 @@ def timer(request):
         global starttime, start
         global end_time
         global duration
-        duration = 7200                                              # request.POST.get('duration')
+        global flag
+        flag = True
+        duration = 7200  # request.POST.get('duration')
         start = datetime.datetime.now()
         start = start + datetime.timedelta(0, 15)
         time = start.second + start.minute * 60 + start.hour * 60 * 60
@@ -87,6 +96,7 @@ def signup(request):
                 userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
                                           email2=email2)
                 userprofile.save()
+                print(username)
                 os.system('mkdir {}/{}'.format(path_usercode, username))
                 login(request, user)
                 return redirect(reverse("instructions"))
@@ -416,12 +426,13 @@ def user_logout(request):
 
 
 def loadBuffer(request):
-    username = request.user.username
+    username = request.POST.get('username')
     user = UserProfile.objects.get(user=request.user)
-    que = Question.objects.get(pk=user.qid)
+    qn = request.POST.get('question_no')
+    que = Question.objects.get(pk=qn)
     mul_que = MultipleQues.objects.get(user=user.user, que=que)
     attempts = mul_que.attempts
-    qn = user.qid
+    ext = request.POST.get('ext')
     response_data = {}
 
     codeFile = '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn, attempts - 1, user.choice)
@@ -446,7 +457,7 @@ def run(request):
         status = str("")
         e_output_file = "{}/data/standard/output/question{}/expected_output1.txt".format(path, que_no)
         expec_out = open(e_output_file, "r")
-        expected = expec_out.readlines()
+        expected = expec_out.read()
         expec_out.close()
         actual = str("")
 
@@ -468,18 +479,22 @@ def run(request):
             status = "Correct answer"
             user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
             user_out = open(user_out_file, "r")
-            actual = user_out.readlines()
+            actual = user_out.read()
             user_out.close()
         elif output == 20:
             status = "Wrong Answer"
             user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
             user_out = open(user_out_file, "r")
-            actual = user_out.readlines()
+            actual = user_out.read()
             user_out.close()
         elif output == 30:
             status = "Time limit exceed"
         elif output == 40:
-            status = "Compile time error"
+            err_file = "{}/{}/question{}/error.txt".format(path_usercode, username, que_no)
+            error = open(err_file, "r")
+            error_text = error.read()
+            status = re.sub('/.*?:', '', error_text)
+            error.close()
         elif output == 50:
             status = "Run time error : core dumped"
         elif output == 60:
