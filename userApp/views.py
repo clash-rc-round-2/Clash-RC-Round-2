@@ -339,10 +339,23 @@ def runCode(request, username, qn, att):
     submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
     submission.save()
 
-    dict = {'com_status': submission.subStatus, 'output_list': output_list, 'score': mul_que.scoreQuestion, 'error':
-        error_text}
+    error_text = "None"
 
-    return render(request, 'userApp/testcases.html', dict)
+    epath = path_usercode + '/{}/question{}/error.txt'.format(username, qn)
+
+    if os.path.exists(epath):
+        ef = open(epath, 'r')
+        error_text = ef.read()
+        ef.close()
+
+    dictt = {
+        'com_status': submission.subStatus,
+        'output_list': output_list,
+        'score': mul_que.scoreQuestion,
+        'error': error_text
+    }
+
+    return render(request, 'userApp/testcases.html', dictt)
 
 
 def user_logout(request):
