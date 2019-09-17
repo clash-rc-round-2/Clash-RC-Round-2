@@ -64,8 +64,10 @@ def calculate():
 
 def signup(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('questionHub'))
-
+        try:
+            user = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            user = UserProfile()
     else:
         if request.method == 'POST':
             try:
@@ -224,15 +226,16 @@ def leader(request):
 
 def submission(request, username, qn):
     user = User.objects.get(username=username)
+    que = Question.objects.get(pk=qn)
     all_submission = Submission.objects.all()
-    all_que = Question.objects.all()
     userQueSub = list()
 
     for submissions in all_submission:
-        for que in all_que:
-            if submissions.user == user and que.IDNumber == qn+1:
-                userQueSub.append(submissions)
+        if submissions.que == que and submissions.user == user:
+            userQueSub.append(submissions)
     var = calculate()
+    print(userQueSub)
+    print("working")
     if var != 0:
         return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var})
     else:
@@ -384,26 +387,32 @@ def runCode(request, username, qn, att):
 
 
 def user_logout(request):
-    user = UserProfile.objects.get(user=request.user)
-    object = UserProfile.objects.order_by("-totalScore", "latestSubTime")
-    rank = 0
-    i = 0
-    dict = {}
-    for user in object:
-        if rank < 3:
-            dict[user.user] = user.totalScore
-            rank = rank + 1
-        else:
-            break
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            return signup(request)
+        object = UserProfile.objects.order_by("-totalScore", "latestSubTime")
+        rank = 0
+        i = 0
+        dict = {}
+        for user in object:
+            if rank < 3:
+                dict[user.user] = user.totalScore
+                rank = rank + 1
+            else:
+                break
 
-    for user in object:
-        i += 1
-        if str(user.user) == str(request.user.username):
-            break
+        for user in object:
+            i += 1
+            if str(user.user) == str(request.user.username):
+                break
 
-    logout(request)
-    return render(request, 'userApp/result.html', context={'dict': dict, 'rank': i, 'name': user.user,
-                                                           'score': user.totalScore})
+        logout(request)
+        return render(request, 'userApp/result.html', context={'dict': dict, 'rank': i, 'name': user.user,
+                                                               'score': user.totalScore})
+    else:
+        return HttpResponseRedirect(reverse("signup"))
 
 
 def loadBuffer(request):

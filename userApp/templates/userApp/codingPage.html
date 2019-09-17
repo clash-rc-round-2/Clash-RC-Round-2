@@ -14,12 +14,7 @@
     <link rel="stylesheet" href="{% static 'javascript/ClashCodingPage/theme/3024-night.css' %}">
     <link rel="stylesheet" href="{% static 'javascript/ClashCodingPage/lib/codemirror.css' %}">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
+
     <style>
         body {
             font-family: 'Biryani', sans-serif;
@@ -78,7 +73,7 @@
         }
 
         .nav-tabs>li>a {
-            background-color: #000000; 
+            background-color: #000000;
             border-color: #777777;
             color:#d7e9f8;
         }
@@ -128,23 +123,23 @@
                             <div class="modal fade" id="logout">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                    
+
                                             <!-- Modal Header -->
                                             <div class="modal-header">
                                             <h4 class="modal-title" style="color: black;">Are you sure you want to logout?</h4>
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
-                                    
+
                                             <!-- Modal body -->
                                             <div class="modal-body">
                                             <p style="color: black;">Logging out will cause termination of your game and your score till this moment will be counted as your Final Score.
                                             </div>
-                                    
+
                                             <!-- Modal footer -->
                                             <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" onclick="location.href='{% url 'logout' %}'" data-dismiss="modal">Log Out</button>
                                             </div>
-                                    
+
                                         </div>
                                     </div>
                                 </div>
@@ -162,16 +157,16 @@
             <div class="row" id="box">
                 <div class="col-lg-12" style="height: 9vh;display: flex;align-items: center;">
                     <div class="col-lg-2"></div>
-                    <div class="col-lg-2"  style="display: flex; justify-content: center;align-items: center;height: 6vh;color: #d7e9f8">
-                        <div class="col-lg-7" style="border: 1px solid #daffef;display: flex; justify-content: center;align-items: center;height: 35px;font-size: 25px;color: #d7e9f8;padding-top: 8px; ">
+                    <div class="col-lg-2"  style="display: flex; justify-content: center;align-items: center;height: 6vh;color: #d7e9f8;box-shadow:0 0 3px 3px black">
+                        <div class="col-lg-7" style="border-right: 4px solid black;display: flex; justify-content: center;align-items: center;height: 35px;font-size: 35px;color: #d7e9f8;padding-top: 5px;height:6vh;padding-right:30px">
                             Score
                         </div>
-                        <div class="col-lg-5" style="border: 1px solid #daffef;display: flex; justify-content: center;align-items: center;height: 35px;font-size: 25px;color: #d7e9f8;padding-top: 8px; ">
+                        <div class="col-lg-5" style="display: flex; justify-content: center;align-items: center;height: 35px;font-size: 35px;color: #d7e9f8;padding-top: 8px;height:6vh;padding-left:30px">
                             {{ total_score }}
                         </div>
                     </div>
                     <div class="col-lg-4"></div>
-                    
+
                     <div class="col-lg-4" style=" height: 6vh;display: flex; justify-content: center;align-items: center;">
                         <span id="fname" style="margin-right: 10px;">No file chosen</span>
                         <input type="file" id="fileLoader" name="files" title="Load File" style="display: none;" />
@@ -233,7 +228,7 @@
                     <div class="row">
                         <div class="col-lg-3 " style="height: 4vh;color: #d7e9f8;font-size: 20px;margin-top: 35px">Code Editor</div>
                     </div>
-                    <div class="row">    
+                    <div class="row">
                         <div class="col-lg-12" id="xx" style="height:60vh;">
                             <textarea name="content" class="col-lg-12" id="editor" style="height: 54vh; resize: none; border-radius: 5px;"></textarea>
                         </div>
@@ -248,10 +243,11 @@
                         </div>
                     </div>
                     <div class="row no-gutters" style="background: rgba(0, 0, 0, 0.5);opacity: 0;border-radius: 5px" id="row">
-                            <div class="col-lg-12" id="hidden" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;border-radius: 5px;text-align: center;overflow: auto">
-                                <div class="col-lg-12" style="height: 3vh;border-bottom: 1px solid #d7e9f8;">
-                                    Status
-                                </div>
+                            <div class="col-lg-12" id="hidden" style="border: 1px solid white;height: 1vh;opacity: 0;background-color: #000000;border-radius: 5px;text-align: center;overflow: auto">
+                                Status
+                            </div>
+                            <div class="col-lg-12" id="st" style="border: 0px solid white;opacity:0;height:0;background-color: #000000;border-radius: 5px;text-align: center;overflow: auto">
+                                <textarea id="stat" style="width:100%;color:white;background-color:black;resize:none;height:9vh;border-radius:5px;text-align:center " readonly></textarea>
                             </div>
                             <div class="col-lg-6 mt-2" id="hidden1" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;text-align: center;border-radius: 5px;">
                                 Actual Output
@@ -259,20 +255,25 @@
                             <div class="col-lg-6 mt-2" id="hidden2" style="border: 1px solid white;height: 0;opacity: 0;background-color: #000000;text-align: center;border-radius: 5px;">
                                 Expected Output
                             </div>
-                        
+                            <div class="col-lg-6" id="acc" style="border: 0px solid white;height: 0;opacity: 0;text-align: center;">
+                                <textarea id="t1" style="background-color:black;width:100%;resize:none;border-radius: 5px;color:white" readonly></textarea>
+                            </div>
+                            <div class="col-lg-6" id="exp" style="border: 0px solid white;height: 0;opacity: 0;background-color: #000000;text-align: center;border-radius: 5px;">
+                                <textarea id="t2" style="background-color:black;width:100%;resize:none;border-radius: 5px;color:white" readonly></textarea>
+                            </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-5 ml-3 mr-3" style="border: 0px solid rgb(64, 179, 255);height: 8vh;display: flex;justify-content: center;align-items: center;">
-                    <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh; background: black;">
+                    <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh; background: black;border-radius:5px;">
 
                                 <input type="radio" name="ext" checked value="c" style="margin-right:5px">
-                                <label style="margin-right: 0.5vw;margin-top:10px;">C</label>
+                                <label style="margin-right: 1.5vw;margin-top:10px;font-size:18px">C</label>
                                <input type="radio" name="ext" checked value="cpp" style="margin-right:5px">
-                               <label style="margin-right: 0.5vw;margin-top:10px;">C++</label>
-                                <input type="radio" name="ext" checked value="cpp" style="margin-right:5px">
-                               <label style="margin-right: 0.5vw;margin-top:10px;">Python</label>
+                               <label style="margin-right: 1vw;margin-top:10px;font-size:18px">C++</label>
+                                <input type="radio" name="ext" checked value="cpp" style="margin-right:8px">
+                               <label style="margin-right: -0.5vw;margin-top:10px;font-size:18px">Python</label>
 
                     </div>
 
@@ -285,10 +286,10 @@
                         <button class="btn btn-block" data-toggle="tab" type="button" id="buffer" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ">Load Buffer</button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block" type="button" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white"><a href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
+                        <button class="btn btn-block" type="button" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white"><a type="button" href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block" type="submit" formmethod="post" onclick="location.href='/user/{{user.username}}/{{question.IDNumber}}';"style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(20,173,20);color: white">Submit</button>
+                        <button class="btn btn-block" type="submit" formmethod="post" onclick="location.href='/user/{{user.username}}/{{question.IDNumber}}';"style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(64,224,200);color: black">Submit</button>
                     </div>
                 </div>
             </div>
@@ -302,7 +303,7 @@
             </div>
         </div>
     </div>
-    
+
     </form>
     <script src="{% static 'javascript/ClashCodingPage/jquery.js' %}"></script>
     <script src="{% static 'javascript/ClashCodingPage/bootstrap.js' %}"></script>
@@ -325,11 +326,14 @@
         var close = document.getElementById('close');
         var div3 = document.getElementById('hidden1');
         var div4 = document.getElementById('hidden2');
+        var div5 = document.getElementById('acc');
+        var div6 = document.getElementById('exp');
         var browse = document.getElementById('br');
         var rbutton= document.getElementById('rbtn');
         var ftext= document.getElementById('fname');
         var real= document.getElementById('fileLoader');
         var row=document.getElementById('row');
+        var st=document.getElementById('st');
 
 
         browse.addEventListener('click',function(){
@@ -349,13 +353,13 @@
             $('#run').click(function(){
                 rbutton.disabled= true;
                 div2.style.transition = 'height 0.5s';
-                div2.style.height = '26vh';
+                div2.style.height = '23vh';
 
                 editor.style.transition = 'height 0.5s';
-                editor.style.height = '24vh';
+                editor.style.height = '23vh';
 
                 div.style.transition = 'height 0.5s';
-                div.style.height = '14vh';
+                div.style.height = '3.5vh';
                 div.style.opacity = '1';
 
                 row.style.transition = 'height 0.5s';
@@ -367,13 +371,25 @@
                 con.style.color= '#d7e9f8';
 
                 div3.style.transition = 'height 0.5s';
-                div3.style.height = '8vh';
+                div3.style.height = '3vh';
                 div3.style.opacity = '1';
+
+                st.style.transition = 'height 0.5s';
+                st.style.height = '10vh';
+                st.style.opacity = '1';
 
                 div4.style.transition = 'height 0.5s';
 
-                div4.style.height = '8vh';
+                div4.style.height = '3vh';
                 div4.style.opacity = '1';
+
+                div5.style.transition = 'height 0.5s';
+                div5.style.height = '6vh';
+                div5.style.opacity = '1';
+
+                div6.style.transition = 'height 0.5s';
+                div6.style.height = '6vh';
+                div6.style.opacity = '1';
 
                 closediv.style.transition = 'height 0.05s';
 
@@ -395,9 +411,9 @@
                        var status = data["status"];
                        var expected = data["expected"];
                        var actual = data["actual"];
-                       $('#hidden').append(status);
-                       $('#hidden1').append(actual);
-                       $('#hidden2').append(expected);
+                       $('#stat').val(status);
+                       $('#t1').val(actual);
+                       $('#t2').val(expected);
                     }
                 });
             });
@@ -423,9 +439,21 @@
             div3.style.height = '0';
             div3.style.opacity = '0';
 
+            st.style.transition = 'height 0.5s';
+                st.style.height = '0vh';
+                st.style.opacity = '0';
+
             div4.style.transition = 'height 0.5s';
             div4.style.height = '0';
             div4.style.opacity = '0';
+
+            div5.style.transition = 'height 0.5s';
+            div5.style.height = '0';
+            div5.style.opacity = '0';
+
+            div6.style.transition = 'height 0.5s';
+            div6.style.height = '0';
+            div6.style.opacity = '0';
 
             closediv.style.transition = 'height 0.5s';
             closediv.style.opacity = '0';
