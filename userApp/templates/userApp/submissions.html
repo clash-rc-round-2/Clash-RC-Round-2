@@ -12,6 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <!--  <link href="https://fonts.googleapis.com/css?family=Biryani&display=swap" rel="stylesheet">-->
     <link rel="stylesheet" href="{%static 'css/submissions.css'%}">
+            <link rel="stylesheet" href="{% static 'css/timer.css' %}">
     <style>
         body{
             background-image: url("{% static 'images/1111111.jpg' %}");
@@ -27,7 +28,6 @@
     </style>
     </head>
     <body>
-     {% csrf_token %}
         <form>
             <div class="container-fluid">
                 <div class="row" style="background-color: #000">
@@ -38,7 +38,13 @@
                         <div class="col-lg-9" style="padding-top: 2vh;height: 6vh; display: flex; align-items: center; justify-content: center; color: white"><h5>SUBMISSIONS PAGE</h5></div>
                     </div>
                     <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: white">
-                        {{time}}
+
+                        <!--                        timer-->
+                            <div class="col-lg-4" id="hour" style="font-size: 4vh; border-right: 1px solid white"></div>
+                            <div class="col-lg-4" id="min" style="font-size: 4vh; border-right: 1px solid white"></div>
+                            <div class="col-lg-4" id="sec" style="font-size: 4vh; "></div>
+
+
                     </div>
                     <div class="col-lg-5" style=" height: 7vh;">
                         <div class="row">
@@ -52,28 +58,28 @@
                             <div class="modal fade" id="logout">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                    
+
                                             <!-- Modal Header -->
                                             <div class="modal-header">
                                             <h4 class="modal-title" style="color: black;">Are you sure you want to logout?</h4>
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
-                                    
+
                                             <!-- Modal body -->
                                             <div class="modal-body">
                                             <p style="color: black;">Logging out will cause termination of your game and your score till this moment will be counted as your Final Score.
                                             </div>
-                                    
+
                                             <!-- Modal footer -->
                                             <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" type="button" onclick="location.href='{% url 'logout' %}'"  data-dismiss="modal">Log Out</button>
                                             </div>
-                                    
+
                                         </div>
                                     </div>
                                 </div>
                             <div class="col-lg-3 mt-1" style="display: flex; justify-content: center; align-items: center;">
-                                <button class="btn btn-danger btn-block" data-toggle="modal"  data-target="#logout" style="font-size: 14px; padding-left: 0; padding-right: 0;">Log Out</button>
+                                <button class="btn btn-danger btn-block" data-toggle="modal" type="button"  data-target="#logout" style="font-size: 14px; padding-left: 0; padding-right: 0;">Log Out</button>
                             </div>
                             <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
                                 <img src="{% static 'images/IEEE_logo.png'%}" style="height: 5vh;">
@@ -98,41 +104,22 @@
                             <div class="table-wrapper-scroll-y my-custom-scrollbar">
                                 <table class="table table-active"style="border-radius:5px">
                                 <tbody>
+
                                  {% for submission in allSubmission %}
                                     <tr scope="row">
-                                        <td class="col-md-1 a1" style="text-align: center;">1</td>
+                                        <td class="col-md-1 a1" style="text-align: center;">{{ forloop.counter }}</td>
                                         <td class="col-md-1"></td>
                                         <td class="col-md-1">
                                             <div id="textareaStyle">
-                                                <textarea disabled class="form-control" style="height: 5vh;resize: none;"></textarea>    
+                                                <textarea disabled class="form-control" style="height: 5vh;resize: none;">{{ submission.subTime }}</textarea>
                                             </div>
                                         </td>
                                         <td class="col-md-1"></td>
                                         <td class="col-md-3">
                                             <div class="progress position-relative" id="progressStyle">
-                                                <div class="progress-bar " style="width:{{ submission.TestCasesPercentage }}%;text-align: center;background-color: #3a8196">
-                                                <p class="justify-content-center d-flex position-absolute w-100" style="margin-top: 0.6vh; color: rgb(12, 12, 12);padding-top: 1vh;"><b>{{ submission.TestCasesPercentage }}%</b></p>
-                                            </div>
-                                        </td>
-                                        <td class="col-md-3">
-                                            <button type="button" class="btn btn-block" style="height: 5vh;;width: 50%;margin-left: 7vw;background-color:#3a8196;color:#d7e9f8">VIEW</button>
-                                        </td>
-                                        <td class="col-md-2"></td>
-                                    </tr>
-                                  {% endfor %}
-                                    <!--tr scope="row">
-                                        <td class="col-md-1 a1" style="text-align: center;">2</td>
-                                        <td class="col-md-1"></td>
-                                        <td class="col-md-1">
-                                            <div id="textareaStyle">
-                                                <textarea disabled class="form-control" style="height: 5vh;resize: none;"></textarea>
-                                            </div>
-                                        </td>
-                                        <td class="col-md-1"></td>
-                                        <td class="col-md-3">
-                                            <div class="progress position-relative" id="progressStyle">
-                                                <div class="progress-bar " style="width:40%;background-color: #3a8196">
-                                                <p class="justify-content-center d-flex position-absolute w-100" style="margin-top: 0.6vh; color: rgb(12, 12, 12);  padding-top: 1vh"><b>40%</b></p>
+                                                <div class="progress-bar " style="width:{{ submission.TestCasesPercentage }}%;background-color: #3a8196">
+                                                    <p class="justify-content-center d-flex position-absolute w-100" style="margin-top: 0.6vh; color: rgb(12, 12, 12);  padding-top: 1vh"><b>{{ submission.TestCasesPercentage }}%</b></p>
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="col-md-3">
@@ -140,7 +127,9 @@
                                         </td>
                                         <td class="col-md-2"></td>
                                     </tr>
-                                    <tr scope="row">
+                                 {% endfor %}
+
+                                    <!--<tr scope="row">
                                         <td class="col-md-1 a1" style="text-align: center;">3</td>
                                         <td class="col-md-1"></td>
                                         <td class="col-md-1">
@@ -252,7 +241,7 @@
                                         <td class="col-md-3">
                                             <div class="progress position-relative" id="progressStyle">
                                                 <div class="progress-bar "style="width:90%;background-color: #3a8196">
-                                            
+
                                                 <p class="justify-content-center d-flex position-absolute w-100" style="margin-top: 0.6vh; color: rgb(12, 12, 12);padding-top: 1vh"><b>90%</b></p></div>
                                         </td>
                                         <td class="col-md-3">
@@ -272,7 +261,7 @@
                                         <td class="col-md-3">
                                             <div class="progress position-relative" id="progressStyle">
                                                 <div class="progress-bar " style="width:80%;background-color: #3a8196">
-                                            
+
                                                 <p class="justify-content-center d-flex position-absolute w-100" style="margin-top: 0.6vh; color: rgb(12, 12, 12);padding-top: 1vh"><b>80%</b></p></div>
                                         </td>
                                         <td class="col-md-3">
@@ -392,7 +381,7 @@
                                         <td class="col-md-3">
                                             <div class="progress position-relative" id="progressStyle">
                                                 <div class="progress-bar " style="width:100%; font: bold;background-color: #3a8196">
-                                                <p class="justify-content-center d-flex position-absolute w-100" style="margin-top: 0.6vh; color: rgb(12, 12, 12);padding-top: 1vh"><b>100%</b></p>  
+                                                <p class="justify-content-center d-flex position-absolute w-100" style="margin-top: 0.6vh; color: rgb(12, 12, 12);padding-top: 1vh"><b>100%</b></p>
                                             </div>
                                         </td>
                                         <td class="col-md-3">
@@ -414,5 +403,54 @@
         </form>
      <script src="{% static 'javascript/jquery.js' %}" ></script>
      <script src="{% static 'javascript/bootstrap.js' %}" ></script>
+    <script>
+        var countDownDate = new Date().getTime();
+
+            var x = setInterval(function () {
+
+                var now = new Date().getTime();
+
+                var remTime = countDownDate + {{ time }}*1000 - now;
+                var hours = Math.floor((remTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+
+                var seconds = Math.floor((remTime / 1000) % 60);
+                var minutes = Math.floor((remTime / 1000 / 60) % 60);
+
+                if ((minutes > 0) || (seconds > 0) || (hours > 0)) {
+                    if (minutes < 10) {
+                        document.getElementById("min").innerHTML = "0" + minutes;
+                    }
+                    else {
+                        document.getElementById("min").innerHTML = minutes;
+                    }
+                    if (seconds < 10) {
+                        document.getElementById("sec").innerHTML = "0" + seconds;
+                    }
+                    else {
+                        document.getElementById("sec").innerHTML = seconds;
+
+                    }
+
+                    if (hours < 10) {
+                        document.getElementById("hour").innerHTML = "0" + hours;
+                    }
+                    else {
+                        document.getElementById("hour").innerHTML = hours;
+                    }
+                }
+                else if (minutes == 0 && seconds == 0 && hours==0) {
+                    document.getElementById("min").innerHTML = "0" + "0";
+                    document.getElementById("sec").innerHTML = "0" + "0";
+                    document.getElementById("hour").innerHTML = "0" + "0";
+
+                    document.getElementById("min").style.color = "#F32013";
+                    document.getElementById("sec").style.color = "#F32013";
+                    document.getElementById("hour").style.color = "#F32013";
+
+
+                }
+            }, 1000);
+    </script>
     </body>
 </html>

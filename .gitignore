@@ -1,5 +1,7 @@
 venv
-clash/__pycache__
+db.sqlite3
 README.md
-userApp/__pycache__
+userApp/migrations/
+data/usersCode/
+__pycache__/
 .idea

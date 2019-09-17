@@ -17,10 +17,11 @@ class UserProfile(models.Model):
     latestSubTime = models.TimeField(default='00:00')
     timer = models.TimeField(default='00:00')
     choice = models.CharField(max_length=5, default='cpp')       # for the extension the code C or CPP or python
-    qid = models.IntegerField(default=0)                         # will store the current question
+    qid = models.IntegerField(default=0)                         # will store the current question id
+    lang = models.CharField(max_length=3)                        # will store the current question lang
 
     def __str__(self):
-            return self.user.username
+        return self.user.username
 
 
 class Question(models.Model):
