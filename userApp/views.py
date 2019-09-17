@@ -269,7 +269,7 @@ def leader(request):
         sorted(data.items(), key=lambda items: (items[1][6], user.latestSubTime))
         var = calculate()
         if var != 0:
-            return render(request, 'userApp/leaderboard.html', context={'dict': dict, 'range': range(1, 7, 1),
+            return render(request, 'userApp/leaderboard.html', context={'dict': data, 'range': range(1, 7, 1),
                                                                         'time': var})
         else:
             return render(request, 'userApp/result.html')
