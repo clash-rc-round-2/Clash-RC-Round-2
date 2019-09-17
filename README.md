@@ -8,7 +8,6 @@ I) From Backend:
 - integrating waiting Page. (Timer Logic)
 - Username Space(Directory) issue.
 - Disabling back button according to the pages.
-- Accuracy of the Questions
 - Adding Python Sandbox
 - Integrating MySQL
 - Run Code by Ajax

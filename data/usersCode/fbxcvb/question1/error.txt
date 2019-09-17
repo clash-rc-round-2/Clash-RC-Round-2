@@ -1,0 +1,3 @@
+/home/gauravghati/clash2/data/usersCode/fbxcvb/question1/code1-0.cpp:1:1: error: ‘sfxbzcxbzdf’ does not name a type
+ sfxbzcxbzdf dfsdf sd fsd fs sdf
+ ^~~~~~~~~~~

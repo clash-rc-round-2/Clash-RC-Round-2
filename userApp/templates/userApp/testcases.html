@@ -1,166 +1,179 @@
 {% load static%}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    <title>Testcases</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel = "stylesheet" type = "text/css" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
- <!--   <link href="https://fonts.googleapis.com/css?family=Biryani&display=swap" rel="stylesheet">-->
-    <style>
-        body{
-            background-image: url("{% static 'images/1111111.jpg' %}");
-            background-repeat: no-repeat;
-            background-size: 100%;
-            font-family: 'Biryani', sans-serif;
-            color: #d7e9f8;
-            overflow: hidden;
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/Clash R2 Testcases.css' %}">
+    <script>
+        function returnImage(status){
+            if(status == "CTE" || status == "RTE" || status == "WA" || status == "AT")
+            {return "FAIL";}
+
+           else if(status == "TLE") {return "TLE";}
+
+           else if(status == "AC") {return "PASS";}
+
+           else {return "FAIL";}
         }
-        @font-face{
-    font-family: 'Biryani';
-    src:url("{% static 'css/Biryani-Regular.ttf' %}");
-    </style>
-    </head>
-    <body>
-    {% csrf_token%}
-        <form>
-            <div class="container-fluid">
-                <div class="row" style="background-color: #000">
-                    <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
-                        <div class="col-lg-3" style=" height: 7vh;">
-                            <img src="{% static 'images/clash.jpg' %}" style="width: 5vw; height:7vh; display:flex;align-items: center;justify-content: center;color: white">
+        function loadIcon(testlist){
+        console.log(testlist);
+
+            var i;
+            for(i = 1; i <= 6; i++){
+
+                document.getElementById("id" + i.toString()).src = "{% static 'images/' %}" + returnImage(testlist[i - 1]) + ".png";
+            }
+        }
+    </script>
+</head>
+<!--<body onload="change_image({{ test_case_1 }}, {{ test_case_2 }}, {{ test_case_3 }}, {{ test_case_4 }}, {{ test_case_5 }}-->
+<!--                , {{ test_case_6 }})">-->
+<body onload="loadIcon({{ testcase }})">
+{% csrf_token%}
+        <!--  Header Bar-->
+        <div class="container-fluid">
+                <div class="row" style="background-color:black">
+                        <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
+                            <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;justify-content: center;color: #d7e9f8"><img src="{% static 'images/clash.jpg' %}" style="height: 5vh;"></div>
+                            <div class="col-lg-9" style=" height: 6vh; display:flex;align-items: center; justify-content: center;color: #d7e9f8"><h5>TESTCASES</h5></div>
                         </div>
-                        <div class="col-lg-9" style="padding-top: 2vh;height: 6vh; display: flex; align-items: center; justify-content: center; color: white"><h5>TESTCASES</h5></div>
-                    </div>
-                    <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: white">
-                        {{ time }}
-                    </div>
-                    <div class="col-lg-5" style=" height: 7vh;">
-                        <div class="row">
-                            <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                <button class="btn btn-block" type="button" onclick="location.href = '/user/allque';"style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Question Hub</button>
-                            </div>
-                            <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                <button class="btn btn-block" type="button" onclick="location.href='{% url 'leader' %}'"style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Leaderboard</button>
-                            </div>
-                            <!-- The Modal -->
-                            <div class="modal fade" id="logout">
+                        <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: #d7e9f8">
+                            {{ time }}
+                        </div>
+                        <div class="col-lg-5" style=" height: 7vh;">
+                            <div class="row">
+                                <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                                    <button class="btn btn-primary" onclick="location.href = '/user/allque';" style="font-size: 13px;color: black">Question Hub</button>
+                                </div>
+                                <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                                    <button class="btn btn-primary" onclick="location.href='{% url 'leader' %}'" style="font-size: 13px;color: black">Leader Board</button>
+                                </div>
+<!--                                <div class="col-lg-3 mt-1" style="display: flex; justify-content: center;align-items: center;">-->
+<!--                                    <button class="btn btn-danger" style="font-size:13px;">Log Out</button>-->
+<!--                                </div>-->
+                                <div class="modal fade" id="logout">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                    
+
                                             <!-- Modal Header -->
                                             <div class="modal-header">
                                             <h4 class="modal-title" style="color: black;">Are you sure you want to logout?</h4>
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
-                                    
+
                                             <!-- Modal body -->
                                             <div class="modal-body">
                                             <p style="color: black;">Logging out will cause termination of your game and your score till this moment will be counted as your Final Score.
                                             </div>
-                                    
+
                                             <!-- Modal footer -->
                                             <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" onclick="location.href='{% url 'logout' %}'" data-dismiss="modal">Log Out</button>
                                             </div>
-                                    
+
                                         </div>
                                     </div>
                                 </div>
-                            <div class="col-lg-3 mt-1" style="display: flex; justify-content: center; align-items: center;">
-                                <button class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#logout" style="font-size: 14px; padding-left: 0; padding-right: 0;">Log Out</button>
-                            </div>
-                            <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                <img src="{% static 'images/IEEE_logo.png'%}" style="height: 5vh;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-
-        
-                        <div class="col-lg-8" style="height:86vh;">
-                           <div class="row">   
-                               <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
-                               font-size: 15px; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;"><div class="spinner-border m-5" role="status">
-                                   <span class="sr-only">Loading...</span>
-                                 </div>CASE 1</div>
-                               <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                                   <span class="sr-only">Loading...</span>
-                                 </div>CASE 2</div>
-                               
-                               </div>   
-                               
-                               <div class="row">   
-                                       <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
-                                       color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                                           <span class="sr-only">Loading...</span>
-                                         </div>CASE 3</div>
-                                       <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw;
-                                       color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                                           <span class="sr-only">Loading...</span>
-                                         </div>CASE 4</div>       
+                                <div class="col-lg-3 mt-1" style="display: flex; justify-content: center; align-items: center;">
+                                    <button class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#logout" style="font-size: 14px; padding-left: 0; padding-right: 0;">Log Out</button>
                                 </div>
-                                       <div class="row">   
-                                               <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;align-items: center;
-                                               color:#d7e9f8;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                                                   <span class="sr-only">Loading...</span>
-                                                 </div>CASE 5</div>
-                                               <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px"><div class="spinner-border m-5" role="status">
-                                                   <span class="sr-only">Loading...</span>
-                                                 </div>CASE 6</div>
-                                               
-                                               </div>     
-               
-                                               <div class="row">   
-                                                       <div class="col-lg-3" style="justify-content: center;display: flex">
-                                                           <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{com_status}}</div>
-                                                       </div>
-                       
-                                                       <!--div class="col-lg-3" style="justify-content: center;display: flex">
-                                                               <div class="col-lg-4" style="background-color:rgb(216, 196, 152);border: 1px solid rgba(1, 22, 1, 0.952);margin:0vw 1vw;height:15vh;width:15vh;border-radius:50%;justify-content:center;display:flex">Score</div>
-                                                           </div!-->
-                                                       
-                                                      
-                                                           <div class="col-lg-5" style="justify-content: center;display: flex">
-                                                                   <div class="col-lg-6" style="justify-content: center; display: flex; height: 15vh; width: 100vh; margin:3vw">
-                                                                        <button class="btn btn-danger" type="button" onclick="history.back()" style="height:5vh; width:9vw; margin:1vh">RETRY</button>
-                                                                   </div>
-                                                               </div>
-
-                                                               <div class="col-lg-3" style="justify-content: center;display: flex">
-                                                                   <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{ score }}</div>
-                                                               </div>
-                                                       </div>
-                           </div>           
-               
-                          
-                        <div class="col-lg-4" style="border: 5px solid rgba(243, 248, 243, 0.952); height:80vh;margin-top:3vh;border-radius: 10px">
-                               <strong style="text-align: center;margin-top: 15px;margin-bottom: 15px;justify-content: center;display: flex; color:#d7e9f8">CONSOLE</strong>
-                               {{ error }}
-                            <div class="row">
-
-                                <div class="row" style="height:40vh;width:60vw;margin:2vw 2vw; border:5px rgb(14, 247, 53)"></div>
-                                            
+                                <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
+                                    <img src="{% static 'images/IEEE_logo.png' %}" style="height: 5vh;">
+                                </div>
                             </div>
-               
-                           <!--div class="row" style="margin:2vw 2vw;justify-content: center;border:1px black;height:4vh">
-                               <button class="btn btn-primary">Retry</button>
-                           </div!-->
                         </div>
                     </div>
-                <div class="row" style="background-color: #000">
-                    <div class="col-lg-12" style="font-size: 15px; border: 2px solid black; height:7vh; display: flex; justify-content: center; align-items: center; color: white">
-                        &copy PICT IEEE STUDENT BRANCH
-                    </div>
+
+                  <!--d7e9f8!-->
+        <div class="row">
+
+         <div class="col-lg-8" style="height:86vh;">
+            <div class="row">
+                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
+                font-size: 15px; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;">
+                    <span class="sr-only"></span>
+                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.0 }}</div><span><img id="id1" height="45vh" width="45vw"></span></div>
+                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
+                    <span class="sr-only"></span>
+                    <div class="abc" style="justify-content: left;margin-right:9vw">{{ testcase.1 }}</div><span><img id="id2" height="40vh" width="40vw"></span></div>
+
                 </div>
+
+                <div class="row">
+                        <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
+                        color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;">
+                            <span class="sr-only"></span>
+                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.2 }}</div><span><img id="id3" height="45vh" width="45vw" ></span></div>
+                        <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw;
+                        color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
+                            <span class="sr-only"></span>
+
+                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.3 }}</div><span><img id="id4" height="40vh" width="40vw"></span>
+                        </div>
+                        </div>
+
+
+                        <div class="row">
+                                <div class="col-lg-4" style ="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;align-items: center;color:#d7e9f8; font-weight: bold;border-radius: 10px">
+                                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.4 }}</div><span><img id="id5" height="45vh" width="45vw"></span></div>
+                                <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
+                              <span class="sr-only"></span>
+                              <div class="fck" style="justify-content: left;margin-right:9vw">{{ testcase.5 }}</div><span><img id="id6" height="45vh" width="45vw" id="TLE"></span></div>
+
+                                </div>
+
+                                <div class="row">
+                                        <div class="col-lg-3" style="justify-content: center;display: flex;margin:2vh ">
+                                            <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{com_status}}</div>
+                                        </div>
+
+                                        <!--div class="col-lg-3" style="justify-content: center;display: flex">
+                                                <div class="col-lg-4" style="background-color:rgb(216, 196, 152);border: 1px solid rgba(1, 22, 1, 0.952);margin:0vw 1vw;height:15vh;width:15vh;border-radius:50%;justify-content:center;display:flex">Score</div>
+                                            </div!-->
+
+
+                                            <div class="col-lg-5" style="justify-content: center;display: flex">
+                                                    <div class="col-lg-6" style="justify-content:center;display:flex;height:15vh;width:100vh;margin:3vw;margin-right:8vw">
+                                                            <button class="btn btn-danger" onclick="history.back()" style=" height:6vh;width:9vw; border: #d7e9f8;margin:4vh">RETRY</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3" style="justify-content: center;display: flex;margin:2vh">
+                                                    <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 10vw;margin-right:19vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{ score }}</div>
+                                                </div>
+
+
+                                        </div>
             </div>
-        </form>
-    <script src="{% static 'javascript/jquery.js' %}" ></script>
-     <script src="{% static 'javascript/bootstrap.js' %}" ></script>
+
+
+         <div class="col-lg-4" style="border: 5px solid rgba(243, 248, 243, 0.952); height:80vh;margin-top:3vh;border-radius: 10px; background-color: black">
+                <strong style="text-align: center;margin-top: 15px;margin-bottom: 15px;justify-content: center;display: flex; color:#d7e9f8">CONSOLE</strong>
+                {{ error }}
+             <div class="row">
+
+                 <div class="row" style="height:40vh;width:60vw;margin:2vw 2vw; border:5px rgb(14, 247, 53)"></div>
+
+             </div>
+
+            <!-- <div class="row" style="margin:2vw 2vw;justify-content: center;border:1px black;height:4vh">
+                <button class="btn btn-primary">Retry</button>
+            </div!-->
+
+            </div>
+     </div>
+     <div class="row" style="background-color: black">
+            <div class="col-lg-12" style="border: 2px solid black;height:7vh;display: flex;justify-content: center;align-items: center;color: #d7e9f8">
+                &copy PICT IEEE STUDENT BRANCH
+            </div>
+        </div>
+    </div>
     </body>
-</html>
+    </html>
