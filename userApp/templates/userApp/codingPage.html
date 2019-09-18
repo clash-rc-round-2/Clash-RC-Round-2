@@ -173,9 +173,9 @@
                     </div>
                     <div class="col-lg-4"></div>
 
-                    <div class="col-lg-4" style=" height: 6vh;display: flex; justify-content: center;align-items: center;">
-                        <span id="fname" style="margin-right: 10px;">No file chosen</span>
-                        <input type="file" id="fileLoader" name="files" title="Load File" style="display: none;" />
+                    <div class="custom-file col-lg-4" style=" height: 6vh;display: flex; justify-content: center;align-items: center;">
+                        <input type="file" id="fileLoader" name="files" onchange="loadFile()" title="Load File"/>
+                        <span  id="fname" style="margin-right: 10px;">No file chosen</span>
                         <button class="btn btn-block" id="br" style="width: 130px;height:35px;font-size: 15px;display: flex; justify-content: center;align-items: center;padding-top: 8px;background-color: #3a8196;color: white ">
                             Browse
                         </button>
@@ -341,18 +341,8 @@
         var row=document.getElementById('row');
         var st=document.getElementById('st');
 
-
         browse.addEventListener('click',function(){
             real.click();
-        });
-
-        real.addEventListener("change",function(){
-            if(real.value) {
-                ftext.innerHTML= real.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-            }
-            else{
-                real.innerHTML= "No file chosen";
-            }
         });
 
         $('document').ready(function(){
@@ -489,6 +479,7 @@
                 });
             });
         });
+
         var countDownDate = new Date().getTime();
 
             var x = setInterval(function () {
@@ -536,6 +527,26 @@
 
                 }
             }, 1000);
-    </script>
+
+    $(document).ready( function() {
+        $('#br').click(function(){
+            $("#fileinput").click();
+        });
+    });
+
+    $('#fileinput').change(function() {
+        $('#selected_filename').text($('#fileinput]')[0].files[0].name);
+    });
+
+    function loadFile(){
+        var file = document.getElementById("fileloader").files[0];
+        var fileReader = new FileReader();
+        fileReader.onload = function(fileLoadedEvent){
+            var textFile = fileLoadedEvent.target.result;
+            codeEditor.setValue = textFile;
+        };
+        fileReader.readAsText(file, "UTF-8");
+    }
+</script>
 </body>
 </html>

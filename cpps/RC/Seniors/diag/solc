@@ -1,0 +1,3 @@
+solution: no of diagnols in n sided polygon.
+constraints : 1<=T<=10^5
+              3<=n<=10^6
