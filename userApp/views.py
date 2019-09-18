@@ -140,7 +140,7 @@ def questionHub(request):
         if var != 0:
             return render(request, 'userApp/qhub.html', context={'all_questions': all_questions, 'time': var})
         else:
-            return render(request, 'userApp/result.html')
+            render(request, "userApp/result.html")
     else:
         return HttpResponseRedirect(reverse("signup"))
 
@@ -216,7 +216,22 @@ def codeSave(request, username, qn):
             )
             print(type(testcase_values))
 
-            sub = Submission(code=content, user=user, que=que, attempt=att)
+            now_time = datetime.datetime.now()
+            now_time_sec = now_time.second + now_time.minute * 60 + now_time.hour * 60 * 60
+            global starttime
+            submit_Time = now_time_sec - starttime
+
+            hour = submit_Time // (60 * 60)
+            val = submit_Time % (60 * 60)
+            min = val // 60
+            sec = val % 60
+
+            subTime = '{}:{}:{}'.format(hour, min, sec)
+
+            print(subTime)
+            print("submit time" + str(submit_Time))
+
+            sub = Submission(code=content, user=user, que=que, attempt=att, subTime=subTime)
             sub.save()
 
             mul_que.attempts += 1
@@ -232,9 +247,24 @@ def codeSave(request, username, qn):
                 error_text = re.sub('/.*?:', '', error_text)  # regular expression
                 ef.close()
 
+            no_of_pass = 0
+            for i in testcase_values:
+                if i == 'AC':
+                    no_of_pass += 1
+
+            print(error_text)
+
+            sub.correctTestCases = no_of_pass
+            sub.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
+            sub.save()
+
+            status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'           # overall Status
+
             data = {
                 'testcase': testcase_values,
-                'error': error_text
+                'error': error_text,
+                'status': status,
+                'score': mul_que.scoreQuestion
             }
 
             return render(request, 'userApp/testcases.html', context=data)
