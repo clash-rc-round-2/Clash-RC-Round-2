@@ -403,12 +403,12 @@
 
                 run.disabled = true;
                 run.classList.add('disabled');
+
                 $.ajax({
                     url : '{% url 'run' %}',
                     method: "POST",
                     dataType : "json",
                     data : { 'csrfmiddlewaretoken' : $('input[name="csrfmiddlewaretoken"]').val(),
-                             'username' : $('#user').val(),
                              'question_no' : $('#queNo').val(),
                              'ext' : $("input[name='ext']:checked"). val(),
                              'content' : codeEditor.getValue(),

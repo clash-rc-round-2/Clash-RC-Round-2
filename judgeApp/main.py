@@ -1,6 +1,5 @@
 import resource
 import subprocess
-import os
 
 
 def initialize_quota(quota):

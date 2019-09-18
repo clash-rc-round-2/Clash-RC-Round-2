@@ -6,7 +6,6 @@ from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
 import os
-import subprocess
 import re
 
 from judgeApp.views import exec_main
@@ -17,7 +16,8 @@ duration = 0
 flag = False
 start = datetime.datetime(2020, 1, 1, 0, 0)
 
-path_usercode = 'data/usersCode'
+path_usercode = 'data/usersCode/'
+standard = 'data/standard/'
 
 NO_OF_QUESTIONS = 6
 NO_OF_TEST_CASES = 6
@@ -143,6 +143,34 @@ def questionHub(request):
         return HttpResponseRedirect(reverse("signup"))
 
 
+def change_file_content(content, extension, code_file):
+    if extension != 'py':
+        sandbox_header = '#include"../../../include/sandbox.h"\n'
+        try:
+            # Inject the function call for install filters in the user code file
+            # Issue with design this way (look for a better solution (maybe docker))
+            # multiple main strings
+            before_main = content.split('main')[0] + 'main'
+            after_main = content.split('main')[1]
+            index = after_main.find('{') + 1
+            main = before_main + after_main[:index] + 'install_filters();' + after_main[index:]
+            with open(code_file, 'w+') as f:
+                f.write(sandbox_header)
+                f.write(main)
+                f.close()
+
+        except IndexError:
+            with open(code_file, 'w+') as f:
+                f.write(content)
+                f.close()
+
+    else:
+        with open(code_file, 'w+') as f:
+            f.write('import temp\n')
+            f.write(content)
+            f.close()
+
+
 def codeSave(request, username, qn):
     if request.user.is_authenticated:  # Check Authentication
         if request.method == 'POST':
@@ -176,33 +204,14 @@ def codeSave(request, username, qn):
 
             content = str(content)
 
-            if extension != 'py':
-                sandbox_header = '#include"../../../include/sandbox.h"\n'
-                try:
-                    # Inject the function call for install filters in the user code file
-                    # Issue with design this way (look for a better solution (maybe docker))
-                    # multiple main strings
-                    before_main = content.split('main')[0] + 'main'
-                    after_main = content.split('main')[1]
-                    index = after_main.find('{') + 1
-                    main = before_main + after_main[:index] + 'install_filters();' + after_main[index:]
-                    with open(code_file, 'w+') as f:
-                        f.write(sandbox_header)
-                        f.write(main)
-                        f.close()
+            change_file_content(content, extension, code_file)
 
-                except IndexError:
-                    with open(code_file, 'w+') as f:
-                        f.write(content)
-                        f.close()
-
-            else:
-                with open(code_file, 'w+') as f:
-                    f.write('import temp\n')
-                    f.write(content)
-                    f.close()
-
-            testcase_values = exec_main(request, qn)
+            testcase_values = exec_main(
+                username=username,
+                qno=qn,
+                attempts=att,
+                lang=extension
+            )
             print(type(testcase_values))
 
             sub = Submission(code=content, user=user, que=que, attempt=att)
@@ -350,60 +359,62 @@ def loadBuffer(request):
 def run(request):
     if request.user.is_authenticated:
         response_data = {}
-        username = request.POST.get('username')
-        user = UserProfile.objects.get(user=request.user)
+        username = request.user.username
         que_no = request.POST.get('question_no')
         ext = request.POST.get('ext')
         code = request.POST.get('content')
-        status = str("")
-        e_output_file = "{}/data/standard/output/question{}/expected_output1.txt".format(path, que_no)
-        expec_out = open(e_output_file, "r")
-        expected = expec_out.read()
-        expec_out.close()
-        actual = str("")
 
-        try:
-            os.system('mkdir {}/{}/question{}'.format(path_usercode, username, que_no))
-        except FileExistsError:
-            pass
+        user_question_path = path_usercode + '{}/question{}/'.format(username, que_no)
+        code_file_path = user_question_path + 'code.{}'.format(ext)
 
-        file = open("{}/{}/question{}/sample.{}".format(path_usercode, username, que_no, ext), "w+")
-        file.write(code)
-        file.close()
+        if not os.path.exists(user_question_path):
+            os.system('mkdir ' + user_question_path)
 
-        value = subprocess.Popen(["python2", "{}/data/Judge/runcode.py".format(path), path, path_usercode, username,
-                                  str(que_no), ext], stdout=subprocess.PIPE)
-        (out, err) = value.communicate()
+        code_f = open(code_file_path, 'w+')
+        code_f.write(code)
+        code_f.close()
 
-        output = int(out)
-        if output == 10:
-            status = "Correct answer"
-            user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
-            user_out = open(user_out_file, "r")
-            actual = user_out.read()
-            user_out.close()
-        elif output == 20:
-            status = "Wrong Answer"
-            user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
-            user_out = open(user_out_file, "r")
-            actual = user_out.read()
-            user_out.close()
-        elif output == 30:
-            status = "Time limit exceed"
-        elif output == 40:
-            err_file = "{}/{}/question{}/error.txt".format(path_usercode, username, que_no)
-            error = open(err_file, "r")
-            error_text = error.read()
-            status = re.sub('/.*?:', '', error_text)
-            error.close()
-        elif output == 50:
-            status = "Run time error : core dumped"
-        elif output == 60:
-            status = "Abnormal termination"
+        change_file_content(code, ext, code_file_path)
+
+        status = exec_main(
+            username=username,
+            qno=que_no,
+            lang=ext,
+            run=True
+        )[0]
+
+        exp_op_path = standard + "output/question{}/expected_output7.txt".format(que_no)
+        op_path = user_question_path + "output7.txt"
+        err_path = user_question_path + "error.txt"
+
+        op_f = open(op_path, 'r')
+        err_f = open(err_path, 'r')
+        exp_f = open(exp_op_path, 'r')
+
+        errcodes = ['CTE', 'RTE', 'AT', 'TLE']
+
+        if status in errcodes:
+            if status == "CTE":
+                err_text = err_f.read()
+                err_text = re.sub('/.*?:', '', err_text)  # regular expression
+                actual = err_text
+            else:
+                actual = ""
+        else:
+            if status == 'AC':
+                status = 'OK'
+            actual = op_f.read()
+
+        op_f.close()
+        err_f.close()
+
+        expected = exp_f.read()
+
+        print(expected, actual)
 
         response_data["status"] = status
-        response_data["actual"] = actual
         response_data["expected"] = expected
+        response_data["actual"] = actual
 
         return JsonResponse(response_data)
 

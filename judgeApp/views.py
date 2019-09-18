@@ -1,5 +1,4 @@
 import os
-from userApp.models import UserProfile, MultipleQues, Question
 from .main import run_in_sandbox
 
 TESTCASES_NO = 6
@@ -7,21 +6,6 @@ TESTCASES_NO = 6
 path_main = 'judgeApp'
 path_users_code = 'data/usersCode/'
 standard_data = 'data/standard/'
-
-
-def clean_up(user_que_path):
-    items = ['temp.py', 'exe']
-
-    for i in items:
-        fp = user_que_path + i
-        if os.path.exists(fp):
-            os.system('rm ' + fp)
-
-    # use regex here (learn it)
-    for i in range(TESTCASES_NO):
-        fp = user_que_path + 'output{}.txt'.format(i + 1)
-        if os.path.exists(fp):
-            os.system('rm ' + user_que_path + 'output{}.txt'.format(i + 1))
 
 
 def get_signals_dict():
@@ -48,6 +32,24 @@ def get_signals_dict():
     return signals
 
 
+def clean_up(user_que_path):
+    # CALL THIS LOGIC ON LOGOUT
+
+    # items = ['temp.py', 'exe']
+    #
+    # for i in items:
+    #     fp = user_que_path + i
+    #     if os.path.exists(fp):
+    #         os.system('rm ' + fp)
+
+    # use regex here (learn it)
+
+    for i in range(TESTCASES_NO):
+        fp = user_que_path + 'output{}.txt'.format(i + 1)
+        if os.path.exists(fp):
+            os.system('rm ' + user_que_path + 'output{}.txt'.format(i + 1))
+
+
 def compare(user_out, e_out):
     user = open(user_out)
     expected = open(e_out)
@@ -70,12 +72,9 @@ def compare(user_out, e_out):
     return 'wa'
 
 
-def run_test_case(test_case_no, user_que_path, code_file_path, lang, qno):
-    input_file = standard_data + 'input/question{}/input{}.txt'.format(qno, test_case_no)
-    input_f = open(input_file, "r")  # standard input
-
-    user_out_file = user_que_path + 'output{}.txt'.format(test_case_no)
-    user_out_f = open(user_out_file, "w+")
+def get_quota(qno, test_case_no):
+    if test_case_no == 7:
+        test_case_no = 6
 
     descrip_path = standard_data + 'description/question{}/quota{}.txt'.format(qno, test_case_no)
     descrip_f = open(descrip_path)
@@ -89,6 +88,18 @@ def run_test_case(test_case_no, user_que_path, code_file_path, lang, qno):
         'mem': int(mem),
     }
 
+    return quota
+
+
+def run_test_case(test_case_no, user_que_path, code_file_path, lang, qno):
+    input_file = standard_data + 'input/question{}/input{}.txt'.format(qno, test_case_no)
+    input_f = open(input_file, "r")  # standard input
+
+    user_out_file = user_que_path + 'output{}.txt'.format(test_case_no)
+    user_out_f = open(user_out_file, "w+")
+
+    quota = get_quota(qno, test_case_no)
+
     error_file = user_que_path + "error.txt"
     err_f = open(error_file, 'w+')
 
@@ -99,7 +110,8 @@ def run_test_case(test_case_no, user_que_path, code_file_path, lang, qno):
 
     process_code = run_in_sandbox(
         exec_file,
-        lang, input_f,
+        lang,
+        input_f,
         user_out_f,
         err_f,
         quota
@@ -130,14 +142,14 @@ def compile_code(user_question_path, code_file_path, err_file):
     return rc  # return 0 for success and 1 for error
 
 
-def exec_main(request, qno):
-    pro_user = UserProfile.objects.get(user=request.user)
-    q = Question.objects.get(pk=qno)
-    que = MultipleQues.objects.get(user=pro_user.user, que=q)
-    user = pro_user.user
+def exec_main(username, qno, lang, attempts=None, run=False):
+    user_question_path = path_users_code + '{}/question{}/'.format(username, qno)
 
-    user_question_path = path_users_code + '{}/question{}/'.format(user.username, qno)
-    code_file_path = user_question_path + 'code{}.{}'.format(que.attempts, pro_user.lang)
+    if run:
+        code_file_path = user_question_path + 'code.{}'.format(lang)
+
+    else:
+        code_file_path = user_question_path + 'code{}.{}'.format(attempts, lang)
 
     sandbox_file_py = 'data/include/pysand.py'
 
@@ -155,26 +167,37 @@ def exec_main(request, qno):
 
     result = []
 
-    if pro_user.lang != 'py':
+    if lang != 'py':
         # Compile only if c or cpp
         return_value = compile_code(user_question_path, code_file_path, error_file)  # calling compile()
         print("compile", return_value)
         if return_value != 0:
-            result = ["CTE"] * 6
+            result = ["CTE"] * TESTCASES_NO
             # clean_up(user_question_path)
             return result
 
-    for i in range(TESTCASES_NO):
+    if run:
         process_code = run_test_case(
-            i + 1,
-            user_question_path,
-            code_file_path,
-            pro_user.lang,
-            qno
+            test_case_no=7,
+            user_que_path=user_question_path,
+            code_file_path=code_file_path,
+            lang=lang,
+            qno=qno
         )
         print("pc", process_code)
         result.append(signals[process_code])
 
-    clean_up(user_question_path)
+    else:
+        for i in range(TESTCASES_NO):
+            process_code = run_test_case(
+                test_case_no=i+1,
+                user_que_path=user_question_path,
+                code_file_path=code_file_path,
+                lang=lang,
+                qno=qno
+            )
+            print("pc", process_code)
+            result.append(signals[process_code])
+            clean_up(user_question_path)
 
     return result
