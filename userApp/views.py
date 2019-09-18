@@ -111,6 +111,8 @@ def signup(request):
         elif request.method == 'GET':
             return render(request, "userApp/login.html")
 
+    return HttpResponseRedirect(reverse("questionHub"))
+
 
 def questionHub(request):
     if request.user.is_authenticated:
@@ -409,6 +411,10 @@ def run(request):
 
     else:
         return HttpResponseRedirect(reverse("signup"))
+
+
+def garbage(request, garbage):
+    return HttpResponseRedirect(reverse('questionHub'))
 
 
 def check_username(request):
