@@ -13,6 +13,7 @@ urlpatterns = [
     path('checkUsername', views.check_username, name='check_username'),
     path('loadBuffer', views.loadBuffer, name='loadBuffer'),
     path('run', views.run, name='run'),
+    path('viewsub/<int:att>', views.view_sub, name='view_sub'),
     path('user/allque', never_cache(views.questionHub), name='questionHub'),
     path('user/<username>/<int:qn>', views.codeSave, name='codeSave'),
     path('user/<username>/<int:qn>/submission', never_cache(views.submission), name='submission'),

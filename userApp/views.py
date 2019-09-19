@@ -140,7 +140,7 @@ def questionHub(request):
         if var != 0:
             return render(request, 'userApp/qhub.html', context={'all_questions': all_questions, 'time': var})
         else:
-            render(request, "userApp/result.html")
+            return render(request, "userApp/result.html")
     else:
         return HttpResponseRedirect(reverse("signup"))
 
@@ -481,3 +481,28 @@ def check_username(request):
         data['error_message'] = 'username already exits.'
 
     return JsonResponse(data)
+
+
+def view_sub(request, att=1):
+    user_profile = UserProfile.objects.get(user=request.user)
+    qn = user_profile.qid
+    que = Question.objects.get(pk=qn)
+    sub = Submission.objects.filter(user=request.user, que=que)
+    codes = []
+    question_nos = []
+
+    for i in sub:
+        codes.append(i.code)
+        question_nos.append(i.attempt)
+    all_que = Question.objects.all()
+
+    question_no = question_nos[int(att) - 1]
+    per_question = all_que[int(question_no) - 1]
+
+    var = calculate()
+    if var != 0:
+        return render(request, 'userApp/codingPage.html', context={'question': per_question, 'user': user_profile,
+                                                                   'time': var, 'question_id': qn,
+                                                                   'code': codes[int(att) - 1]})
+    else:
+        return render(request, 'userApp/result.html')

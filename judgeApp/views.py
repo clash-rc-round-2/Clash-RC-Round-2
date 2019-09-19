@@ -51,25 +51,18 @@ def clean_up(user_que_path):
 
 
 def compare(user_out, e_out):
-    user = open(user_out)
-    expected = open(e_out)
+    user = open(user_out, "r")
+    expected = open(e_out, "r")
 
-    lines_user = user.readlines()
-    l1 = [i.strip() for i in lines_user]
-    lines_expected = expected.readlines()
-    l2 = [i.strip() for i in lines_expected]
-    flag = 0
-    if len(l1) == len(l2):
-        for i in range(len(l1)):  # check if files of equal length
-            if l1[i] == l2[i]:
-                flag = 1
-            else:
-                break
-        if flag:
-            return 0
-        else:
-            return 'wa'
-    return 'wa'
+    lines_user = user.read()
+    lines_expected = expected.read()
+    user.close()
+    expected.close()
+
+    if lines_user == lines_expected:
+        return 0
+    else:
+        return 'wa'
 
 
 def get_quota(qno, test_case_no):
@@ -87,7 +80,6 @@ def get_quota(qno, test_case_no):
         'time': int(time),
         'mem': int(mem),
     }
-
     return quota
 
 
