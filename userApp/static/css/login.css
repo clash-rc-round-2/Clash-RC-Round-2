@@ -8,6 +8,9 @@ body{
     color:#d7e9f8;
 
 }
+input:invalid {
+box-shadow: none;
+}
 .header{
     border:none;
     height:7vh;

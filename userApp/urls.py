@@ -15,6 +15,7 @@ urlpatterns = [
     path('run', views.run, name='run'),
     path('user/allque', never_cache(views.questionHub), name='questionHub'),
     path('user/<username>/<int:qn>', views.codeSave, name='codeSave'),
+    path('emerlogin/',views.emergency_login),
     path('user/<username>/<int:qn>/submission', never_cache(views.submission), name='submission'),
     url(r'^(?P<garbage>.*)/$', views.garbage, name='redirect'),
     # path('user/<username>/<int:qn>/<int:att>/testCases', views.runCode, name='runCode'),

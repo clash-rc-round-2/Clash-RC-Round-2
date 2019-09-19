@@ -258,16 +258,22 @@ def codeSave(request, username, qn):
             sub.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
             sub.save()
 
-            status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'           # overall Status
+            status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'  # overall Status
+
+            var = calculate()
 
             data = {
                 'testcase': testcase_values,
                 'error': error_text,
                 'status': status,
-                'score': mul_que.scoreQuestion
+                'score': mul_que.scoreQuestion,
+                'time':var
             }
+            if var != 0:
+                return render(request, 'userApp/testcases.html', context=data)
+            else:
+                render(request, "userApp/result.html")
 
-            return render(request, 'userApp/testcases.html', context=data)
 
         elif request.method == 'GET':
             que = Question.objects.get(pk=qn)
@@ -467,3 +473,23 @@ def check_username(request):
         data['error_message'] = 'username already exits.'
 
     return JsonResponse(data)
+
+
+def emergency_login(request):
+    if request.method == 'POST':
+        adminpass = '1234'
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        AdminPass = request.POST.get('admin_password')
+        user = authenticate(username=username,password = password)
+        if user is not None and AdminPass is adminpass:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('questionHub'))
+        else:
+
+            return HttpResponse('invalid details')
+    else:
+        return render(request,'userApp/emerlogin.html')
+
+
