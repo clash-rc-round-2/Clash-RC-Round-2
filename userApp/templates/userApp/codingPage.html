@@ -208,22 +208,46 @@
                     <div class="row no-gutters">
                         <ul class="nav nav-tabs" id="tab" style="margin-left: 2px">
                              <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" onclick="location.href='1';">1</a>
+                             {% if question_id is 1 %}
+                                 <a class="nav-link active" data-toggle="tab" onclick="location.href='1';">1</a>
+                                 {%else%}
+                                 <a class="nav-link" data-toggle="tab" onclick="location.href='1';">1</a>
+                             {% endif %}
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" onclick="location.href='2';">2</a>
+                                {% if question_id is 2 %}
+                                 <a class="nav-link active" data-toggle="tab" onclick="location.href='2';">2</a>
+                                 {%else%}
+                                 <a class="nav-link" data-toggle="tab" onclick="location.href='2';">2</a>
+                                 {% endif %}
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" onclick="location.href='3';">3</a>
+                               {% if question_id is 3 %}
+                                 <a class="nav-link active" data-toggle="tab" onclick="location.href='3';">3</a>
+                                 {%else%}
+                                 <a class="nav-link" data-toggle="tab" onclick="location.href='3';">3</a>
+                                 {% endif %}
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" onclick="location.href='4';">4</a>
+                               {% if question_id is 4 %}
+                                 <a class="nav-link active" data-toggle="tab" onclick="location.href='4';">4</a>
+                                 {%else%}
+                                 <a class="nav-link" data-toggle="tab" onclick="location.href='4';">4</a>
+                                 {% endif %}
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" onclick="location.href='5';">5</a>
-                            </li>
+                                {% if question_id is 5 %}
+                                 <a class="nav-link active" data-toggle="tab" onclick="location.href='5';">5</a>
+                                 {%else%}
+                                 <a class="nav-link" data-toggle="tab" onclick="location.href='5';">5</a>
+                                 {% endif %}
+                                    </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" onclick="location.href='6';">6</a>
+                                {% if question_id is 6 %}
+                                 <a class="nav-link active" data-toggle="tab" onclick="location.href='6';">6</a>
+                                 {%else%}
+                                 <a class="nav-link" data-toggle="tab" onclick="location.href='6';">6</a>
+                                 {% endif %}
                             </li>
                         </ul>
                     </div>
@@ -253,7 +277,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12" id="xx" style="height:60vh;">
-                            <textarea name="content" class="col-lg-12" id="editor" style="height: 54vh; resize: none; border-radius: 5px;"></textarea>
+                            <textarea name="content" class="col-lg-12" id="editor" style="height: 54vh; resize: none; border-radius: 5px;">{{ code }}</textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -289,15 +313,15 @@
             </div>
             <div class="row">
                 <div class="col-lg-5 ml-3 mr-3" style="border: 0px solid rgb(64, 179, 255);height: 8vh;display: flex;justify-content: center;align-items: center;">
+
                     <div class="col-lg-5 mt-3" style="display: flex;justify-content: center;align-items: center;height: 7vh; background: black;border-radius:5px;">
 
                                 <input type="radio" name="ext" checked value="c" style="margin-right:5px">
                                 <label style="margin-right: 1.5vw;margin-top:10px;font-size:18px">C</label>
                                <input type="radio" name="ext" checked value="cpp" style="margin-right:5px">
                                <label style="margin-right: 1vw;margin-top:10px;font-size:18px">C++</label>
-                                <input type="radio" name="ext" checked value="cpp" style="margin-right:8px">
+                                <input type="radio" name="ext" checked value="py" style="margin-right:8px">
                                <label style="margin-right: -0.5vw;margin-top:10px;font-size:18px">Python</label>
-
                     </div>
 
                 </div>
@@ -404,12 +428,12 @@
 
                 run.disabled = true;
                 run.classList.add('disabled');
+
                 $.ajax({
                     url : '{% url 'run' %}',
                     method: "POST",
                     dataType : "json",
                     data : { 'csrfmiddlewaretoken' : $('input[name="csrfmiddlewaretoken"]').val(),
-                             'username' : $('#user').val(),
                              'question_no' : $('#queNo').val(),
                              'ext' : $("input[name='ext']:checked"). val(),
                              'content' : codeEditor.getValue(),
@@ -535,7 +559,7 @@
                     document.getElementById("sec").style.color = "#F32013";
                     document.getElementById("hour").style.color = "#F32013";
 
-
+                    location.href='{% url 'logout' %}';
                 }
             }, 1000);
 

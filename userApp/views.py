@@ -5,18 +5,19 @@ from django.db import IntegrityError
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
-import os, subprocess
+import os
 import re
 
-global starttime
-global end_time
-global duration
-global flag
-start = datetime.datetime(2020, 1, 1, 0, 0)
-flag = 'False'
+from judgeApp.views import exec_main
 
-path = os.getcwd()
-path_usercode = path + '/data/usersCode'
+starttime = 0
+end_time = 0
+duration = 0
+flag = False
+start = datetime.datetime(2020, 1, 1, 0, 0)
+
+path_usercode = 'data/usersCode/'
+standard = 'data/standard/'
 
 NO_OF_QUESTIONS = 6
 NO_OF_TEST_CASES = 6
@@ -27,7 +28,7 @@ def waiting(request):
         return redirect(reverse("questionHub"))
     else:
         global flag
-        if flag == False:
+        if not flag:
             return render(request, 'userApp/waiting.html')
         else:
             now = datetime.datetime.now()
@@ -110,11 +111,13 @@ def signup(request):
         elif request.method == 'GET':
             return render(request, "userApp/login.html")
 
+    return HttpResponseRedirect(reverse("questionHub"))
+
 
 def questionHub(request):
     if request.user.is_authenticated:
         try:
-            user = UserProfile.objects.get(user=request.user)
+            user_profile = UserProfile.objects.get(user=request.user)
         except UserProfile.DoesNotExist:
             return signup(request)
 
@@ -137,13 +140,41 @@ def questionHub(request):
         if var != 0:
             return render(request, 'userApp/qhub.html', context={'all_questions': all_questions, 'time': var})
         else:
-            return render(request, 'userApp/result.html')
+            return render(request, "userApp/result.html")
     else:
         return HttpResponseRedirect(reverse("signup"))
 
 
+def change_file_content(content, extension, code_file):
+    if extension != 'py':
+        sandbox_header = '#include"../../../include/sandbox.h"\n'
+        try:
+            # Inject the function call for install filters in the user code file
+            # Issue with design this way (look for a better solution (maybe docker))
+            # multiple main strings
+            before_main = content.split('main')[0] + 'main'
+            after_main = content.split('main')[1]
+            index = after_main.find('{') + 1
+            main = before_main + after_main[:index] + 'install_filters();' + after_main[index:]
+            with open(code_file, 'w+') as f:
+                f.write(sandbox_header)
+                f.write(main)
+                f.close()
+
+        except IndexError:
+            with open(code_file, 'w+') as f:
+                f.write(content)
+                f.close()
+
+    else:
+        with open(code_file, 'w+') as f:
+            f.write('import temp\n')
+            f.write(content)
+            f.close()
+
+
 def codeSave(request, username, qn):
-    if request.user.is_authenticated:                                           # Check Authentication
+    if request.user.is_authenticated:  # Check Authentication
         if request.method == 'POST':
             que = Question.objects.get(pk=qn)
             user = User.objects.get(username=username)
@@ -156,34 +187,92 @@ def codeSave(request, username, qn):
 
             temp_user = UserProfile.objects.get(user=user)
             temp_user.qid = qn
+            temp_user.lang = extension
             temp_user.save()
 
             try:
                 mul_que = MultipleQues.objects.get(user=user, que=que)
             except MultipleQues.DoesNotExist:
                 mul_que = MultipleQues(user=user, que=que)
+                mul_que.save()
             att = mul_que.attempts
 
-            try:
-                os.system('mkdir {}/{}/question{}'.format(path_usercode, username, qn))
-            except FileExistsError:
-                pass
+            user_question_path = '{}/{}/question{}/'.format(path_usercode, username, qn)
 
-            codefile = open("{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att, extension), "w+")
-            codefile.write(content)
-            codefile.close()
+            if not os.path.exists(user_question_path):
+                os.system('mkdir ' + user_question_path)
 
-            ans = subprocess.Popen(['python2', "{}/data/Judge/main.py".format(path), path, username, str(qn), str(att),
-                                    extension, "{}/{}/question{}/code{}-{}.{}".format(path_usercode, username, qn, qn, att,
-                                    extension)], stdout=subprocess.PIPE)
-            (out, err) = ans.communicate()
-            submission = Submission(code=content, user=user, que=que, attempt=att, out=out)
-            submission.save()
+            code_file = user_question_path + "code{}.{}".format(att, extension)
+
+            content = str(content)
+
+            change_file_content(content, extension, code_file)
+
+            testcase_values = exec_main(
+                username=username,
+                qno=qn,
+                attempts=att,
+                lang=extension
+            )
+            print(type(testcase_values))
+
+            now_time = datetime.datetime.now()
+            now_time_sec = now_time.second + now_time.minute * 60 + now_time.hour * 60 * 60
+            global starttime
+            submit_Time = now_time_sec - starttime
+
+            hour = submit_Time // (60 * 60)
+            val = submit_Time % (60 * 60)
+            min = val // 60
+            sec = val % 60
+
+            subTime = '{}:{}:{}'.format(hour, min, sec)
+
+            print(subTime)
+            print("submit time" + str(submit_Time))
+
+            sub = Submission(code=content, user=user, que=que, attempt=att, subTime=subTime)
+            sub.save()
 
             mul_que.attempts += 1
             mul_que.save()
 
-            return redirect("runCode", username=username, qn=qn, att=att)
+            error_text = ""
+
+            epath = path_usercode + '/{}/question{}/error.txt'.format(username, qn)
+
+            if os.path.exists(epath):
+                ef = open(epath, 'r')
+                error_text = ef.read()
+                error_text = re.sub('/.*?:', '', error_text)  # regular expression
+                ef.close()
+
+            no_of_pass = 0
+            for i in testcase_values:
+                if i == 'AC':
+                    no_of_pass += 1
+
+            print(error_text)
+
+            sub.correctTestCases = no_of_pass
+            sub.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
+            sub.save()
+
+            status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'           # overall Status
+
+            var = calculate()
+            data = {
+                'testcase': testcase_values,
+                'error': error_text,
+                'status': status,
+                'score': mul_que.scoreQuestion,
+                'time': var
+            }
+
+            if var != 0:
+                return render(request, 'userApp/testcases.html', context=data)
+            else:
+                return render(request, "userApp/result.html")
 
         elif request.method == 'GET':
             que = Question.objects.get(pk=qn)
@@ -194,7 +283,7 @@ def codeSave(request, username, qn):
             if var != 0:
                 return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var,
                                                                            'total_score': user_profile.totalScore,
-                                                                           'question_id': user_profile.qid})
+                                                                           'question_id': qn})
             else:
                 return render(request, 'userApp/result.html')
     else:
@@ -203,6 +292,14 @@ def codeSave(request, username, qn):
 
 def instructions(request):
     if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            user = UserProfile()
+        if user.flag:
+            return HttpResponseRedirect(reverse('questionHub'))
+        if request.method == "POST":
+            return HttpResponseRedirect(reverse('questionHub'))
         return render(request, 'userApp/instructions.html')
     else:
         return HttpResponseRedirect(reverse("signup"))
@@ -210,23 +307,23 @@ def instructions(request):
 
 def leader(request):
     if request.user.is_authenticated:
-        dict = {}
+        data = {}
         for user in UserProfile.objects.order_by("-totalScore"):
-            list = []
+            l = []
             for n in range(1, 7):
                 que = Question.objects.get(pk=n)
                 try:
                     mulQue = MultipleQues.objects.get(user=user.user, que=que)
-                    list.append(mulQue.scoreQuestion)
+                    l.append(mulQue.scoreQuestion)
                 except MultipleQues.DoesNotExist:
-                    list.append(0)
-            list.append(user.totalScore)
-            dict[user.user] = list
+                    l.append(0)
+            l.append(user.totalScore)
+            data[user.user] = l
 
-        sorted(dict.items(), key=lambda items: (items[1][6], user.latestSubTime))
+        sorted(data.items(), key=lambda items: (items[1][6], user.latestSubTime))
         var = calculate()
         if var != 0:
-            return render(request, 'userApp/leaderboard.html', context={'dict': dict, 'range': range(1, 7, 1),
+            return render(request, 'userApp/leaderboard.html', context={'dict': data, 'range': range(1, 7, 1),
                                                                         'time': var})
         else:
             return render(request, 'userApp/result.html')
@@ -236,7 +333,9 @@ def leader(request):
 
 def submission(request, username, qn):
     user = User.objects.get(username=username)
+    print(qn)
     que = Question.objects.get(pk=qn)
+    # all_submissions = Submission.objects.filter()
     all_submission = Submission.objects.all()
     userQueSub = list()
 
@@ -247,153 +346,10 @@ def submission(request, username, qn):
     print(userQueSub)
     print("working")
     if var != 0:
-        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var})
+        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var, 'qn': qn,
+                                                                    'username': user.username})
     else:
         return render(request, 'userApp/result.html')
-
-
-def runCode(request, username, qn, att):
-    if request.user.is_authenticated:                                               # authentication
-        user = User.objects.get(username=username)
-        que = Question.objects.get(pk=qn)
-        user_profile = UserProfile.objects.get(user=request.user)
-
-        try:
-            mul_que = MultipleQues.objects.get(user=user, que=que)
-        except MultipleQues.DoesNotExist:
-            mul_que = MultipleQues(user=user, que=que)
-
-        submission = Submission.objects.get(user=user, que=que, attempt=att)
-
-        '''
-            code will have text in form '1020301020'
-            output_list will contain (10, 20, 30, 10, 20)  for 6 test cases
-    
-            Sandbox will return(save) these values in total_output.txt
-            10 = right answer (PASS)
-            20 = wrong answer (WA)
-            30 = Time Limit Exceed (TLE)
-            40 = compile time error (CTE)
-            50 = core Dumped (RTE)
-            60 = Abnormal Termination (RTE)
-        '''
-
-        code = int(submission.out)
-        output_list = list()
-        correct_list = list()
-
-        for i in range(0, NO_OF_TEST_CASES):
-            correct_list.append('PASS')               # list of all PASS test Cases
-
-        check50 = False                               # for checking return value is 50 or 60
-
-        for i in range(0, NO_OF_TEST_CASES):
-            var = code % 100
-            if var == 10:
-                output_list.append('PASS')
-            elif var == 20:
-                output_list.append('WA')
-            elif var == 30:
-                output_list.append('TLE')
-            elif var == 40:
-                output_list.append('CTE')
-            elif var == 50 or var == 60:
-                output_list.append('RTE')
-                check50 = True if var == 50 else False
-            code = int(code / 100)
-            print(code)
-
-        flag = True                                      # for checking condition of multiple submission
-        output_list.reverse()
-        print(output_list)
-        print(correct_list)
-
-        if output_list == correct_list:                  # if all are correct then Score = 100
-            if mul_que.scoreQuestion == 0:
-                que.totalSuccessfulSub += 1
-                mul_que.scoreQuestion = 100
-                submission.subStatus = 'PASS'
-                user_profile.totalScore += mul_que.scoreQuestion
-                que.save()
-                mul_que.save()
-            else:
-                submission.subStatus = 'PASS'
-                flag = False
-
-        if flag:
-            user_profile.save()
-
-        com_time_error = False
-        tle_error = False
-        wrg_ans = False
-        run_time_error = False
-
-        for i in output_list:
-            if i == 'CTE':
-                com_time_error = True
-                submission.subStatus = 'CTE'
-            elif i == 'TLE':
-                tle_error = True
-                submission.subStatus = 'TLE'
-            elif i == 'WA':
-                wrg_ans = True
-                submission.subStatus = 'WA'
-            elif i == 'RTE':
-                run_time_error = True
-                submission.subStatus = 'RTE'
-            mul_que.scoreQuestion = 100 if submission.subStatus == 'PASS' else 0
-
-        error_text = 'Wrong Answer!'
-
-        if not (wrg_ans or tle_error or com_time_error or run_time_error):
-            error_text = 'No Error Found, Compiled Successfully! Your Answer is Correct!'
-
-        if run_time_error and check50:
-            error_text = 'Run Time Error! Core Dumped!'
-        elif run_time_error and (check50 is False):
-            error_text = 'Run Time Error! Abnormal Termination!'
-
-        if com_time_error:
-            for i in output_list:                  # assigning each element with 40 (CTE will be for every test case)
-                i = 40
-            error_path = path_usercode + '/{}/question{}'.format(username, qn)
-            error_file = open('{}/error.txt'.format(error_path), 'r')
-            error_text = error_file.readline()
-
-        error_text = re.sub('/.*?:', '', error_text)            # regular expression
-
-        no_of_pass = 0
-        for i in output_list:
-            if i == 'PASS':
-                no_of_pass += 1
-
-        print(error_text)
-
-        submission.correctTestCases = no_of_pass
-        submission.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
-        submission.save()
-
-        status = 'PASS' if no_of_pass == NO_OF_TEST_CASES else 'FAIL'
-
-        # for i in output_list:
-        #     if i == 'WA' or i == 'RTE' or i == 'CTE':
-        #         i = 'FAIL'
-
-        test_case_1 = output_list[0]
-        test_case_2 = output_list[1]
-        test_case_3 = output_list[2]
-        test_case_4 = output_list[3]
-        test_case_5 = output_list[4]
-        test_case_6 = output_list[5]
-
-        dict = {'com_status': status, 'test_case_1': test_case_1, 'test_case_2': test_case_2, 'test_case_3': test_case_3,
-                'test_case_4': test_case_4, 'test_case_5': test_case_5, 'test_case_6': test_case_6,
-                'output_list': output_list, 'score': mul_que.scoreQuestion, 'error': error_text}
-
-        return render(request, 'userApp/testcases.html', dict)
-
-    else:
-        return HttpResponseRedirect(reverse("signup"))
 
 
 def user_logout(request):
@@ -435,7 +391,7 @@ def loadBuffer(request):
     ext = request.POST.get('ext')
     response_data = {}
 
-    codeFile = '{}/{}/question{}/code{}-{}.{}'.format(path_usercode, username, qn, qn, attempts - 1, user.choice)
+    codeFile = '{}/{}/question{}/code{}.{}'.format(path_usercode, username, qn, attempts - 1, user.lang)
 
     f = open(codeFile, "r")
     txt = f.read()
@@ -449,65 +405,71 @@ def loadBuffer(request):
 def run(request):
     if request.user.is_authenticated:
         response_data = {}
-        username = request.POST.get('username')
-        user = UserProfile.objects.get(user=request.user)
+        username = request.user.username
         que_no = request.POST.get('question_no')
         ext = request.POST.get('ext')
         code = request.POST.get('content')
-        status = str("")
-        e_output_file = "{}/data/standard/output/question{}/expected_output1.txt".format(path, que_no)
-        expec_out = open(e_output_file, "r")
-        expected = expec_out.read()
-        expec_out.close()
-        actual = str("")
 
-        try:
-            os.system('mkdir {}/{}/question{}'.format(path_usercode, username, que_no))
-        except FileExistsError:
-            pass
+        user_question_path = path_usercode + '{}/question{}/'.format(username, que_no)
+        code_file_path = user_question_path + 'code.{}'.format(ext)
 
-        file = open("{}/{}/question{}/sample.{}".format(path_usercode, username, que_no, ext), "w+")
-        file.write(code)
-        file.close()
+        if not os.path.exists(user_question_path):
+            os.system('mkdir ' + user_question_path)
 
-        value = subprocess.Popen(["python2", "{}/data/Judge/runcode.py".format(path), path, path_usercode, username,
-                                  str(que_no), ext], stdout=subprocess.PIPE)
-        (out, err) = value.communicate()
+        code_f = open(code_file_path, 'w+')
+        code_f.write(code)
+        code_f.close()
 
-        output = int(out)
-        if output == 10:
-            status = "Correct answer"
-            user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
-            user_out = open(user_out_file, "r")
-            actual = user_out.read()
-            user_out.close()
-        elif output == 20:
-            status = "Wrong Answer"
-            user_out_file = '{}/{}/question{}/sample_out.txt'.format(path_usercode, username, que_no)
-            user_out = open(user_out_file, "r")
-            actual = user_out.read()
-            user_out.close()
-        elif output == 30:
-            status = "Time limit exceed"
-        elif output == 40:
-            err_file = "{}/{}/question{}/error.txt".format(path_usercode, username, que_no)
-            error = open(err_file, "r")
-            error_text = error.read()
-            status = re.sub('/.*?:', '', error_text)
-            error.close()
-        elif output == 50:
-            status = "Run time error : core dumped"
-        elif output == 60:
-            status = "Abnormal termination"
+        change_file_content(code, ext, code_file_path)
+
+        status = exec_main(
+            username=username,
+            qno=que_no,
+            lang=ext,
+            run=True
+        )[0]
+
+        exp_op_path = standard + "output/question{}/expected_output7.txt".format(que_no)
+        op_path = user_question_path + "output7.txt"
+        err_path = user_question_path + "error.txt"
+
+        op_f = open(op_path, 'r')
+        err_f = open(err_path, 'r')
+        exp_f = open(exp_op_path, 'r')
+
+        errcodes = ['CTE', 'RTE', 'AT', 'TLE']
+
+        if status in errcodes:
+            if status == "CTE":
+                err_text = err_f.read()
+                err_text = re.sub('/.*?:', '', err_text)  # regular expression
+                actual = err_text
+            else:
+                actual = ""
+        else:
+            if status == 'AC':
+                status = 'OK'
+            actual = op_f.read()
+
+        op_f.close()
+        err_f.close()
+
+        expected = exp_f.read()
+
+        print(expected, actual)
 
         response_data["status"] = status
-        response_data["actual"] = actual
         response_data["expected"] = expected
+        response_data["actual"] = actual
 
         return JsonResponse(response_data)
 
     else:
         return HttpResponseRedirect(reverse("signup"))
+
+
+def garbage(request, garbage):
+    return HttpResponseRedirect(reverse('questionHub'))
 
 
 def check_username(request):
@@ -519,3 +481,28 @@ def check_username(request):
         data['error_message'] = 'username already exits.'
 
     return JsonResponse(data)
+
+
+def view_sub(request, att=1):
+    user_profile = UserProfile.objects.get(user=request.user)
+    qn = user_profile.qid
+    que = Question.objects.get(pk=qn)
+    sub = Submission.objects.filter(user=request.user, que=que)
+    codes = []
+    question_nos = []
+
+    for i in sub:
+        codes.append(i.code)
+        question_nos.append(i.attempt)
+    all_que = Question.objects.all()
+
+    question_no = question_nos[int(att) - 1]
+    per_question = all_que[int(question_no) - 1]
+
+    var = calculate()
+    if var != 0:
+        return render(request, 'userApp/codingPage.html', context={'question': per_question, 'user': user_profile,
+                                                                   'time': var, 'question_id': qn,
+                                                                   'code': codes[int(att) - 1]})
+    else:
+        return render(request, 'userApp/result.html')

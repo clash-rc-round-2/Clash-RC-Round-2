@@ -17,10 +17,12 @@ class UserProfile(models.Model):
     latestSubTime = models.TimeField(default='00:00')
     timer = models.TimeField(default='00:00')
     choice = models.CharField(max_length=5, default='cpp')       # for the extension the code C or CPP or python
-    qid = models.IntegerField(default=0)                         # will store the current question
+    qid = models.IntegerField(default=0)                         # will store the current question id
+    lang = models.CharField(max_length=3)                        # will store the current question lang
+    flag = models.BooleanField(default=False)                    # Flag for instruction Page
 
     def __str__(self):
-            return self.user.username
+        return self.user.username
 
 
 class Question(models.Model):
@@ -51,7 +53,7 @@ class Submission(models.Model):
     attempt = models.IntegerField(default=0)                       # Current Attempt
     out = models.IntegerField(default=0)
     subStatus = models.CharField(default='NA', max_length=5)     # four type of submission status(WA, PASS, TLE, CTE)
-    subTime = models.TimeField(default='00:00')
+    subTime = models.CharField(default='', max_length=50)
     subScore = models.IntegerField(default=0)
     correctTestCases = models.IntegerField(default=0)
     TestCasesPercentage = models.IntegerField(default=0)
