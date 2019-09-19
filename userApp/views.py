@@ -117,15 +117,12 @@ def signup(request):
 def questionHub(request):
     if request.user.is_authenticated:
         try:
-            user = UserProfile.objects.get(user=request.user)
+            user_profile = UserProfile.objects.get(user=request.user)
         except UserProfile.DoesNotExist:
             return signup(request)
 
         all_questions = Question.objects.all()
         all_users = User.objects.all()
-
-        user.flag = True
-        user.save()
 
         for que in all_questions:
             for user in all_users:
@@ -263,14 +260,19 @@ def codeSave(request, username, qn):
 
             status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'           # overall Status
 
+            var = calculate()
             data = {
                 'testcase': testcase_values,
                 'error': error_text,
                 'status': status,
-                'score': mul_que.scoreQuestion
+                'score': mul_que.scoreQuestion,
+                'time': var
             }
 
-            return render(request, 'userApp/testcases.html', context=data)
+            if var != 0:
+                return render(request, 'userApp/testcases.html', context=data)
+            else:
+                return render(request, "userApp/result.html")
 
         elif request.method == 'GET':
             que = Question.objects.get(pk=qn)
@@ -344,7 +346,8 @@ def submission(request, username, qn):
     print(userQueSub)
     print("working")
     if var != 0:
-        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var})
+        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var, 'qn': qn,
+                                                                    'username': user.username})
     else:
         return render(request, 'userApp/result.html')
 
