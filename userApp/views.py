@@ -124,6 +124,9 @@ def questionHub(request):
         all_questions = Question.objects.all()
         all_users = User.objects.all()
 
+        user.flag = True
+        user.save()
+
         for que in all_questions:
             for user in all_users:
                 try:
@@ -287,6 +290,14 @@ def codeSave(request, username, qn):
 
 def instructions(request):
     if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            user = UserProfile()
+        if user.flag:
+            return HttpResponseRedirect(reverse('questionHub'))
+        if request.method == "POST":
+            return HttpResponseRedirect(reverse('questionHub'))
         return render(request, 'userApp/instructions.html')
     else:
         return HttpResponseRedirect(reverse("signup"))
