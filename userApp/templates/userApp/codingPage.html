@@ -565,12 +565,15 @@
 
     function loadFile(){
         var file = document.getElementById("file").files[0];
-        var fileReader = new FileReader();
-        fileReader.onload = function(fileLoadedEvent){
-            var text = fileLoadedEvent.target.result;
-            codeEditor.setValue(text);
-        };
+        if ( /\.(c|cpp|py)$/i.test(file.name) === false ) { alert("Please select .c / .cpp / .py file.");
+        }else{
+            var fileReader = new FileReader();
+            fileReader.onload = function(fileLoadedEvent){
+                var text = fileLoadedEvent.target.result;
+                codeEditor.setValue(text);
+            }
         fileReader.readAsText(file, "UTF-8");
+        }
     }
 </script>
 </body>
