@@ -6,11 +6,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
           <link rel = "stylesheet" type = "text/css" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <!--  <link href="https://fonts.googleapis.com/css?family=Biryani&display=swap" rel="stylesheet">-->
     <link rel="stylesheet" href="{%static 'css/submissions.css'%}">
             <link rel="stylesheet" href="{% static 'css/timer.css' %}">
     <style>
@@ -25,6 +20,7 @@
          @font-face{
     font-family: 'Biryani';
     src:url("{% static 'css/Biryani-Regular.ttf' %}");
+}
     </style>
     </head>
     <body>
@@ -33,9 +29,9 @@
                 <div class="row" style="background-color: #000">
                     <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
                         <div class="col-lg-3" style=" height: 7vh;">
-                            <img src="{% static 'images/clash.jpg'%}" style="width: 5vw; height:7vh; display:flex;align-items: center;justify-content: center;color: white">
+                            <img src="{% static 'images/cc.png'%}" style="width: 5vw; height:7vh; display:flex;align-items: center;justify-content: center;color: white">
                         </div>
-                        <div class="col-lg-9" style="padding-top: 2vh;height: 6vh; display: flex; align-items: center; justify-content: center; color: white"><h5>SUBMISSIONS PAGE</h5></div>
+                        <div class="col-lg-9" style="padding-top: 2vh;height: 6vh; display: flex; align-items: center;  color: white"><h5>SUBMISSIONS PAGE</h5></div>
                     </div>
                     <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: white">
 
@@ -124,7 +120,7 @@
                                         </td>
                                         <td class="col-md-3">
 
-                                                <button type="button" onclick="location.href='{% url 'view_sub' att=forloop.counter %}'" class="btn btn-block" style="height: 5vh;width: 50%;margin-left: 7vw;background-color: #3a8196;color:#d7e9f8">VIEW</button>
+                                                <button type="button" onclick="location.href='{% url 'view_sub' username=username qn=qn att=forloop.counter %}'" class="btn btn-block" style="height: 5vh;width: 50%;margin-left: 7vw;background-color: #3a8196;color:#d7e9f8">VIEW</button>
                                         </td>
                                         <td class="col-md-2"></td>
                                     </tr>

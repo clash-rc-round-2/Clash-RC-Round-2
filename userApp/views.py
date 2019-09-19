@@ -258,7 +258,9 @@ def codeSave(request, username, qn):
             sub.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
             sub.save()
 
-            status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'           # overall Status
+            status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'  # overall Status
+
+            var = calculate()
 
             var = calculate()
             data = {
@@ -268,11 +270,10 @@ def codeSave(request, username, qn):
                 'score': mul_que.scoreQuestion,
                 'time': var
             }
-
             if var != 0:
                 return render(request, 'userApp/testcases.html', context=data)
             else:
-                return render(request, "userApp/result.html")
+                render(request, "userApp/result.html")
 
         elif request.method == 'GET':
             que = Question.objects.get(pk=qn)
@@ -483,9 +484,8 @@ def check_username(request):
     return JsonResponse(data)
 
 
-def view_sub(request, att=1):
+def view_sub(request, username, qn, att=1):
     user_profile = UserProfile.objects.get(user=request.user)
-    qn = user_profile.qid
     que = Question.objects.get(pk=qn)
     sub = Submission.objects.filter(user=request.user, que=que)
     codes = []
@@ -496,8 +496,8 @@ def view_sub(request, att=1):
         question_nos.append(i.attempt)
     all_que = Question.objects.all()
 
-    question_no = question_nos[int(att) - 1]
-    per_question = all_que[int(question_no) - 1]
+    question_no = question_nos[int(att)]
+    per_question = all_que[int(question_no)]
 
     var = calculate()
     if var != 0:
@@ -506,3 +506,19 @@ def view_sub(request, att=1):
                                                                    'code': codes[int(att) - 1]})
     else:
         return render(request, 'userApp/result.html')
+
+
+def emergency_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        AdminPass = request.POST.get('admin_password')
+        user = authenticate(username=username, password=password)
+        if user is (not None) and (AdminPass == '1234'):
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('questionHub'))
+        else:
+            return HttpResponse('invalid details')
+    else:
+        return render(request, 'userApp/emerlogin.html')
