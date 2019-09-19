@@ -41,7 +41,27 @@
             color: rgb(43, 43, 43);
             border-radius: 5px;
         }
+         input[type="file"] {
+            clip: rect(0, 0, 0, 0);
+            position: absolute;
+        }
 
+        input[type="file"]+label {
+              display:flex;
+              justify-content:center;
+            border: none;
+            width: 35%;
+            height: 5.5vh;
+            font-size: 17px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            margin-left: 160px;
+            width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white ;
+
+        }
         #run.disabled:hover {
             cursor: not-allowed;
         }
@@ -174,11 +194,8 @@
                     <div class="col-lg-4"></div>
 
                     <div class="custom-file col-lg-4" style=" height: 6vh;display: flex; justify-content: center;align-items: center;">
-                        <input type="file" id="fileLoader" name="files" onchange="loadFile()" title="Load File"/>
-                        <span  id="fname" style="margin-right: 10px;">No file chosen</span>
-                        <button class="btn btn-block" id="br" style="width: 130px;height:35px;font-size: 15px;display: flex; justify-content: center;align-items: center;padding-top: 8px;background-color: #3a8196;color: white ">
-                            Browse
-                        </button>
+                         <input type="file" id="file" onchange="loadFile()"/>
+                                        <label for="file">Choose file</label>
                     </div>
                 </div>
             </div>
@@ -334,16 +351,10 @@
         var div4 = document.getElementById('hidden2');
         var div5 = document.getElementById('acc');
         var div6 = document.getElementById('exp');
-        var browse = document.getElementById('br');
         var rbutton= document.getElementById('rbtn');
         var ftext= document.getElementById('fname');
-        var real= document.getElementById('fileLoader');
         var row=document.getElementById('row');
         var st=document.getElementById('st');
-
-        browse.addEventListener('click',function(){
-            real.click();
-        });
 
         $('document').ready(function(){
             $('#run').click(function(){
@@ -528,22 +539,12 @@
                 }
             }, 1000);
 
-    $(document).ready( function() {
-        $('#br').click(function(){
-            $("#fileinput").click();
-        });
-    });
-
-    $('#fileinput').change(function() {
-        $('#selected_filename').text($('#fileinput]')[0].files[0].name);
-    });
-
     function loadFile(){
-        var file = document.getElementById("fileloader").files[0];
+        var file = document.getElementById("file").files[0];
         var fileReader = new FileReader();
         fileReader.onload = function(fileLoadedEvent){
-            var textFile = fileLoadedEvent.target.result;
-            codeEditor.setValue = textFile;
+            var text = fileLoadedEvent.target.result;
+            codeEditor.setValue(text);
         };
         fileReader.readAsText(file, "UTF-8");
     }
