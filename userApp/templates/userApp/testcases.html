@@ -5,13 +5,9 @@
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/Clash R2 Testcases.css' %}">
         <link rel="stylesheet" href="{% static 'css/timer.css' %}">
+     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <script>
         function returnImage(status){
             if(status == "CTE" || status == "RTE" || status == "WA" || status == "AT")
@@ -42,8 +38,8 @@
         <div class="container-fluid">
                 <div class="row" style="background-color:black">
                         <div class="col-lg-5" style="height: 7vh;display: flex; justify-content: center;align-items: center;">
-                            <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;justify-content: center;color: #d7e9f8"><img src="{% static 'images/clash.jpg' %}" style="height: 5vh;"></div>
-                            <div class="col-lg-9" style=" height: 6vh; display:flex;align-items: center; justify-content: center;color: #d7e9f8"><h5>TESTCASES</h5></div>
+                            <div class="col-lg-3" style=" height: 6vh; display:flex;align-items: center;justify-content: center;color: #d7e9f8"><img src="{% static 'images/cc.png' %}" style="height: 5vh;"></div>
+                            <div class="col-lg-9" style=" height: 6vh; display:flex;align-items: center;color: #d7e9f8"><h5>TESTCASES</h5></div>
                         </div>
                         <div class="col-lg-2" style=" height: 7vh; display: flex; justify-content: center;align-items: center;color: #d7e9f8">
 
@@ -58,10 +54,10 @@
                         <div class="col-lg-5" style=" height: 7vh;">
                             <div class="row">
                                 <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                    <button class="btn btn-primary" onclick="location.href = '/user/allque';" style="font-size: 13px;color: black">Question Hub</button>
+                                                                    <button class="btn btn-block" type="button" onclick="location.href='/user/allque';"style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Question Hub</button>
                                 </div>
                                 <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                    <button class="btn btn-primary" onclick="location.href='{% url 'leader' %}'" style="font-size: 13px;color: black">Leader Board</button>
+                                    <button class="btn btn-block"  type="button" onclick="location.href='{% url 'leader' %}'" style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Leaderboard</button>
                                 </div>
 <!--                                <div class="col-lg-3 mt-1" style="display: flex; justify-content: center;align-items: center;">-->
 <!--                                    <button class="btn btn-danger" style="font-size:13px;">Log Out</button>-->
@@ -107,10 +103,10 @@
                 <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
                 font-size: 15px; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;">
                     <span class="sr-only"></span>
-                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.0 }}</div><span><img id="id1" height="45vh" width="45vw"></span></div>
+                    <div class="xyz" style="justify-content: left;margin-right:9vw;font-size:3vh">{{ testcase.0 }}</div><span><img id="id1" height="45vh" width="45vw"></span></div>
                 <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
                     <span class="sr-only"></span>
-                    <div class="abc" style="justify-content: left;margin-right:9vw">{{ testcase.1 }}</div><span><img id="id2" height="40vh" width="40vw"></span></div>
+                    <div class="abc" style="justify-content: left;margin-right:9vw;font-size:3vh">{{ testcase.1 }}</div><span><img id="id2" height="40vh" width="40vw"></span></div>
 
                 </div>
 
@@ -118,28 +114,28 @@
                         <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;
                         color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px;">
                             <span class="sr-only"></span>
-                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.2 }}</div><span><img id="id3" height="45vh" width="45vw" ></span></div>
+                            <div class="xyz" style="justify-content: left;margin-right:9vw;font-size:3vh">{{ testcase.2 }}</div><span><img id="id3" height="45vh" width="45vw" ></span></div>
                         <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw;
                         color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
                             <span class="sr-only"></span>
 
-                            <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.3 }}</div><span><img id="id4" height="40vh" width="40vw"></span>
+                            <div class="xyz" style="justify-content: left;margin-right:9vw;font-size:3vh">{{ testcase.3 }}</div><span><img id="id4" height="40vh" width="40vw"></span>
                         </div>
                         </div>
 
 
                         <div class="row">
                                 <div class="col-lg-4" style ="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex;margin:2vw 1vw 1vw 5vw;align-items: center;color:#d7e9f8; font-weight: bold;border-radius: 10px">
-                                    <div class="xyz" style="justify-content: left;margin-right:9vw">{{ testcase.4 }}</div><span><img id="id5" height="45vh" width="45vw"></span></div>
+                                    <div class="xyz" style="justify-content: left;margin-right:9vw;font-size:3vh">{{ testcase.4 }}</div><span><img id="id5" height="45vh" width="45vw"></span></div>
                                 <div class="col-lg-4" style="height:15vh;width:100%;border: 3px solid  #d7e9f8; justify-content:center;display:flex; margin:2vw 1vw 1vw 5vw; color:#d7e9f8;align-items: center;font-weight: bold;border-radius: 10px">
                               <span class="sr-only"></span>
-                              <div class="fck" style="justify-content: left;margin-right:9vw">{{ testcase.5 }}</div><span><img id="id6" height="45vh" width="45vw" id="TLE"></span></div>
+                              <div class="fck" style="justify-content: left;margin-right:9vw;font-size:3vh">{{ testcase.5 }}</div><span><img id="id6" height="45vh" width="45vw" id="TLE"></span></div>
 
                                 </div>
 
                                 <div class="row">
                                         <div class="col-lg-3" style="justify-content: center;display: flex;margin:2vh ">
-                                            <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{com_status}}</div>
+                                            <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 1vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold;font-size:3vh">{{ status }}</div>
                                         </div>
 
                                         <!--div class="col-lg-3" style="justify-content: center;display: flex">
@@ -154,7 +150,7 @@
                                                 </div>
 
                                                 <div class="col-lg-3" style="justify-content: center;display: flex;margin:2vh">
-                                                    <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 10vw;margin-right:19vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold">{{ score }}</div>
+                                                    <div class="col-lg-6" style="background-color:dodgerblue;border: 3px solid #d7e9f8;margin:2vw 10vw;margin-right:19vw;height:13vh;width:10vh;border-radius:50%;justify-content:center;display:flex;color:#d7e9f8;align-items: center;font-weight: bold;font-size:3vh">{{ score }}</div>
                                                 </div>
 
 
@@ -163,7 +159,7 @@
 
 
          <div class="col-lg-4" style="border: 5px solid rgba(243, 248, 243, 0.952); height:80vh;margin-top:3vh;border-radius: 10px; background-color: black">
-                <strong style="text-align: center;margin-top: 15px;margin-bottom: 15px;justify-content: center;display: flex; color:#d7e9f8">CONSOLE</strong>
+                <strong style="text-align: center;margin-top: 15px;margin-bottom: 15px;justify-content: center;display: flex; color:#d7e9f8;font-size:3vh">CONSOLE</strong>
                 {{ error }}
              <div class="row">
 
@@ -183,6 +179,8 @@
             </div>
         </div>
     </div>
+<script src="{% static 'javascript/ClashCodingPage/jquery.js' %}" ></script>
+     <script src="{% static 'javascript/ClashCodingPage/bootstrap.js' %}" ></script>
     <script>
         var countDownDate = new Date().getTime();
 

@@ -1,0 +1,4 @@
+SOLUTION: print mex of vowels in string
+CONSTRANTS: 1<=t<=10
+			1<=s.len<=100000
+			lower_case

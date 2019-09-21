@@ -1,0 +1,41 @@
+Two magicians Harshit and Varad are competing with each other.
+To see who is superior amongst them they are participating in a competition called "Freeze it".
+Judge of the competition Abizer decides rules for the competition.
+There are N rivers flowing down the mountain.(numbered 1 to N inclusive). Some of these rivers are originating from the glacier and some of these are sub part of another rivers.
+If a river x is a sub-river of river y and river z in turn is a sub-river of river y.
+Then river z is also a sub-river of river x.
+
+Both the magicians play optimally and alternatively.
+Each magician will choose a river and freeze it.
+Once a river is freezed all it's sub-rivers are also freezed and they will become glaciers.
+And a glacier cannot be freezed again.xD
+The one who is unable to freeze a river will lose.
+
+Abizer favours Harshit by always giving him first chance.
+
+Input Format :
+	1. First line contains T, denoting number of test cases.
+	2. Second line contains N.
+	3. N lines follow,each line containing two space separated x y
+		if x=0, y is a river originating from glacier.
+		else y is a direct sub-river of x.
+		and y!=0.
+	
+
+Output Format:
+	
+	For each test case, print the name of superior magician
+	"Varad" if Varad wins, else "Harshit".(without quotes)
+	
+Sample Input:
+2
+1
+0 1
+3
+0 1
+1 2
+0 3
+
+Sample Output:
+Harshit
+Harshit	
