@@ -214,7 +214,12 @@ def codeSave(request, username, qn):
                 attempts=att,
                 lang=extension
             )
+
             print(type(testcase_values))
+
+            with open(code_file, 'w+') as f:
+                f.write(content)
+                f.close()
 
             now_time = datetime.datetime.now()
             now_time_sec = now_time.second + now_time.minute * 60 + now_time.hour * 60 * 60
@@ -273,6 +278,7 @@ def codeSave(request, username, qn):
                 mul_que.save()
 
             var = calculate()
+
             data = {
                 'testcase': testcase_values,
                 'error': error_text,
