@@ -1,4 +1,0 @@
-solution: keep adding the digits till you get a single digit number.
-constraints  1<=T<=10^6
-             0<=n<=10^12
-note: have corner cases in the test cases where x%9==0 and x==0.

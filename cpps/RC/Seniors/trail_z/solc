@@ -1,3 +1,0 @@
-solution : f(x) where x is the number of trailing 0 in x!
-Constraint : 1<=t<=10^4
-		 0<=n<=10^18

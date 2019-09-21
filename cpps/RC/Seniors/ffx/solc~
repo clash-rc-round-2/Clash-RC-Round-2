@@ -1,3 +1,0 @@
-SOLUTION : f(f(x)), where f(x) is the no of set bits in binary representation of x.
-Constraints: 1<=t<=10000
-0<=x<=10^12
