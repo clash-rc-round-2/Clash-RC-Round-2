@@ -334,7 +334,7 @@ def leader(request):
 
 def submission(request, username, qn):
     user = User.objects.get(username=username)
-    print(qn)
+    print("hi")
     que = Question.objects.get(pk=qn)
     # all_submissions = Submission.objects.filter()
     all_submission = Submission.objects.all()
@@ -484,12 +484,18 @@ def check_username(request):
     return JsonResponse(data)
 
 
-def view_sub(request, username, qn, att=1):
+def view_sub(request, username, qn, att):
     user_profile = UserProfile.objects.get(user=request.user)
     que = Question.objects.get(pk=qn)
-    sub = Submission.objects.filter(user=request.user, que=que)
-    codes = []
-    question_nos = []
+    att=att-1
+    sub = Submission.objects.get(user=request.user, que=que, attempt=att)
+    code = str("")
+    code = sub.code
+    print(username)
+    print(qn)
+    print(att)
+    print(code)
+    '''question_nos = []
 
     for i in sub:
         codes.append(i.code)
@@ -497,13 +503,13 @@ def view_sub(request, username, qn, att=1):
     all_que = Question.objects.all()
 
     question_no = question_nos[int(att)]
-    per_question = all_que[int(question_no)]
+    per_question = all_que[int(question_no)]'''
 
     var = calculate()
     if var != 0:
-        return render(request, 'userApp/codingPage.html', context={'question': per_question, 'user': user_profile,
-                                                                   'time': var, 'question_id': qn,
-                                                                   'code': codes[int(att) - 1]})
+        return render(request, 'userApp/codingPage1.html', {'user': user_profile,
+                                                                   'time': var, 'question_id': qn,'code':code
+                                                                   })
     else:
         return render(request, 'userApp/result.html')
 
