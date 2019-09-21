@@ -277,6 +277,8 @@ def codeSave(request, username, qn):
                 user_profile.save()
                 mul_que.save()
 
+            var = calculate()
+
             data = {
                 'testcase': testcase_values,
                 'error': error_text,
