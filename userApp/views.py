@@ -130,7 +130,7 @@ def questionHub(request):
                     mul_que = MultipleQues.objects.get(user=user, que=que)
                 except MultipleQues.DoesNotExist:
                     mul_que = MultipleQues(user=user, que=que)
-                que.totalSub += mul_que.attempts
+                que.totalSub += 1 if mul_que.attempts > 0 else 0
             try:
                 que.accuracy = round((que.totalSuccessfulSub * 100/que.totalSub), 1)
             except ZeroDivisionError:
@@ -260,7 +260,17 @@ def codeSave(request, username, qn):
 
             status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'  # overall Status
 
-            var = calculate()
+            if status == 'WA':
+                mul_que.scoreQuestion = 0
+
+            if status == 'AC':
+                if mul_que.scoreQuestion == 0:
+                    user_profile.totalScore += 100
+                    que.totalSuccessfulSub += 1
+                    que.save()
+                mul_que.scoreQuestion = 100
+                user_profile.save()
+                mul_que.save()
 
             var = calculate()
             data = {
