@@ -1,7 +1,0 @@
-#!/bin/bash
-y=1
-while [ $y -lt 6 ]
-do
-	./a.out < input$y.txt >expected_output$y.txt
-	y=$((y+1))
-done

@@ -1,3 +1,0 @@
-soln: if n<=12, print no of days in the nth month, else print "Invalid".
-constraints :	 1<=t<=100
-		 1<=n<=100

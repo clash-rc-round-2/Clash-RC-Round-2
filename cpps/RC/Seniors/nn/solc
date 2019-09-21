@@ -1,3 +1,0 @@
-solution: (n-1)*(n+1)
-constraints : 1<=T<=10^5
-              1<=n<=10^6
