@@ -1,0 +1,34 @@
+Shivang is going far from home for vacations.He has N pairs of red shoes and M pairs of blue shoes to take with him.As he wants to look cool,he selects a blue shoe and a red shoe to make a pair.As every pair of shoes may have different sizes,each shoe in the pair he selects, must differ in size by at most one. Help Shivang to determine the largest possible number of pairs that can be formed from N pairs of red and M pairs of blue shoes.
+
+Input Format
+
+The first line contains an integer N .The second line contains sequence a1, a2, ..., aN.where ai is size of i-th pair of red shoes.The third line contains an integer M.The fourth line contains sequence b1,b2...bM.where bi is size of i-th pair of blue shoes.
+
+Constraints
+
+1<=N<=10^4
+
+1<=aN<=10^6
+
+1<=M<=10^4
+
+1<=bM<=10^6
+
+Output Format
+
+Print a single number — the required maximum possible number of pairs.
+
+Sample Input 0
+
+4
+1 4 6 2
+5
+5 1 5 7 9
+
+Sample Output 0
+
+3
+
+Explanation 0
+
+The red shoe of size 1 can be paired with blue shoe of size 1 and red shoe of size 4 can be paired with blue shoe of size 5 and red shoe of size 6 can be paired with blue shoe of size 7.

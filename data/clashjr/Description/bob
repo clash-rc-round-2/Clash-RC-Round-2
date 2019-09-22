@@ -1,0 +1,45 @@
+Bob is very fond of chocolates.There are n chocolates in shop.Bob is given p pairs of chocolates,chocolates in each pair belong to same catagory.Now Bob wants to buy all the chocolates but he has Rs.1,00,00,00,000.The total cost for buying all the chocolates is calculated as follows:
+
+Suppose Ci be the number of chocolates belonging to ith catagory.
+If there are m different types of chocolates then the numbers of chocolates in all catagories will be C1,C2,C3,....,Cm in non-decreasing manner
+Suppose x is the price of one chocolate of the catagory 1 in above sequence then total price of all chocolates will be cost=C1*x+C2*(x+1)+....+Cm(x+m-1)
+Help Bob to find maximum value of x such that he will be able to buy all the chocolates.
+
+Input Format:
+
+-First Line Contains an single interger T denoting the number of testcases.
+
+-1st line of each testcase contains two space seperated integers n,p
+
+-Next p lines of each testcase contain 2 space-separated integers denoting the chocolate numbers belonging to same catagory.
+
+Constraints:
+
+- 1<=T<=5
+- 1<=n<=100000
+- 1<=p<=10000
+
+Output:
+- T lines containing single integer denoting maximum permitted value of x for that partiular TestCase
+
+Sample Input: 
+2
+5 3
+0 1
+2 3
+1 4
+5 4
+0 1
+1 2
+2 3
+3 4
+Sample Output:
+
+199999999
+200000000
+
+Explanation:
+
+For Sample Test Case 1,[0,1,4] belong to one catagory and [2,3] belong to another catagory. So maximum x such that 2*x+3*(x+1)<=1000000000 is 199999999
+
+For sample Test Case 2,all chocolates belong to same catagory so the maximum value of x satisfying given condition is 200000000

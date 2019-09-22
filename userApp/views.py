@@ -13,7 +13,6 @@ from judgeApp.views import exec_main
 starttime = 0
 end_time = 0
 duration = 0
-# flag = False
 start = datetime.datetime(2020, 1, 1, 0, 0)
 
 path_usercode = 'data/usersCode/'

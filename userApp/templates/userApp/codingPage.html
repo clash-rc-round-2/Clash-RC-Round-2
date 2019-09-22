@@ -324,8 +324,8 @@
                                 <label style="margin-right: 1.5vw;margin-top:10px;font-size:18px">C</label>
                                <input type="radio" name="ext" checked value="cpp" style="margin-right:5px">
                                <label style="margin-right: 1vw;margin-top:10px;font-size:18px">C++</label>
-                                <input type="radio" name="ext" checked value="py" style="margin-right:8px">
-                               <label style="margin-right: -0.5vw;margin-top:10px;font-size:18px">Python</label>
+                              <!--  <input type="radio" name="ext" checked value="py" style="margin-right:8px">
+                               <label style="margin-right: -0.5vw;margin-top:10px;font-size:18px">Python</label> -->
                     </div>
 
                 </div>
@@ -434,7 +434,6 @@
                 run.classList.add('disabled');
 
                 $.ajax({
-                    console.log("hiii")
                     url : '{% url 'run' %}',
                     method: "POST",
                     dataType : "json",

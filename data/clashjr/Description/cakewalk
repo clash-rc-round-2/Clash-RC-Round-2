@@ -1,0 +1,21 @@
+Nayse and Tanmay are best friends.They are sitting in a boring lecture.So they decided to play an interesting game. 
+Nayse gave Tanmay 2 arrays each of size N. Let the arrays be A1,A2,...,AN and B1,B2,...,BN. 
+He asked him to find number of valid indices i such that Ai != Bi. 
+
+Help Tanmay to complete his task. 
+
+
+Input: 
+First line contains an integer N denoting size of the Arrays. 
+Next Line contains N space-seperated integers A1,A2,...,AN .
+Next Line contains N space-seperated integers B1,B2,...,BN 
+
+
+Constraints:  
+1 <= N <= 10^6   
+1 <= Ai,Bi <= 10^6  
+
+
+Output: 
+Print a single integer containing number of valid indices i such that Ai != Bi .
+

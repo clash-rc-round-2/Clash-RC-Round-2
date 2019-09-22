@@ -1,0 +1,45 @@
+Find The Rank
+
+You have 4 numbers A,B,C,D in input.
+You have to make special set from these 4 numbers. 
+special set will consist of all multiples of A,B,C,D.
+This special set have all distinct values arranged in ascending order.
+You have Q queryies to solve.
+Each query will contain an integer K.
+You have to find the rank of K in given special set.
+
+Note: If K is not in special set you have to print count of numbers less than K  in special set.
+
+
+
+Input Format :
+
+First line contains no. of test cases T.
+Second line contains array of 4 elements.
+Next line contains integer Q .
+Following Q line contains a single integer K.
+
+Contraints: 
+1<=T<=10
+
+1<=Ai<=100000
+
+1<=Q<=10000
+
+1<=K<=10^18
+
+
+Output Format:
+
+You have to print rank of Each K of Q queries on separate line.
+
+Sample Input:
+
+1
+2 4 5 8
+1
+10
+
+Sample Output:
+
+6
