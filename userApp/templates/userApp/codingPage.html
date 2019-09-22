@@ -147,7 +147,7 @@
                                 <button class="btn btn-block" type="button" onclick="location.href='{% url 'questionHub' %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Question Hub</button>
                             </div>
                             <div class="col-lg-3 mt-1" style=" height: 6vh; display: flex; justify-content: center;align-items: center;">
-                                <button class="btn btn-block"  type="button" onclick="location.href='{% url 'submission' username=user.username qn=question_id %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Submissions</button>
+                                <button class="btn btn-block"  type="button" onclick="location.href='{% url 'submission' qn=question_id %}'"  style="background-color: #3a8196; color: white; font-size: 14px; padding-left: 0; padding-right: 0;">Submissions</button>
                             </div>
                             <!-- The Modal -->
                             <div class="modal fade" id="logout">
@@ -340,7 +340,7 @@
                         <button class="btn btn-block" type="button" id="rbtn" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: #3a8196;color: white"><a type="button" href="#" id="run" style="text-decoration: none;color: #ffffff;">Run Code</a></button>
                     </div>
                     <div class="col-lg-3 mt-3" style="display: flex;justify-content: center;align-items: center;">
-                        <button class="btn btn-block" type="submit" formmethod="post" onclick="location.href='/user/{{user.username}}/{{question.IDNumber}}';"style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(64,224,200);color: black">Submit</button>
+                        <button class="btn btn-block" type="submit" formmethod="post" style="width: 10vw;height: 6vh;font-size: 17px;padding-top: 8px;background-color: rgb(64,224,200);color: black">Submit</button>
                     </div>
                 </div>
             </div>

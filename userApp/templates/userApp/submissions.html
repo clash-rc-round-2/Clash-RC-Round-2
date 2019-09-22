@@ -120,7 +120,7 @@
                                         </td>
                                         <td class="col-md-3">
 
-                                                <button type="button" onclick="location.href='{% url 'view_sub' username=username qn=qn att=forloop.counter %}'" class="btn btn-block" style="height: 5vh;width: 50%;margin-left: 7vw;background-color: #3a8196;color:#d7e9f8">VIEW</button>
+                                                <button type="button" onclick="location.href='{%  url 'view_sub' qno=qn _id=submission.id %}'" class="btn btn-block" style="height: 5vh;width: 50%;margin-left: 7vw;background-color: #3a8196;color:#d7e9f8">VIEW</button>
                                         </td>
                                         <td class="col-md-2"></td>
                                     </tr>

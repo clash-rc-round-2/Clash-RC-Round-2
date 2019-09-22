@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
-import os
+import os, subprocess
 import re
 
 from judgeApp.views import exec_main
@@ -13,13 +13,13 @@ from judgeApp.views import exec_main
 starttime = 0
 end_time = 0
 duration = 0
-flag = False
+# flag = False
 start = datetime.datetime(2020, 1, 1, 0, 0)
 
 path_usercode = 'data/usersCode/'
 standard = 'data/standard/'
 
-NO_OF_QUESTIONS = 6
+NO_OF_QUESTIONS = 10
 NO_OF_TEST_CASES = 6
 
 
@@ -89,15 +89,18 @@ def signup(request):
                 phone2 = request.POST.get('phone2')
                 email1 = request.POST.get('email1')
                 email2 = request.POST.get('email2')
+                junior = request.POST.get('optradio')
+
+                junior = True if (junior == 'fe' or junior == 'se') else False
 
                 if username == "" or password == "":
                     return render(request, 'userApp/login.html')
-
+                print(junior)
                 user = User.objects.create_user(username=username, password=password)
                 userprofile = UserProfile(user=user, name1=name1, name2=name2, phone1=phone1, phone2=phone2, email1=email1,
-                                          email2=email2)
+                                          email2=email2, junior=junior)
                 userprofile.save()
-                print(username)
+                # print(username)
                 os.system('mkdir {}/{}'.format(path_usercode, username))
                 login(request, user)
                 return redirect(reverse("instructions"))
@@ -173,11 +176,12 @@ def change_file_content(content, extension, code_file):
             f.close()
 
 
-def codeSave(request, username, qn):
+def codeSave(request, qn):
     if request.user.is_authenticated:  # Check Authentication
         if request.method == 'POST':
             que = Question.objects.get(pk=qn)
-            user = User.objects.get(username=username)
+            user = request.user
+            username= user.username
 
             content = request.POST['content']
             extension = request.POST['ext']
@@ -214,12 +218,12 @@ def codeSave(request, username, qn):
                 attempts=att,
                 lang=extension
             )
-
             print(type(testcase_values))
 
-            # with open(code_file, 'w+') as f:
-            #     f.write(content)
-            #     f.close()
+            code_f = open(code_file, 'w+')
+            code_f.seek(0)
+            code_f.write(content)
+            code_f.close()
 
             now_time = datetime.datetime.now()
             now_time_sec = now_time.second + now_time.minute * 60 + now_time.hour * 60 * 60
@@ -233,8 +237,8 @@ def codeSave(request, username, qn):
 
             subTime = '{}:{}:{}'.format(hour, min, sec)
 
-            print(subTime)
-            print("submit time" + str(submit_Time))
+            # print(subTime)
+            # print("submit time" + str(submit_Time))
 
             sub = Submission(code=content, user=user, que=que, attempt=att, subTime=subTime)
             sub.save()
@@ -257,16 +261,13 @@ def codeSave(request, username, qn):
                 if i == 'AC':
                     no_of_pass += 1
 
-            print(error_text)
+            # print(error_text)
 
             sub.correctTestCases = no_of_pass
             sub.TestCasesPercentage = (no_of_pass / NO_OF_TEST_CASES) * 100
             sub.save()
 
             status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'  # overall Status
-
-            if status == 'WA':
-                mul_que.scoreQuestion = 0
 
             if status == 'AC':
                 if mul_que.scoreQuestion == 0:
@@ -278,7 +279,6 @@ def codeSave(request, username, qn):
                 mul_que.save()
 
             var = calculate()
-
             data = {
                 'testcase': testcase_values,
                 'error': error_text,
@@ -289,18 +289,19 @@ def codeSave(request, username, qn):
             if var != 0:
                 return render(request, 'userApp/testcases.html', context=data)
             else:
-                render(request, "userApp/result.html")
+                return render(request, "userApp/result.html")
 
         elif request.method == 'GET':
             que = Question.objects.get(pk=qn)
             user_profile = UserProfile.objects.get(user=request.user)
-            user = User.objects.get(username=username)
+            user = request.user
 
             var = calculate()
             if var != 0:
                 return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var,
                                                                            'total_score': user_profile.totalScore,
-                                                                           'question_id': qn})
+                                                                           'question_id': qn, 'code': '',
+                                                                           'junior':user_profile.junior})
             else:
                 return render(request, 'userApp/result.html')
     else:
@@ -348,23 +349,22 @@ def leader(request):
         return HttpResponseRedirect(reverse("signup"))
 
 
-def submission(request, username, qn):
-    user = User.objects.get(username=username)
-    print("hi")
+def submission(request, qn):
+    # print(qn)
     que = Question.objects.get(pk=qn)
     # all_submissions = Submission.objects.filter()
     all_submission = Submission.objects.all()
     userQueSub = list()
 
     for submissions in all_submission:
-        if submissions.que == que and submissions.user == user:
+        if submissions.que == que and submissions.user == request.user:
             userQueSub.append(submissions)
     var = calculate()
-    print(userQueSub)
-    print("working")
+    # print(userQueSub)
+    # print("working")
     if var != 0:
         return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var, 'qn': qn,
-                                                                    'username': user.username})
+                                                                    })
     else:
         return render(request, 'userApp/result.html')
 
@@ -399,24 +399,81 @@ def user_logout(request):
 
 
 def loadBuffer(request):
-    username = request.POST.get('username')
     user = UserProfile.objects.get(user=request.user)
+    username = request.user.username
     qn = request.POST.get('question_no')
     que = Question.objects.get(pk=qn)
     mul_que = MultipleQues.objects.get(user=user.user, que=que)
     attempts = mul_que.attempts
     ext = request.POST.get('ext')
+
     response_data = {}
 
-    codeFile = '{}/{}/question{}/code{}.{}'.format(path_usercode, username, qn, attempts - 1, user.lang)
+    codeFile = path_usercode + '{}/question{}/code{}.{}'.format(username, qn, int(attempts) - 1, ext)
 
-    f = open(codeFile, "r")
-    txt = f.read()
-    if not txt:
-        data = ""
+    txt = ""
+
+    try:
+        f = open(codeFile, "r")
+        txt = f.read()
+        f.close()
+    except FileNotFoundError:
+        pass
+
     response_data["txt"] = txt
 
     return JsonResponse(response_data)
+
+
+def garbage(request, garbage):
+    return HttpResponseRedirect(reverse('questionHub'))
+
+
+def check_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    if data['is_taken']:
+        data['error_message'] = 'username already exits.'
+
+    return JsonResponse(data)
+
+
+def view_sub(request, qno, _id):
+    if request.method == 'GET':
+        user_profile = UserProfile.objects.get(user=request.user)
+        sub = Submission.objects.get(id=_id)
+        code = sub.code
+
+        # print(code)
+
+        que = Question.objects.get(pk=int(qno))
+        user = request.user
+
+        var = calculate()
+
+        return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var,
+                                                                   'total_score': user_profile.totalScore,
+                                                                   'question_id': qno, 'code': code})
+    else:
+        return HttpResponse("fdshfhsdlkfnlksdjfnlsdnflkdsnflds")
+
+
+def emergency_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        AdminPass = request.POST.get('admin_password')
+        user = authenticate(username=username, password=password)
+        if AdminPass == '1234':
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('questionHub'))
+        else:
+            return HttpResponse('invalid details')
+    else:
+        return render(request, 'userApp/emerlogin.html')
 
 
 def run(request):
@@ -485,62 +542,67 @@ def run(request):
         return HttpResponseRedirect(reverse("signup"))
 
 
-def garbage(request, garbage):
-    return HttpResponseRedirect(reverse('questionHub'))
+def run(request):
+    if request.user.is_authenticated:
+        response_data = {}
+        username = request.user.username
+        que_no = request.POST.get('question_no')
+        ext = request.POST.get('ext')
+        code = request.POST.get('content')
 
+        user_question_path = path_usercode + '{}/question{}/'.format(username, que_no)
+        code_file_path = user_question_path + 'code.{}'.format(ext)
 
-def check_username(request):
-    username = request.GET.get('username', None)
-    data = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
-    }
-    if data['is_taken']:
-        data['error_message'] = 'username already exits.'
+        if not os.path.exists(user_question_path):
+            os.system('mkdir ' + user_question_path)
 
-    return JsonResponse(data)
+        code_f = open(code_file_path, 'w+')
+        code_f.write(code)
+        code_f.close()
 
+        change_file_content(code, ext, code_file_path)
 
-def view_sub(request, username, qn, att):
-    user_profile = UserProfile.objects.get(user=request.user)
-    que = Question.objects.get(pk=qn)
-    att=att-1
-    sub = Submission.objects.get(user=request.user, que=que, attempt=att)
-    code = str("")
-    code = sub.code
-    print(username)
-    print(qn)
-    print(att)
-    print(code)
-    '''question_nos = []
+        status = exec_main(
+            username=username,
+            qno=que_no,
+            lang=ext,
+            run=True
+        )[0]
 
-    for i in sub:
-        codes.append(i.code)
-        question_nos.append(i.attempt)
-    all_que = Question.objects.all()
+        exp_op_path = standard + "output/question{}/expected_output7.txt".format(que_no)
+        op_path = user_question_path + "output7.txt"
+        err_path = user_question_path + "error.txt"
 
-    question_no = question_nos[int(att)]
-    per_question = all_que[int(question_no)]'''
+        op_f = open(op_path, 'r')
+        err_f = open(err_path, 'r')
+        exp_f = open(exp_op_path, 'r')
 
-    var = calculate()
-    if var != 0:
-        return render(request, 'userApp/codingPage1.html', {'user': user_profile,
-                                                                   'time': var, 'question_id': qn,'code':code
-                                                                   })
-    else:
-        return render(request, 'userApp/result.html')
+        errcodes = ['CTE', 'RTE', 'AT', 'TLE']
 
-
-def emergency_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        AdminPass = request.POST.get('admin_password')
-        user = authenticate(username=username, password=password)
-        if user is (not None) and (AdminPass == '1234'):
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse('questionHub'))
+        if status in errcodes:
+            if status == "CTE":
+                err_text = err_f.read()
+                err_text = re.sub('/.*?:', '', err_text)  # regular expression
+                actual = err_text
+            else:
+                actual = ""
         else:
-            return HttpResponse('invalid details')
+            if status == 'AC':
+                status = 'OK'
+            actual = op_f.read()
+
+        op_f.close()
+        err_f.close()
+
+        expected = exp_f.read()
+
+        print(expected, actual)
+
+        response_data["status"] = status
+        response_data["expected"] = expected
+        response_data["actual"] = actual
+
+        return JsonResponse(response_data)
+
     else:
-        return render(request, 'userApp/emerlogin.html')
+        return HttpResponseRedirect(reverse("signup"))

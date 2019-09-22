@@ -122,7 +122,7 @@
             
                                     </td>
                                     <td>
-                                        <button class="btn " type="button"  onclick="window.location.href = '{{ user.username }}/{{ question.IDNumber }}';"  style="width: 8vw ;font-size: 15px;height: 5vh; margin-top: 1vh ; background-color: #3a8196; color: white;">VIEW</button>
+                                        <button class="btn " type="button" onclick="location.href='{% url 'codeSave' qn=question.id  %}'" style="width: 8vw ;font-size: 15px;height: 5vh; margin-top: 1vh ; background-color: #3a8196; color: white;">VIEW</button>
                                     </td>
                                 </tr>
                                  {% endfor %}
