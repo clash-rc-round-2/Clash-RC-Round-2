@@ -434,6 +434,7 @@
                 run.classList.add('disabled');
 
                 $.ajax({
+                    console.log("hiii")
                     url : '{% url 'run' %}',
                     method: "POST",
                     dataType : "json",
