@@ -81,6 +81,7 @@ def signup(request):
         if request.method == 'POST':
             try:
                 username = request.POST.get('username')
+                username = username.replace(' ', '_')
                 password = request.POST.get('password')
                 name1 = request.POST.get('name1')
                 name2 = request.POST.get('name2')
