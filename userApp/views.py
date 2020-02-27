@@ -14,11 +14,12 @@ starttime = 0
 end_time = 0
 duration = 0
 start = datetime.datetime(2020, 1, 1, 0, 0)
+flag = False
 
-path_usercode = 'data/usersCode/'
-standard = 'data/standard/'
+path_usercode = 'data/usersCode'
+standard = 'data/standard'
 
-NO_OF_QUESTIONS = 10
+NO_OF_QUESTIONS = 6
 NO_OF_TEST_CASES = 6
 
 
@@ -159,6 +160,7 @@ def change_file_content(content, extension, code_file):
             after_main = content.split('main')[1]
             index = after_main.find('{') + 1
             main = before_main + after_main[:index] + 'install_filters();' + after_main[index:]
+            print(code_file)
             with open(code_file, 'w+') as f:
                 f.write(sandbox_header)
                 f.write(main)
