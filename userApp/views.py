@@ -5,8 +5,7 @@ from django.db import IntegrityError
 from .models import Question, Submission, UserProfile, MultipleQues
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 import datetime
-import os, subprocess
-import re
+import os, re
 
 from judgeApp.views import exec_main
 
@@ -16,7 +15,7 @@ duration = 0
 start = datetime.datetime(2020, 1, 1, 0, 0)
 flag = False
 
-path_usercode = 'data/usersCode'
+path_usercode = 'data/usersCode/'
 standard = 'data/standard'
 
 NO_OF_QUESTIONS = 6
@@ -134,7 +133,6 @@ def questionHub(request):
                     mul_que = MultipleQues.objects.get(user=user, que=que)
                 except MultipleQues.DoesNotExist:
                     mul_que = MultipleQues(user=user, que=que)
-                que.totalSub += 1 if mul_que.attempts > 0 else 0
             try:
                 que.accuracy = round((que.totalSuccessfulSub * 100/que.totalSub), 1)
             except ZeroDivisionError:
@@ -271,16 +269,20 @@ def codeSave(request, qn):
 
             status = 'AC' if no_of_pass == NO_OF_TEST_CASES else 'WA'  # overall Status
 
+            if mul_que.attempts == 1:
+                que.totalSub += 1
+
             if status == 'AC':
                 if mul_que.scoreQuestion == 0:
                     user_profile.totalScore += 100
                     que.totalSuccessfulSub += 1
-                    que.save()
                 mul_que.scoreQuestion = 100
                 user_profile.save()
                 mul_que.save()
 
+            que.save()
             var = calculate()
+
             data = {
                 'testcase': testcase_values,
                 'error': error_text,
@@ -303,7 +305,7 @@ def codeSave(request, qn):
                 return render(request, 'userApp/codingPage.html', context={'question': que, 'user': user, 'time': var,
                                                                            'total_score': user_profile.totalScore,
                                                                            'question_id': qn, 'code': '',
-                                                                           'junior':user_profile.junior})
+                                                                           'junior': user_profile.junior})
             else:
                 return render(request, 'userApp/result.html')
     else:
@@ -352,21 +354,18 @@ def leader(request):
 
 
 def submission(request, qn):
-    # print(qn)
     que = Question.objects.get(pk=qn)
-    # all_submissions = Submission.objects.filter()
     all_submission = Submission.objects.all()
+
     userQueSub = list()
 
     for submissions in all_submission:
         if submissions.que == que and submissions.user == request.user:
             userQueSub.append(submissions)
     var = calculate()
-    # print(userQueSub)
-    # print("working")
+
     if var != 0:
-        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var, 'qn': qn,
-                                                                    })
+        return render(request, 'userApp/submissions.html', context={'allSubmission': userQueSub, 'time': var, 'qn': qn})
     else:
         return render(request, 'userApp/result.html')
 
@@ -394,6 +393,12 @@ def user_logout(request):
                 break
 
         logout(request)
+
+        path = path_usercode + user.user.username
+        print(path)
+        if os.path.exists(path):
+            os.system("rm -rf " + path)
+
         return render(request, 'userApp/result.html', context={'dict': dict, 'rank': i, 'name': user.user,
                                                                'score': user.totalScore})
     else:
@@ -476,72 +481,6 @@ def emergency_login(request):
             return HttpResponse('invalid details')
     else:
         return render(request, 'userApp/emerlogin.html')
-
-
-def run(request):
-    if request.user.is_authenticated:
-        response_data = {}
-        username = request.user.username
-        que_no = request.POST.get('question_no')
-        ext = request.POST.get('ext')
-        code = request.POST.get('content')
-
-        user_question_path = path_usercode + '{}/question{}/'.format(username, que_no)
-        code_file_path = user_question_path + 'code.{}'.format(ext)
-
-        if not os.path.exists(user_question_path):
-            os.system('mkdir ' + user_question_path)
-
-        code_f = open(code_file_path, 'w+')
-        code_f.write(code)
-        code_f.close()
-
-        change_file_content(code, ext, code_file_path)
-
-        status = exec_main(
-            username=username,
-            qno=que_no,
-            lang=ext,
-            run=True
-        )[0]
-
-        exp_op_path = standard + "output/question{}/expected_output7.txt".format(que_no)
-        op_path = user_question_path + "output7.txt"
-        err_path = user_question_path + "error.txt"
-
-        op_f = open(op_path, 'r')
-        err_f = open(err_path, 'r')
-        exp_f = open(exp_op_path, 'r')
-
-        errcodes = ['CTE', 'RTE', 'AT', 'TLE']
-
-        if status in errcodes:
-            if status == "CTE":
-                err_text = err_f.read()
-                err_text = re.sub('/.*?:', '', err_text)  # regular expression
-                actual = err_text
-            else:
-                actual = ""
-        else:
-            if status == 'AC':
-                status = 'OK'
-            actual = op_f.read()
-
-        op_f.close()
-        err_f.close()
-
-        expected = exp_f.read()
-
-        print(expected, actual)
-
-        response_data["status"] = status
-        response_data["expected"] = expected
-        response_data["actual"] = actual
-
-        return JsonResponse(response_data)
-
-    else:
-        return HttpResponseRedirect(reverse("signup"))
 
 
 def run(request):
