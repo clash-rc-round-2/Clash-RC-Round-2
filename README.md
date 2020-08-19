@@ -28,12 +28,12 @@ activate this envirnoment:
 
 installing all required packages which are present in requirement.txt:
 
-	pip install -r requirement.txt
+	pip install -r requirements.txt
 	
 installing all the sandboxing packages, run the script seccomp.sh by command:
 
 	chmod +x seccomp.sh
-	./seccomp
+	./seccomp.sh
 
 You are almost Done! ;)
 
