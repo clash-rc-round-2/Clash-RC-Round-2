@@ -1,5 +1,8 @@
 # CLASH RC BACKEND CODE
 
+<details><summary>Click to view Steps of installing locally</summary>
+<p>
+
 So, here is a quick guide for installation of this whole game on your PC and host it locally!
 
 ### 1) Clone the Project
@@ -28,12 +31,12 @@ activate this envirnoment:
 
 installing all required packages which are present in requirement.txt:
 
-	pip install -r requirement.txt
+	pip install -r requirements.txt
 	
 installing all the sandboxing packages, run the script seccomp.sh by command:
 
 	chmod +x seccomp.sh
-	./seccomp
+	./seccomp.sh
 
 You are almost Done! ;)
 
@@ -44,3 +47,7 @@ Run this game by command:
 	python manage.py runserver
 
 hit the timer before starting, by appending the url(i.e. 127.0.0.1:8000) by "/timer/" in new tab and then by clicking on submit button, after clicking submit you should get "timer is set", come back to main page again and wait till the game start
+
+
+</p>
+</details>
