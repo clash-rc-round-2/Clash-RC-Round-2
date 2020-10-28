@@ -1,6 +1,6 @@
 # CLASH RC BACKEND CODE
 
-<details><summary>Click to view Steps of installing locally</summary>
+<details><summary>Click to view Steps of host this software locally</summary>
 <p>
 
 So, here is a quick guide for installation of this whole game on your PC and host it locally!
@@ -51,3 +51,31 @@ hit the timer before starting, by appending the url(i.e. 127.0.0.1:8000) by "/ti
 
 </p>
 </details>
+
+## User Interface
+#### 1) Waiting Page (Wait till the Game start)
+![Waiting Page](./screenshots/waitingpage.png)
+
+### 2) Instruction Page
+![Instructions Page](./screenshots/instructionpage.png)
+
+### 3) Coding Page
+![codingpage.png](./screenshots/codingpage.png)
+
+### 4) LeaderBoard
+![leaderboardpage.png](./screenshots/leaderboardpage.png)
+
+### 5) Question Page
+![questionhubpage.png](./screenshots/questionhubpage.png)
+
+### 6) Result Page
+![resultpage.png](./screenshots/resultpage.png)
+
+### 7) SignUp Page
+![signuppage.png](./screenshots/signuppage.png)
+
+### 8) Submissions Page
+![submissionpage.png](./screenshots/submissionpage.png)
+
+### 9) TestCase Page
+![testcasespage.png](./screenshots/testcasespage.png)
