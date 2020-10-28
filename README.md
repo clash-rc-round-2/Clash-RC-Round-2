@@ -1,6 +1,6 @@
 # CLASH RC BACKEND CODE
 
-<details><summary>Click to view Steps of host this software locally</summary>
+<details><summary>Click to view Steps to host this Game locally</summary>
 <p>
 
 So, here is a quick guide for installation of this whole game on your PC and host it locally!
